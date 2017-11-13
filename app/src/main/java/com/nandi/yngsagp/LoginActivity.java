@@ -1,8 +1,11 @@
 package com.nandi.yngsagp;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -18,9 +21,16 @@ import android.widget.ScrollView;
 
 import com.nandi.yngsagp.utils.BaseActivity;
 import com.nandi.yngsagp.utils.SharedUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.weyye.hipermission.HiPermission;
+import me.weyye.hipermission.PermissionCallback;
+import me.weyye.hipermission.PermissionItem;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -54,13 +64,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        checkPremission();
         isLogin = (String) SharedUtils.getShare(this, "isLogin", "");
         if ("1".equals(isLogin)) {
             finish();
         }else {
             intiView();
             initListener();
-
         }
     }
 
@@ -189,13 +199,46 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     showToast("请输入账号");
                 } else if (TextUtils.isEmpty(pwd)) {
                     showToast( "请输入密码");
-                } {
-                    progressDialog.show();
+                }else {
+                    ToNextActivity(MainActivity.class);
+//                    progressDialog.show();
                 }
                 break;
         }
     }
 
+    //权限申请
+    private void checkPremission() {
+        List<PermissionItem> permissionItems = new ArrayList<PermissionItem>();
+        permissionItems.add(new PermissionItem(Manifest.permission.CAMERA, "照相机", R.drawable.permission_ic_camera));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "定位", R.drawable.permission_ic_location));
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "读写SD卡", R.drawable.permission_ic_storage));
+        HiPermission.create(this)
+                .title("权限申请")
+                .permissions(permissionItems)
+                .filterColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()))//图标的颜色
+                .msg("为了您更好的使用体验，开启这些权限吧！\n一定要确认啰！")
+                .style(R.style.PermissionDefaultBlueStyle)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+                        checkPremission();
+                    }
 
+                    @Override
+                    public void onFinish() {
+
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
+    }
 
 }

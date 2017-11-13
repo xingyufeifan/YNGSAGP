@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -64,6 +64,14 @@ public class BaseActivity extends AppCompatActivity {
         showToast(text,Toast.LENGTH_SHORT);
     }
 
+    /**
+     * log日志
+     * @param tag 过滤标示
+     * @param text  内容
+     */
+    public void  showLog(String tag ,String text){
+        Log.d(tag, text);
+    }
     /**
      * 信息提示对话框
      * @param text 提示内容
