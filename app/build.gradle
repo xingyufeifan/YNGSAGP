@@ -21,6 +21,11 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.nandi.yngsagp.greendao'
+        targetGenDir 'src/main/java'
+    }
 }
 
 dependencies {
