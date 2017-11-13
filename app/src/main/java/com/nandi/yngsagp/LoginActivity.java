@@ -3,7 +3,6 @@ package com.nandi.yngsagp;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -17,15 +16,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-
-import com.lzy.okgo.OkGo;
+import com.nandi.yngsagp.utils.BaseActivity;
 import com.nandi.yngsagp.utils.SharedUtils;
-import com.nandi.yngsagp.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
 
     @BindView(R.id.et_mobile)
@@ -59,7 +56,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ButterKnife.bind(this);
         isLogin = (String) SharedUtils.getShare(this, "isLogin", "");
         if ("1".equals(isLogin)) {
-
             finish();
         }else {
             intiView();
@@ -189,15 +185,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     etPassword.setSelection(pwd.length());
                 break;
             case R.id.btn_login:
-
                 if (TextUtils.isEmpty(mobile)) {
-                    ToastUtils.showShort(this, "请输入账号");
+                    showToast("请输入账号");
                 } else if (TextUtils.isEmpty(pwd)) {
-                    ToastUtils.showShort(this, "请输入密码");
-                } else if (SharedUtils.containsShare(this, "IP") && SharedUtils.containsShare(this, "PORT")) {
+                    showToast( "请输入密码");
+                } {
                     progressDialog.show();
-                } else {
-                    ToastUtils.showShort(this, "请设置相应IP和端口");
                 }
                 break;
         }
