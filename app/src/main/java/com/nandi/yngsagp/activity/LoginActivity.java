@@ -1,10 +1,9 @@
-package com.nandi.yngsagp;
+package com.nandi.yngsagp.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.InputType;
@@ -19,9 +18,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.nandi.yngsagp.utils.BaseActivity;
+import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.BaseActivity;
+import com.nandi.yngsagp.activity.MainActivity;
 import com.nandi.yngsagp.utils.SharedUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +200,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else if (TextUtils.isEmpty(pwd)) {
                     showToast( "请输入密码");
                 }else {
-                    ToNextActivity(MainActivity.class);
+                    ToNextActivity(DisasterListActivity.class);
 //                    progressDialog.show();
                 }
                 break;

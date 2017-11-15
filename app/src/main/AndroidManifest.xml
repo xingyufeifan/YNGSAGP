@@ -35,6 +35,7 @@
             android:authorities="com.nandi.gsgdsecond.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <!-- 元数据 -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
@@ -51,7 +52,7 @@
             android:name="com.alibaba.app.appsecret"
             android:value="98c048c2ed6ab28dd97197a0a50c1d71" />
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,13 +60,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+
+        <activity android:name=".activity.DisasterListActivity"></activity>
     </application>
 
 </manifest>
