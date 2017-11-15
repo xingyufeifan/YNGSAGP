@@ -36,7 +36,6 @@ public class DangerListActivity extends BaseActivity {
         titleList = new ArrayList<String>();
         titleList.add("已处理");
         titleList.add("未处理");
-
     }
 
 

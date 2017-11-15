@@ -13,16 +13,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        OkHttpHelper.sendHttpGet(this, "http://gank.io/api/random/data/Android/20", new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println(response);
-            }
 
-            @Override
-            public void onError(Exception error) {
-
-            }
-        });
     }
 }
