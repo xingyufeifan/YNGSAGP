@@ -1,7 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:tabBackground="@color/holo_light_primary"
+        app:tabIndicatorColor="@color/colorLine"
+        app:tabSelectedTextColor="@android:color/holo_blue_dark">
+
+    </android.support.design.widget.TabLayout>
+
+    <ScrollView
+        android:id="@+id/text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_1"
+        android:layout_below="@+id/tab_layout"
+        android:visibility="visible">
+
+        <!--<include layout="@layout/layout_disaster_text_report" />-->
+    </ScrollView>
 
 
-</RelativeLayout>
+    <ScrollView
+        android:id="@+id/media_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_1"
+        android:layout_below="@+id/tab_layout"
+        android:visibility="invisible">
+
+        <!--<include layout="@layout/layout_disaster_media_report" />-->
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="保存" />
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="上传" />
+
+    </LinearLayout>
+
+</LinearLayout>

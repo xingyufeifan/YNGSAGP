@@ -19,7 +19,9 @@ import android.widget.TextView;
 
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.fragment.DangerListFragment;
 import com.nandi.yngsagp.fragment.DangerReportFragment;
+import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.fragment.DisasterReportFragment;
 import com.nandi.yngsagp.fragment.ModifyFragment;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -85,7 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navView.setNavigationItemSelectedListener(this);
         tvTitle.setText("灾情直报");
         DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
-        transaction(disasterReportFragment);;
+        transactions(disasterReportFragment);;
     }
 
     @Override
@@ -95,23 +97,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_disaster_edit:
                 tvTitle.setText("灾情直报");
                 DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
-                transaction(disasterReportFragment);
+                transactions(disasterReportFragment);
 
                 break;
             case R.id.nav_danger_edit:
                 tvTitle.setText("险情速报");
                 DangerReportFragment dangerReportFragment =new DangerReportFragment();
-                transaction(dangerReportFragment);
+                transactions(dangerReportFragment);
 
                 break;
             case R.id.nav_disaster_handle:
+                tvTitle.setText("灾情处置");
+                DisasterListFragment disasterListFragment =  new DisasterListFragment();
+                transactions(disasterListFragment);
                 break;
             case R.id.nav_danger_handle:
+                tvTitle.setText("险情处置");
+                DangerListFragment dangerListFragment =  new DangerListFragment();
+                transactions(dangerListFragment);
                 break;
             case R.id.nav_modify_password:
                 tvTitle.setText("修改密码");
                 ModifyFragment modifyFragment =  new ModifyFragment();
-                transaction(modifyFragment);
+                transactions(modifyFragment);
                 break;
             case R.id.nav_clear:
                 break;
@@ -123,7 +131,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void transaction(Fragment fragment) {
+    private void transactions(Fragment fragment) {
         transaction=getFragmentManager().beginTransaction();
         transaction.replace(R.id.main_container,fragment);
         transaction.commit();

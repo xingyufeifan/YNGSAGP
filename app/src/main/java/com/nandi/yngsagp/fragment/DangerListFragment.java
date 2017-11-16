@@ -8,12 +8,9 @@ import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 
-import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.utils.SharedUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,30 +21,24 @@ import butterknife.Unbinder;
  * Created by qingsong on 2017/11/15.
  */
 
-public class DangerReportFragment extends Fragment {
-
+public class DangerListFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
-    @BindView(R.id.text_layout)
-    ScrollView textLayout;
-    @BindView(R.id.media_layout)
-    ScrollView mediaLayout;
-    @BindView(R.id.btn_save)
-    Button btnSave;
-    @BindView(R.id.btn_upload)
-    Button btnUpload;
+    @BindView(R.id.dangerAlready)
+    LinearLayout dangerAlready;
+    @BindView(R.id.dangerNo)
+    LinearLayout dangerNo;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_danger_report, container, false);
+        View view = inflater.inflate(R.layout.fragment_danger_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         initViews();
         setListener();
         return view;
     }
-
 
     private void setListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -55,11 +46,11 @@ public class DangerReportFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (position == 0) {
-                    textLayout.setVisibility(View.VISIBLE);
-                    mediaLayout.setVisibility(View.INVISIBLE);
+                    dangerAlready.setVisibility(View.VISIBLE);
+                    dangerNo.setVisibility(View.INVISIBLE);
                 } else {
-                    textLayout.setVisibility(View.INVISIBLE);
-                    mediaLayout.setVisibility(View.VISIBLE);
+                    dangerNo.setVisibility(View.INVISIBLE);
+                    dangerAlready.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -75,9 +66,11 @@ public class DangerReportFragment extends Fragment {
     }
 
     private void initViews() {
-        tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
+        tabLayout.addTab(tabLayout.newTab().setText("未处理险情"), 0, true);
+        tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 1);
+
     }
+
 
     @Override
     public void onDestroyView() {

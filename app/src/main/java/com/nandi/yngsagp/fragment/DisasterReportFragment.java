@@ -75,8 +75,6 @@ public class DisasterReportFragment extends Fragment {
     LinearLayout llDReport;
     @BindView(R.id.root)
     RelativeLayout root;
-    private int screenHeight = 0;//屏幕高度
-    private int keyHeight = 0; //软件盘弹起后所占高度
 
     @Nullable
     @Override
@@ -125,6 +123,7 @@ public class DisasterReportFragment extends Fragment {
     private void initData() {
 
     }
+
 
 
     @Override
