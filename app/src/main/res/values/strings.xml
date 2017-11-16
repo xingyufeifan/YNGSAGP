@@ -10,10 +10,31 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+    <!--修改密码-->
     <string name="modify_user">用户名：</string>
     <string name="modify_psw">原密码：</string>
     <string name="modify_npsw">新密码：</string>
     <string name="modify_anpsw">再次输入新密码：</string>
     <string name="modify_clear">取消</string>
     <string name="modify_sure">确认</string>
+    <string name="password_success">密码修改成功</string>
+    <!--disasterReport-->
+    <string name="dReportPersonnel">填报人：</string>
+    <string name="dReportPhone">手机号码：</string>
+    <string name="dReportTime">发现时间：</string>
+    <string name="dReportAddress">发生地点：</string>
+    <string name="dReportLocation">发生地点：</string>
+    <string name="dReportType">灾种类型：</string>
+    <string name="dReportFactor">诱发因素：</string>
+    <string name="dReportInjurd">受伤人数：</string>
+    <string name="dReportDeath">死亡人数：</string>
+    <string name="dReportMiss">失踪人数：</string>
+    <string name="dReportFram">受灾农田(亩)：</string>
+    <string name="dReportHouse">损毁房屋(间)：</string>
+    <string name="dReportMoney">损失财产(万元)：</string>
+    <string name="dReportLon">经度：</string>
+    <string name="dReportLat">纬度：</string>
+    <string name="pleaseInput">请输入...</string>
+    <string name="dReportMobile">联系电话：</string>
+    <string name="dReportName">电话通知人：</string>
 </resources>

@@ -74,17 +74,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkPremission();
         intiView();
         initListener();
-        if (SharedUtils.containsShare(mContext, Constant.MOBILE)&&SharedUtils.containsShare(mContext, Constant.PASSWORD)){
-            System.out.println("我来了");
-            etMobile.setText((String) SharedUtils.getShare(mContext, Constant.MOBILE,""));
-            etPassword.setText((String) SharedUtils.getShare(mContext, Constant.PASSWORD,""));
-        }else{
-            System.out.println("我走了");
-        }
 
     }
 
+
     private void intiView() {
+        if (SharedUtils.containsShare(mContext, Constant.MOBILE)) {
+            etMobile.setText((String) SharedUtils.getShare(mContext, Constant.MOBILE, ""));
+
+        }
+        if (SharedUtils.containsShare(mContext, Constant.PASSWORD)) {
+            etPassword.setText((String) SharedUtils.getShare(mContext, Constant.PASSWORD, ""));
+        }
         screenHeight = this.getResources().getDisplayMetrics().heightPixels; //获取屏幕高度
         keyHeight = screenHeight / 4;//弹起高度为屏幕高度的1/3
         //dialog
@@ -144,12 +145,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     s.delete(temp.length() - 1, temp.length());
                     etPassword.setSelection(s.length());
                 }
-            }
-        });
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
             }
         });
         root.addOnLayoutChangeListener(new ViewGroup.OnLayoutChangeListener() {
@@ -221,21 +216,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         OkHttpHelper.sendHttpGet(this, "http://192.168.10.195:8080/yncmd/appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                SharedUtils.putShare(mContext, Constant.MOBILE,mobile);
-                SharedUtils.putShare(mContext, Constant.PASSWORD,pwd);
+                SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
+                SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
                 progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta  = new JSONObject(jsonObject.optString("meta"));
-                  boolean isSuccess =  jsonMeta.optBoolean("success");
-                  if (isSuccess){
-                      initJson(jsonObject);
-                      finish();
-                      ToNextActivity(MainActivity.class);
-                  }else{
-                      String message = jsonMeta.optString("message");
-                      showToast(message);
-                  }
+                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                    boolean isSuccess = jsonMeta.optBoolean("success");
+                    if (isSuccess) {
+                        initJson(jsonObject);
+                        finish();
+                        ToNextActivity(MainActivity.class);
+                    } else {
+                        String message = jsonMeta.optString("message");
+                        showToast(message);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

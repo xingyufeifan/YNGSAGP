@@ -22,4 +22,13 @@
         <!-- 设置光标 -->
         <item name="android:textCursorDrawable">@color/colorPrimaryDark</item>
     </style>
+
+    <style name="disasterStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:hint">@string/pleaseInput</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_height">wrap_content</item>
+
+    </style>
 </resources>

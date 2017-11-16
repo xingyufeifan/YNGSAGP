@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -14,8 +15,11 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.LoginActivity;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,18 +66,32 @@ public class ModifyFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.modify_clear:
-                modifyUser.setText("");
                 modifyPsw.setText("");
                 modifyAnpsw.setText("");
                 modifyNpsw.setText("");
                 break;
             case R.id.modify_sure:
-               String url= "http://localhost:8080/yncmd/appdocking/updateAppUser/{username}/{password}/{newPassword}/{type}";
+               String url= "http://192.168.10.195:8080/yncmd/appdocking/updateAppUser/"+modifyUser.getText().toString().trim()+"/"+modifyPsw.getText().toString().trim()+"/"+modifyNpsw.getText().toString().trim()+"/"+SharedUtils.getShare(getActivity(),Constant.TYPE,"");
                 if (textInput()){
                     OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
                         @Override
                         public void onSuccess(String response) {
+                            try {
+                                JSONObject jsonObject =  new JSONObject(response);
+                                String meta = jsonObject.optString("meta");
+                                JSONObject metaJson  = new JSONObject(meta);
+                               if (metaJson.optBoolean("success")){
+//                                   ToastUtils.showShort(R.string.password_success);
+                                   SharedUtils.removeShare(getActivity(),Constant.PASSWORD);
+                                   startActivity(new Intent(getActivity(), LoginActivity.class));
+                                   getActivity().finish();
+                               }else{
+                                   ToastUtils.showShort(metaJson.optString("message"));
+                               }
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override
@@ -96,7 +114,7 @@ public class ModifyFragment extends Fragment {
         }else if (TextUtils.isEmpty(modifyAnpsw.getText())){
             modifyAnpsw.setError("新密码不能为空");
             return false;
-        }else if (modifyAnpsw.getText().toString().trim().equals(modifyNpsw.getText().toString().trim())){
+        }else if (modifyAnpsw.getText().equals(modifyNpsw.getText())){
             ToastUtils.showShort("两次密码输入不一致");
             return false;
         }
