@@ -1,9 +1,9 @@
 package com.nandi.yngsagp.fragment;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +14,7 @@ import android.widget.LinearLayout;
 
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.DangerAdapter;
-import com.nandi.yngsagp.adapter.DisasterAdapter;
 import com.nandi.yngsagp.bean.DangerUBean;
-import com.nandi.yngsagp.bean.DisasterUBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +57,11 @@ public class DangerFragment extends Fragment {
     }
 
     private void initRecycler() {
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayout.VERTICAL);
         disasterShow.setLayoutManager(mLayoutManager);
         initData();
-        mAdapter = new DangerAdapter(getContext(), beanList);
+        mAdapter = new DangerAdapter(getActivity(), beanList);
         disasterShow.setAdapter(mAdapter);
     }
 

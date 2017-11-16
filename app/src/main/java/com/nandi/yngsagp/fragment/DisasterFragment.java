@@ -1,9 +1,9 @@
 package com.nandi.yngsagp.fragment;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,11 +57,11 @@ public class DisasterFragment extends Fragment {
     }
 
     private void initRecycler() {
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayout.VERTICAL);
         disasterShow.setLayoutManager(mLayoutManager);
         initData();
-        mAdapter = new DisasterAdapter(getContext(), beanList);
+        mAdapter = new DisasterAdapter(getActivity(), beanList);
         disasterShow.setAdapter(mAdapter);
     }
 

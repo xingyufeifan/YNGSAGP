@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">YNGSAGP</string>
+    <string name="app_name">灾险情上报</string>
     <string name="loginName">云南群测群防</string>
     <string name="inputUser">请输入手机号</string>
     <string name="login">登录</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

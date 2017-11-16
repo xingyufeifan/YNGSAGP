@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -200,7 +201,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else if (TextUtils.isEmpty(pwd)) {
                     showToast( "请输入密码");
                 }else {
-                    ToNextActivity(DisasterListActivity.class);
+                    ToNextActivity(MainActivity.class);
 //                    progressDialog.show();
                 }
                 break;

@@ -26,7 +26,6 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
 //        initCloudChannel(getApplicationContext());
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
