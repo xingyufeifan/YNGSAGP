@@ -6,4 +6,5 @@
     <color name="colorLine">#FF4081</color>
     <color name="header_left_text">#222222</color>
     <color name="header_right_text">#ffffff</color>
+    <color name="holo_light_primary">#ffe6e6e6</color>
 </resources>

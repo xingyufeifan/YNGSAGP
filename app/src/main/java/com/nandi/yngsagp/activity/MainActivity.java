@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.fragment.DangerFragment;
-import com.nandi.yngsagp.fragment.DisasterFragment;
+import com.nandi.yngsagp.fragment.DangerReportFragment;
+import com.nandi.yngsagp.fragment.DisasterReportFragment;
 import com.nandi.yngsagp.fragment.ModifyFragment;
 import com.nandi.yngsagp.utils.SharedUtils;
 
@@ -84,8 +84,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
         tvTitle.setText("灾情直报");
-        DisasterFragment disasterFragment=new DisasterFragment();
-        transaction(disasterFragment);;
+        DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
+        transaction(disasterReportFragment);;
     }
 
     @Override
@@ -94,14 +94,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (id) {
             case R.id.nav_disaster_edit:
                 tvTitle.setText("灾情直报");
-                DisasterFragment disasterFragment=new DisasterFragment();
-                transaction(disasterFragment);
+                DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
+                transaction(disasterReportFragment);
 
                 break;
             case R.id.nav_danger_edit:
                 tvTitle.setText("险情速报");
-                DangerFragment dangerFragment=new DangerFragment();
-                transaction(dangerFragment);
+                DangerReportFragment dangerReportFragment =new DangerReportFragment();
+                transaction(dangerReportFragment);
 
                 break;
             case R.id.nav_disaster_handle:
