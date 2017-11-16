@@ -1,8 +1,8 @@
 package com.nandi.yngsagp.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
@@ -19,10 +19,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.activity.BaseActivity;
-import com.nandi.yngsagp.activity.MainActivity;
+import com.nandi.yngsagp.Content;
+import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,20 +63,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private String mobile;
     private ProgressDialog progressDialog;
     private String isLogin = "-1";
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mContext = this;
         ButterKnife.bind(this);
         checkPremission();
-        isLogin = (String) SharedUtils.getShare(this, "isLogin", "");
-        if ("1".equals(isLogin)) {
-            finish();
-        }else {
-            intiView();
-            initListener();
+        intiView();
+        initListener();
+        if (SharedUtils.containsShare(mContext,Content.MOBILE)&&SharedUtils.containsShare(mContext,Content.PASSWORD)){
+            System.out.println("我来了");
+            etMobile.setText((String) SharedUtils.getShare(mContext,Content.MOBILE,""));
+            etPassword.setText((String) SharedUtils.getShare(mContext,Content.PASSWORD,""));
+        }else{
+            System.out.println("我走了");
         }
+
     }
 
     private void intiView() {
@@ -143,7 +152,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 return true;
             }
         });
-        findViewById(R.id.root).addOnLayoutChangeListener(new ViewGroup.OnLayoutChangeListener() {
+        root.addOnLayoutChangeListener(new ViewGroup.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
               /* old是改变前的左上右下坐标点值，没有old的是改变后的左上右下坐标点值
@@ -199,13 +208,60 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (TextUtils.isEmpty(mobile)) {
                     showToast("请输入账号");
                 } else if (TextUtils.isEmpty(pwd)) {
-                    showToast( "请输入密码");
-                }else {
-                    ToNextActivity(MainActivity.class);
-//                    progressDialog.show();
+                    showToast("请输入密码");
+                } else {
+                    loginPost();
+                    progressDialog.show();
                 }
                 break;
         }
+    }
+
+    private void loginPost() {
+        OkHttpHelper.sendHttpGet(this, "http://192.168.10.195:8080/yncmd/appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                SharedUtils.putShare(mContext,Content.MOBILE,mobile);
+                SharedUtils.putShare(mContext,Content.PASSWORD,pwd);
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonMeta  = new JSONObject(jsonObject.optString("meta"));
+                  boolean isSuccess =  jsonMeta.optBoolean("success");
+                  if (isSuccess){
+                      initJson(jsonObject);
+                      finish();
+                      ToNextActivity(DisasterListActivity.class);
+                  }else{
+                      String message = jsonMeta.optString("message");
+                      showToast(message);
+                  }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+                showToast(error.getMessage());
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void initJson(JSONObject jsonObject) throws JSONException {
+        JSONObject jsonData = new JSONObject(jsonObject.optString("data"));
+        String area_id = jsonData.optString("area_id");
+        SharedUtils.putShare(mContext, Content.AREA_ID,area_id);
+        String address = jsonData.optString("address");
+        SharedUtils.putShare(mContext, Content.ADDRESS,address);
+        String name = jsonData.optString("name");
+        SharedUtils.putShare(mContext, Content.NAME,name);
+        String userName = jsonData.optString("userName");
+        SharedUtils.putShare(mContext, Content.USER_NAME,userName);
+        String type = jsonData.optString("type");
+        SharedUtils.putShare(mContext, Content.TYPE,type);
     }
 
     //权限申请
