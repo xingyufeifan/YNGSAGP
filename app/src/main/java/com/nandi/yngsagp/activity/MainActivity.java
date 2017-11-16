@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,10 +17,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.fragment.DangerFragment;
 import com.nandi.yngsagp.fragment.DisasterFragment;
 import com.nandi.yngsagp.fragment.ModifyFragment;
+import com.nandi.yngsagp.utils.SharedUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +39,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     LinearLayout container;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    private String mobile;
+    private String address;
+    private String type;
+    private String name;
     private FragmentTransaction transaction;
 
     @Override
@@ -43,12 +50,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initData();
         initViews();
+
+    }
+
+    private void initData() {
+        mobile= (String) SharedUtils.getShare(context, Constant.MOBILE,"");
+        address= (String) SharedUtils.getShare(context, Constant.ADDRESS,"");
+        type= (String) SharedUtils.getShare(context, Constant.TYPE,"");
+        name= (String) SharedUtils.getShare(context, Constant.NAME,"");
     }
 
     private void initViews() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        View headerView = navView.getHeaderView(0);
+        TextView tvName = (TextView) headerView.findViewById(R.id.tv_name);
+        TextView tvAccount = (TextView) headerView.findViewById(R.id.tv_account);
+        TextView tvAddress = (TextView) headerView.findViewById(R.id.tv_address);
+        TextView tvDuty = (TextView) headerView.findViewById(R.id.tv_duty);
+        tvName.setText(name);
+        tvAccount.setText(mobile);
+        tvAddress.setText(address);
+        tvDuty.setText("0".equals(type)?"监测员":"审核员");
+        if ("0".equals(type)){
+            navView.getMenu().getItem(2).setVisible(false);
+            navView.getMenu().getItem(3).setVisible(false);
+        }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
@@ -87,6 +116,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_clear:
                 break;
             case R.id.nav_login_out:
+                loginOut();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -99,6 +129,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         transaction.commit();
     }
 
+
+    private void loginOut() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确定要注销登录吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // TODO: 2017/11/16 清空数据
+                        startActivity(new Intent(context,LoginActivity.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
 
     @Override
     public void onBackPressed() {

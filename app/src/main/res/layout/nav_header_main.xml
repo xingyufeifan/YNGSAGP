@@ -4,15 +4,89 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/image_header3"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:gravity="top"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="30dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <ImageView
         android:src="@mipmap/ic_launcher"
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="0dp">
+            <TextView
+                android:text="姓名:"
+                android:textColor="@color/header_left_text"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_name"
+                android:text="李青松"
+                android:textColor="@color/header_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="0dp">
+            <TextView
+                android:text="账号:"
+                android:textColor="@color/header_left_text"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_account"
+                android:text="13569558467"
+                android:textColor="@color/header_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:text="位置:"
+                android:textColor="@color/header_left_text"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_address"
+                android:text="渝北"
+                android:textColor="@color/header_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:text="职责:"
+                android:textColor="@color/header_left_text"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_duty"
+                android:text="监测员"
+                android:textColor="@color/header_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

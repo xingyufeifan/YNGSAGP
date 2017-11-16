@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.nandi.yngsagp.Constent;
+import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +48,7 @@ public class ModifyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_modify, container, false);
         unbinder = ButterKnife.bind(this, view);
-        modifyUser.setText((String) SharedUtils.getShare(getActivity(), Constent.MOBILE,""));
+        modifyUser.setText((String) SharedUtils.getShare(getActivity(), Constant.MOBILE,""));
         return view;
     }
 
