@@ -18,61 +18,46 @@
         android:id="@+id/text_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_upload"
+        android:layout_above="@+id/ll_1"
         android:layout_below="@+id/tab_layout"
         android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="文本" />
-        </LinearLayout>
+        <include layout="@layout/layout_disaster_text_report" />
     </ScrollView>
+
 
     <ScrollView
         android:id="@+id/media_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_upload"
+        android:layout_above="@+id/ll_1"
         android:layout_below="@+id/tab_layout"
         android:visibility="invisible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <include layout="@layout/layout_disaster_media_report" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="媒体" />
-        </LinearLayout>
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/ll_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <Button
             android:id="@+id/btn_save"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:text="保存" />
 
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:text="上传" />
 
     </LinearLayout>
