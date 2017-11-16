@@ -21,7 +21,7 @@ import android.widget.ScrollView;
 
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.Content;
+import com.nandi.yngsagp.Constent;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
 
@@ -74,10 +74,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkPremission();
         intiView();
         initListener();
-        if (SharedUtils.containsShare(mContext,Content.MOBILE)&&SharedUtils.containsShare(mContext,Content.PASSWORD)){
+        if (SharedUtils.containsShare(mContext, Constent.MOBILE)&&SharedUtils.containsShare(mContext, Constent.PASSWORD)){
             System.out.println("我来了");
-            etMobile.setText((String) SharedUtils.getShare(mContext,Content.MOBILE,""));
-            etPassword.setText((String) SharedUtils.getShare(mContext,Content.PASSWORD,""));
+            etMobile.setText((String) SharedUtils.getShare(mContext, Constent.MOBILE,""));
+            etPassword.setText((String) SharedUtils.getShare(mContext, Constent.PASSWORD,""));
         }else{
             System.out.println("我走了");
         }
@@ -221,8 +221,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         OkHttpHelper.sendHttpGet(this, "http://192.168.10.195:8080/yncmd/appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                SharedUtils.putShare(mContext,Content.MOBILE,mobile);
-                SharedUtils.putShare(mContext,Content.PASSWORD,pwd);
+                SharedUtils.putShare(mContext, Constent.MOBILE,mobile);
+                SharedUtils.putShare(mContext, Constent.PASSWORD,pwd);
                 progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -253,15 +253,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initJson(JSONObject jsonObject) throws JSONException {
         JSONObject jsonData = new JSONObject(jsonObject.optString("data"));
         String area_id = jsonData.optString("area_id");
-        SharedUtils.putShare(mContext, Content.AREA_ID,area_id);
+        SharedUtils.putShare(mContext, Constent.AREA_ID,area_id);
         String address = jsonData.optString("address");
-        SharedUtils.putShare(mContext, Content.ADDRESS,address);
+        SharedUtils.putShare(mContext, Constent.ADDRESS,address);
         String name = jsonData.optString("name");
-        SharedUtils.putShare(mContext, Content.NAME,name);
+        SharedUtils.putShare(mContext, Constent.NAME,name);
         String userName = jsonData.optString("userName");
-        SharedUtils.putShare(mContext, Content.USER_NAME,userName);
+        SharedUtils.putShare(mContext, Constent.USER_NAME,userName);
         String type = jsonData.optString("type");
-        SharedUtils.putShare(mContext, Content.TYPE,type);
+        SharedUtils.putShare(mContext, Constent.TYPE,type);
     }
 
     //权限申请

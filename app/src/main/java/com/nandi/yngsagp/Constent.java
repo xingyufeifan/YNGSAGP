@@ -4,7 +4,7 @@ package com.nandi.yngsagp;
  * Created by qingsong on 2017/11/15.
  */
 
-public class Content {
+public class Constent {
     public  static  final  String AREA_ID = "AREA_ID";
     public  static  final  String ADDRESS = "ADDRESS";
     public  static  final  String NAME = "NAME";

@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.activity;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.fragment.DangerFragment;
 import com.nandi.yngsagp.fragment.DisasterFragment;
+import com.nandi.yngsagp.fragment.ModifyFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     LinearLayout container;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
         tvTitle.setText("灾情直报");
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        DisasterFragment disasterFragment = new DisasterFragment();
-        transaction.add(R.id.main_container, disasterFragment);
-        transaction.commit();
+        DisasterFragment disasterFragment=new DisasterFragment();
+        transaction(disasterFragment);;
     }
 
     @Override
@@ -64,23 +65,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (id) {
             case R.id.nav_disaster_edit:
                 tvTitle.setText("灾情直报");
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                DisasterFragment disasterFragment = new DisasterFragment();
-                transaction.replace(R.id.main_container, disasterFragment);
-                transaction.commit();
+                DisasterFragment disasterFragment=new DisasterFragment();
+                transaction(disasterFragment);
+
                 break;
             case R.id.nav_danger_edit:
                 tvTitle.setText("险情速报");
-                FragmentTransaction transaction1 = getFragmentManager().beginTransaction();
-                DangerFragment dangerFragment = new DangerFragment();
-                transaction1.replace(R.id.main_container, dangerFragment);
-                transaction1.commit();
+                DangerFragment dangerFragment=new DangerFragment();
+                transaction(dangerFragment);
+
                 break;
             case R.id.nav_disaster_handle:
                 break;
             case R.id.nav_danger_handle:
                 break;
             case R.id.nav_modify_password:
+                tvTitle.setText("修改密码");
+                ModifyFragment modifyFragment =  new ModifyFragment();
+                transaction(modifyFragment);
                 break;
             case R.id.nav_clear:
                 break;
@@ -90,6 +92,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void transaction(Fragment fragment) {
+        transaction=getFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_container,fragment);
+        transaction.commit();
+    }
+
 
     @Override
     public void onBackPressed() {

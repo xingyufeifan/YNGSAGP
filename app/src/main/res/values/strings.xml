@@ -10,4 +10,10 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+    <string name="modify_user">用户名：</string>
+    <string name="modify_psw">原密码：</string>
+    <string name="modify_npsw">新密码：</string>
+    <string name="modify_anpsw">再次输入新密码：</string>
+    <string name="modify_clear">取消</string>
+    <string name="modify_sure">确认</string>
 </resources>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="50dp"
+        android:id="@+id/textInput1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/modify_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/modify_user"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:theme="@style/InputStyle" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/textInput2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/modify_psw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/modify_psw"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:theme="@style/InputStyle" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/textInput3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/modify_npsw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/modify_npsw"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:theme="@style/InputStyle" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/textInput4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/modify_anpsw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/modify_anpsw"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:theme="@style/InputStyle" />
+    </android.support.design.widget.TextInputLayout>
+   <LinearLayout
+       android:layout_marginTop="30dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <Button
+           android:id="@+id/modify_clear"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="5dp"
+           android:text="@string/modify_clear"/>
+       <Button
+           android:id="@+id/modify_sure"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="5dp"
+           android:text="@string/modify_sure"/>
+   </LinearLayout>
+</LinearLayout>
