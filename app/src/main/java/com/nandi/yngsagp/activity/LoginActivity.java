@@ -231,7 +231,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                   if (isSuccess){
                       initJson(jsonObject);
                       finish();
-                      ToNextActivity(DisasterListActivity.class);
+                      ToNextActivity(MainActivity.class);
                   }else{
                       String message = jsonMeta.optString("message");
                       showToast(message);
