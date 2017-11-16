@@ -2,15 +2,18 @@ package com.nandi.yngsagp.fragment;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -18,6 +21,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -27,20 +31,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nandi.yngsagp.Constant;
 import com.blankj.utilcode.util.ToastUtils;
+import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.utils.SharedUtils;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.PhotoPath;
+import com.nandi.yngsagp.utils.SharedUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +63,8 @@ public class DisasterReportFragment extends Fragment {
 
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
+    private static final int TAKE_VIDEO = 3;
+    private static final int RECORD_AUDIO = 4;
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -79,6 +84,10 @@ public class DisasterReportFragment extends Fragment {
     LinearLayout textLayout;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
+    @BindView(R.id.tv_video)
+    TextView tvVideo;
+    @BindView(R.id.tv_audio)
+    TextView tvAudio;
     private Context context;
     private File pictureFile;
     private PopupWindow popupWindow;
@@ -120,6 +129,9 @@ public class DisasterReportFragment extends Fragment {
     LinearLayout llDReport;
     @BindView(R.id.root)
     RelativeLayout root;
+    private File videoFile;
+    private MediaRecorder recorder;
+    private String audioPath;
 
     @Nullable
     @Override
@@ -183,7 +195,7 @@ public class DisasterReportFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -194,14 +206,138 @@ public class DisasterReportFragment extends Fragment {
                 }
                 break;
             case R.id.iv_take_video:
+                takeVideo();
                 break;
             case R.id.iv_take_audio:
+                takeAudio();
                 break;
             case R.id.btn_save:
                 break;
             case R.id.btn_upload:
                 break;
+            case R.id.tv_video:
+                if (!TextUtils.isEmpty(tvVideo.getText())) {
+                    Uri uri = Uri.parse(videoFile.getAbsolutePath());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "video/mp4");
+                    startActivity(intent);
+                }
+                break;
+            case R.id.tv_audio:
+                if (!TextUtils.isEmpty(tvAudio.getText())) {
+                    playAudio();
+                }
+                break;
         }
+    }
+
+    private void playAudio() {
+        final MediaPlayer player = new MediaPlayer();
+        try {
+            player.setDataSource(audioPath);
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
+        Button btnStart = (Button) view.findViewById(R.id.btn_dialog_play);
+        Button btnPause = (Button) view.findViewById(R.id.btn_dialog_pause);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        player.stop();
+                    }
+                }).show();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player.start();
+            }
+        });
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+            }
+        });
+    }
+
+    private void takeAudio() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_recoder, null);
+        final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
+        final Button btnStop = (Button) view.findViewById(R.id.btn_stop_recode);
+        btnStop.setEnabled(false);
+        final TextView tv = (TextView) view.findViewById(R.id.tv_time);
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (TextUtils.isEmpty(audioPath)) {
+                            return;
+                        }
+                        File file2 = new File(audioPath);
+                        if (file2.isFile() && file2.exists()) {
+                            file2.delete();
+                        }
+                        if (recorder != null) {
+                            recorder.stop();
+                            recorder.release();
+                            recorder = null;
+                        }
+                    }
+                }).show();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                audioPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getPath() + "/"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                recorder = new MediaRecorder();
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                recorder.setOutputFile(audioPath);
+                //设置编码格式
+                try {
+                    recorder.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    ToastUtils.showShort("录音机使用失败！");
+                }
+                recorder.start();
+                tv.setVisibility(View.VISIBLE);
+                btnStop.setEnabled(true);
+                btnStart.setEnabled(false);
+            }
+        });
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recorder.stop();
+                recorder.release();
+                recorder = null;
+                tvAudio.setText(audioPath);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void takeVideo() {
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        videoFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+        } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
+            uri = Uri.fromFile(videoFile);
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0.8);
+        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+        startActivityForResult(intent, TAKE_VIDEO);
     }
 
     private void choosePhoto() {
@@ -284,6 +420,8 @@ public class DisasterReportFragment extends Fragment {
                         photoPaths.add(photoPath);
                         pictureAdapter.notifyDataSetChanged();
                     }
+                case TAKE_VIDEO:
+                    tvVideo.setText(videoFile.getAbsolutePath());
                     break;
             }
         }

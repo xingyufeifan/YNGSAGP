@@ -265,6 +265,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         permissionItems.add(new PermissionItem(Manifest.permission.CAMERA, "照相机", R.drawable.permission_ic_camera));
         permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "定位", R.drawable.permission_ic_location));
         permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "读写SD卡", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.RECORD_AUDIO, "录音", R.drawable.permission_ic_micro_phone));
         HiPermission.create(this)
                 .title("权限申请")
                 .permissions(permissionItems)

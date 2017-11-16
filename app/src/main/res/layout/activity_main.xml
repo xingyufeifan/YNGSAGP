@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:background="@color/colorPrimary">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
