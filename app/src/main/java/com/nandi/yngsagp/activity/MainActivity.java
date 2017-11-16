@@ -45,7 +45,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String address;
     private String type;
     private String name;
-    private FragmentTransaction transaction;
+    private DisasterReportFragment disasterReportFragment;
+    private DangerReportFragment dangerReportFragment;
+    private DisasterListFragment disasterListFragment;
+    private DangerListFragment dangerListFragment;
+    private ModifyFragment modifyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +62,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initData() {
-        mobile= (String) SharedUtils.getShare(context, Constant.MOBILE,"");
-        address= (String) SharedUtils.getShare(context, Constant.ADDRESS,"");
-        type= (String) SharedUtils.getShare(context, Constant.TYPE,"");
-        name= (String) SharedUtils.getShare(context, Constant.NAME,"");
+        mobile = (String) SharedUtils.getShare(context, Constant.MOBILE, "");
+        address = (String) SharedUtils.getShare(context, Constant.ADDRESS, "");
+        type = (String) SharedUtils.getShare(context, Constant.TYPE, "");
+        name = (String) SharedUtils.getShare(context, Constant.NAME, "");
     }
 
     private void initViews() {
@@ -75,8 +79,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvName.setText(name);
         tvAccount.setText(mobile);
         tvAddress.setText(address);
-        tvDuty.setText("0".equals(type)?"监测员":"审核员");
-        if ("0".equals(type)){
+        tvDuty.setText("0".equals(type) ? "监测员" : "审核员");
+        if ("0".equals(type)) {
             navView.getMenu().getItem(2).setVisible(false);
             navView.getMenu().getItem(3).setVisible(false);
         }
@@ -85,41 +89,48 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
+        navView.getMenu().getItem(0).setChecked(true);
         tvTitle.setText("灾情直报");
-        DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
-        transactions(disasterReportFragment);;
+         disasterReportFragment = new DisasterReportFragment();
+         dangerReportFragment = new DangerReportFragment();
+         disasterListFragment = new DisasterListFragment();
+         dangerListFragment = new DangerListFragment();
+         modifyFragment =  new ModifyFragment();
+        addFragment(disasterReportFragment);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        drawerLayout.closeDrawer(GravityCompat.START);
         switch (id) {
             case R.id.nav_disaster_edit:
-                tvTitle.setText("灾情直报");
-                DisasterReportFragment disasterReportFragment =new DisasterReportFragment();
-                transactions(disasterReportFragment);
-
+                if (!navView.getMenu().getItem(0).isChecked()) {
+                    tvTitle.setText("灾情直报");
+                    replaceFragment(disasterReportFragment);
+                }
                 break;
             case R.id.nav_danger_edit:
-                tvTitle.setText("险情速报");
-                DangerReportFragment dangerReportFragment =new DangerReportFragment();
-                transactions(dangerReportFragment);
-
+                if (!navView.getMenu().getItem(1).isChecked()) {
+                    tvTitle.setText("险情速报");
+                    replaceFragment(dangerReportFragment);
+                }
                 break;
             case R.id.nav_disaster_handle:
-                tvTitle.setText("灾情处置");
-                DisasterListFragment disasterListFragment =  new DisasterListFragment();
-                transactions(disasterListFragment);
+                if (!navView.getMenu().getItem(2).isChecked()) {
+                    tvTitle.setText("灾情处置");
+                    replaceFragment(disasterListFragment);
+                }
                 break;
             case R.id.nav_danger_handle:
-                tvTitle.setText("险情处置");
-                DangerListFragment dangerListFragment =  new DangerListFragment();
-                transactions(dangerListFragment);
+                if (!navView.getMenu().getItem(3).isChecked()) {
+                    tvTitle.setText("险情处置");
+                    replaceFragment(dangerListFragment);
+                }
                 break;
             case R.id.nav_modify_password:
                 tvTitle.setText("修改密码");
-                ModifyFragment modifyFragment =  new ModifyFragment();
-                transactions(modifyFragment);
+                replaceFragment(modifyFragment);
                 break;
             case R.id.nav_clear:
                 break;
@@ -127,16 +138,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 loginOut();
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void transactions(Fragment fragment) {
-        transaction=getFragmentManager().beginTransaction();
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.main_container,fragment);
         transaction.commit();
     }
-
+    private void addFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.main_container,fragment);
+        transaction.commit();
+    }
 
     private void loginOut() {
         new AlertDialog.Builder(context)
@@ -146,7 +160,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // TODO: 2017/11/16 清空数据
-                        startActivity(new Intent(context,LoginActivity.class));
+                        startActivity(new Intent(context, LoginActivity.class));
                         finish();
                     }
                 })
