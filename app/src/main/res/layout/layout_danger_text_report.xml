@@ -22,7 +22,7 @@
                 android:textSize="16sp"
                 android:text="@string/dReportPersonnel" />
 
-            <EditText
+            <TextView
                 android:id="@+id/userDanger"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -43,7 +43,7 @@
                 android:textSize="16sp"
                 android:text="@string/dReportPhone" />
 
-            <EditText
+            <TextView
                 android:id="@+id/phoneDanger"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -93,6 +93,7 @@
 
             <EditText
                 android:id="@+id/addressDanger"
+                android:hint="请输入...(必填)"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -114,6 +115,7 @@
 
             <EditText
                 android:id="@+id/locationDanger"
+                android:hint="请输入...(必填)"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -132,7 +134,7 @@
                 android:textSize="16sp"
                 android:text="@string/dReportLon" />
 
-            <EditText
+            <TextView
                 android:id="@+id/lonDanger"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -153,7 +155,7 @@
                 android:textSize="16sp"
                 android:text="@string/dReportLat" />
 
-            <EditText
+            <TextView
                 android:id="@+id/latDanger"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -179,9 +181,14 @@
                 android:textSize="16sp"
                 android:text="@string/dReportType" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/typeDanger"
-                style="@style/disasterStyle" />
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:entries="@array/dangerType"
+                />
+
         </LinearLayout>
 
         <TextView
@@ -198,6 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:hint="请输入...(必填)"
                 android:text="@string/dReportFactor" />
 
             <EditText
@@ -274,6 +282,7 @@
             <EditText
                 android:id="@+id/moneyDanger"
                 style="@style/disasterStyle"
+                android:hint="请输入...(必填)"
                 android:inputType="number" />
         </LinearLayout>
 

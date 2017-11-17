@@ -13,13 +13,14 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportPersonnel" />
 
             <TextView
@@ -29,18 +30,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportPhone" />
 
             <TextView
@@ -50,81 +51,136 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportTime" />
 
             <TextView
                 android:id="@+id/dReportTime"
+                android:hint="请选择...(必填)"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
-
+            android:layout_height="1dp"
+            android:background="@color/report_unpressed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="位置"
+            android:textSize="18sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportAddress" />
 
             <EditText
                 android:id="@+id/dReportAddress"
+                android:hint="请输入...(必填)"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportLocation" />
 
             <EditText
                 android:id="@+id/dReportLocation"
+                android:hint="请输入...(必填)"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:textSize="16sp"
+                android:text="@string/dReportLon" />
+
+            <EditText
+                android:id="@+id/dReportLon"
+                style="@style/disasterStyle" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@string/dReportLat" />
+
+            <EditText
+                android:id="@+id/dReportLat"
+                style="@style/disasterStyle" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/report_unpressed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="原因/类型"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:textSize="16sp"
                 android:text="@string/dReportType" />
 
             <EditText
@@ -134,18 +190,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+               android:textSize="16sp"
                 android:text="@string/dReportFactor" />
 
             <EditText
@@ -155,18 +211,23 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
-
+            android:layout_height="1dp"
+            android:background="@color/report_unpressed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="灾情"
+            android:textSize="18sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportInjurd" />
 
             <EditText
@@ -177,18 +238,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportDeath" />
 
             <EditText
@@ -199,18 +260,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportMiss" />
 
             <EditText
@@ -221,18 +282,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+               android:textSize="16sp"
                 android:text="@string/dReportFram" />
 
             <EditText
@@ -243,18 +304,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportHouse" />
 
             <EditText
@@ -265,111 +326,81 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/dReportMoney" />
 
             <EditText
                 android:id="@+id/dReportMoney"
                 style="@style/disasterStyle"
+                android:hint="请输入...(必填)"
                 android:inputType="number|numberDecimal" />
         </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_height="0.01dp"
+                android:background="@color/lineColor" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/dReportLon" />
-
-                <EditText
-                    android:id="@+id/dReportLon"
-                    style="@style/disasterStyle" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/dReportLat" />
-
-                <EditText
-                    android:id="@+id/dReportLat"
-                    style="@style/disasterStyle" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:textSize="16sp"
                     android:text="@string/dReportOther" />
 
                 <EditText
                     android:id="@+id/dReportOther"
-                    style="@style/disasterStyle" />
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/shape_report"
+                    android:hint="@string/pleaseInput"
+                    android:padding="5dp"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <TextView
+                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_height="1dp"
+                android:background="@color/report_unpressed" />
 
             <LinearLayout
                 android:id="@+id/ll_dReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:visibility="gone">
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="电话通知填报"
+                    android:textSize="18sp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="20dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@string/dReportMobile" />
 
                     <EditText
@@ -379,18 +410,18 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimaryDark" />
+                    android:layout_height="0.01dp"
+                    android:background="@color/lineColor" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="20dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                       android:textSize="16sp"
                         android:text="@string/dReportName" />
 
                     <EditText
@@ -400,8 +431,8 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimaryDark" />
+                    android:layout_height="1dp"
+                    android:background="@color/report_unpressed" />
             </LinearLayout>
 
         </LinearLayout>

@@ -5,16 +5,22 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.blankj.utilcode.util.ToastUtils;
+import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.utils.SharedUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,9 +41,9 @@ public class DangerReportFragment extends Fragment {
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.userDanger)
-    EditText userDanger;
+    TextView userDanger;
     @BindView(R.id.phoneDanger)
-    EditText phoneDanger;
+    TextView phoneDanger;
     @BindView(R.id.timeDanger)
     TextView timeDanger;
     @BindView(R.id.addressDanger)
@@ -45,11 +51,11 @@ public class DangerReportFragment extends Fragment {
     @BindView(R.id.locationDanger)
     EditText locationDanger;
     @BindView(R.id.lonDanger)
-    EditText lonDanger;
+    TextView lonDanger;
     @BindView(R.id.latDanger)
-    EditText latDanger;
+    TextView latDanger;
     @BindView(R.id.typeDanger)
-    EditText typeDanger;
+    Spinner typeDanger;
     @BindView(R.id.factorDanger)
     EditText factorDanger;
     @BindView(R.id.personDanger)
@@ -70,6 +76,7 @@ public class DangerReportFragment extends Fragment {
     Button btnSave;
     @BindView(R.id.btn_upload)
     Button btnUpload;
+    private int typePos = 0;
 
     @Nullable
     @Override
@@ -104,12 +111,25 @@ public class DangerReportFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        typeDanger.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typePos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("parent = " + parent);
+            }
+        });
 
     }
 
     private void initViews() {
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
+        userDanger.setText((CharSequence) SharedUtils.getShare(getActivity(), Constant.NAME,""));
+        phoneDanger.setText((CharSequence) SharedUtils.getShare(getActivity(), Constant.MOBILE,""));
     }
 
     @Override
@@ -141,7 +161,31 @@ public class DangerReportFragment extends Fragment {
             case R.id.btn_save:
                 break;
             case R.id.btn_upload:
+                messageIsTrue();
                 break;
         }
+    }
+
+    private boolean messageIsTrue() {
+        if (TextUtils.isEmpty(timeDanger.getText())){
+            ToastUtils.showShort("请选择时间");
+            return false;
+        }else if (TextUtils.isEmpty(addressDanger.getText())){
+            addressDanger.setError("请填写地址");
+            ToastUtils.showShort("请填写地址");
+            return false;
+        }else if (TextUtils.isEmpty(locationDanger.getText())){
+            locationDanger.setError("请填写地址");
+            ToastUtils.showShort("请填写地址");
+            return false;
+        }else if (TextUtils.isEmpty(moneyDanger.getText())){
+            moneyDanger.setError("请填写经济损失");
+            ToastUtils.showShort("请填写经济损失");
+            return false;
+        }else if (0 == typePos){
+            ToastUtils.showShort("请选择灾种类型");
+            return false;
+        }
+        return true;
     }
 }
