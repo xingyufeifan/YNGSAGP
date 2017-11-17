@@ -183,9 +183,12 @@
                android:textSize="16sp"
                 android:text="@string/dReportType" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/dReportType"
-                style="@style/disasterStyle" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/dangerType"
+                />
         </LinearLayout>
 
         <TextView

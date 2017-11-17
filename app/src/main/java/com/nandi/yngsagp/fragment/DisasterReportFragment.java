@@ -29,11 +29,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
@@ -117,7 +119,7 @@ public class DisasterReportFragment extends Fragment {
     @BindView(R.id.dReportLocation)
     EditText dReportLocation;
     @BindView(R.id.dReportType)
-    EditText dReportType;
+    Spinner dReportType;
     @BindView(R.id.dReportFactor)
     EditText dReportFactor;
     @BindView(R.id.dReportInjurd)
@@ -153,6 +155,7 @@ public class DisasterReportFragment extends Fragment {
     private String audioPath;
     private RequestCall build;
     private ProgressDialog progressDialog;
+    private int typePos;
 
     @Nullable
     @Override
@@ -207,6 +210,18 @@ public class DisasterReportFragment extends Fragment {
                 pictureAdapter.notifyDataSetChanged();
             }
         });
+        dReportType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typePos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("parent = " + parent);
+            }
+        });
+
     }
 
     private void enlargePhoto(String path) {
@@ -243,7 +258,7 @@ public class DisasterReportFragment extends Fragment {
             dReportTime.setText(disasterUBean.getTime());
             dReportAddress.setText(disasterUBean.getAddress());
             dReportLocation.setText(disasterUBean.getLocation());
-            dReportType.setText(disasterUBean.getType());
+            dReportType.setSelection(Integer.parseInt(disasterUBean.getType()),true);
             dReportFactor.setText(disasterUBean.getFactor());
             dReportInjurd.setText(disasterUBean.getInjured());
             dReportDeath.setText(disasterUBean.getDeath());
@@ -394,7 +409,7 @@ public class DisasterReportFragment extends Fragment {
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = dReportType.getText().toString().trim();
+        String type = typePos+"";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
         String death = dReportDeath.getText().toString().trim();
@@ -455,7 +470,7 @@ public class DisasterReportFragment extends Fragment {
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = dReportType.getText().toString().trim();
+        String type = typePos+"";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
         String death = dReportDeath.getText().toString().trim();
