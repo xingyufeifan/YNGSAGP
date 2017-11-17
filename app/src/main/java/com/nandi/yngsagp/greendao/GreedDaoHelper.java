@@ -43,14 +43,13 @@ public class GreedDaoHelper {
         daoSession.getPhotoPathDao().update(photoPath);
     }
 
-    public static PhotoPath queryPhoto(int type) {
-        return daoSession.getPhotoPathDao().queryBuilder().where(PhotoPathDao.Properties.Type.eq(type)).unique();
+    public static List<PhotoPath> queryPhoto(int type) {
+        return daoSession.getPhotoPathDao().queryBuilder().where(PhotoPathDao.Properties.Type.eq(type)).list();
     }
 
     public static void deletePhoto(PhotoPath photoPath) {
         daoSession.getPhotoPathDao().delete(photoPath);
     }
-
     public static void insertVideo(VideoPath videoPath) {
         daoSession.getVideoPathDao().insertOrReplace(videoPath);
     }

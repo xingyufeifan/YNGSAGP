@@ -37,10 +37,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.PictureAdapter;
+import com.nandi.yngsagp.bean.AudioPath;
+import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
@@ -158,8 +162,8 @@ public class DisasterReportFragment extends Fragment {
         context = getActivity();
         initData();
         initViews();
-        setListener();
         setAdapter();
+        setListener();
         return view;
     }
 
@@ -191,6 +195,27 @@ public class DisasterReportFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        pictureAdapter.setOnItemViewClickListener(new PictureAdapter.OnItemViewClickListener() {
+            @Override
+            public void onPictureClick(int position) {
+                enlargePhoto(photoPaths.get(position).getPath());
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                photoPaths.remove(position);
+                pictureAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void enlargePhoto(String path) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
+        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+        photoView.setImageBitmap(ImageUtils.getBitmap(path, 1280, 720));
+        new android.support.v7.app.AlertDialog.Builder(context, R.style.Transparent)
+                .setView(view)
+                .show();
     }
 
     private void initViews() {
@@ -203,11 +228,48 @@ public class DisasterReportFragment extends Fragment {
         if ("1".equals((String) SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
-        dReportUser.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
-        dReportPhone.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+        dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
+        dReportPhone.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
     }
 
     private void initData() {
+        DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
+        List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(1);
+        VideoPath queryVideo = GreedDaoHelper.queryVideo(1);
+        AudioPath queryAudio = GreedDaoHelper.queryAudio(1);
+        if (disasterUBean != null) {
+            dReportUser.setText(disasterUBean.getReportMan());
+            dReportPhone.setText(disasterUBean.getPhone());
+            dReportTime.setText(disasterUBean.getTime());
+            dReportAddress.setText(disasterUBean.getAddress());
+            dReportLocation.setText(disasterUBean.getLocation());
+            dReportType.setText(disasterUBean.getType());
+            dReportFactor.setText(disasterUBean.getFactor());
+            dReportInjurd.setText(disasterUBean.getInjured());
+            dReportDeath.setText(disasterUBean.getDeath());
+            dReportMiss.setText(disasterUBean.getMiss());
+            dReportFram.setText(disasterUBean.getFarm());
+            dReportHouse.setText(disasterUBean.getHouse());
+            dReportMoney.setText(disasterUBean.getMoney());
+            dReportLon.setText(disasterUBean.getLon());
+            dReportLat.setText(disasterUBean.getLat());
+            dReportOther.setText(disasterUBean.getOther());
+            dReportMobile.setText(disasterUBean.getReportMobile());
+            dReportName.setText(disasterUBean.getReportName());
+        }
+        if (queryPhoto != null && queryPhoto.size() > 0) {
+            photoPaths.clear();
+            photoPaths.addAll(queryPhoto);
+        }
+        if (queryVideo != null&&!TextUtils.isEmpty(queryVideo.getPath())) {
+
+            videoFile = new File(queryVideo.getPath());
+            tvVideo.setText(videoFile.getAbsolutePath());
+        }
+        if (queryAudio != null) {
+            audioPath = queryAudio.getPath();
+            tvAudio.setText(audioPath);
+        }
 
     }
 
@@ -218,7 +280,7 @@ public class DisasterReportFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload,R.id.dReportTime})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -255,29 +317,135 @@ public class DisasterReportFragment extends Fragment {
                 break;
             case R.id.tv_video:
                 if (!TextUtils.isEmpty(tvVideo.getText())) {
-                    Uri uri = Uri.parse(videoFile.getAbsolutePath());
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "video/mp4");
-                    startActivity(intent);
+                    clickText(1);
                 }
                 break;
             case R.id.tv_audio:
                 if (!TextUtils.isEmpty(tvAudio.getText())) {
-                    playAudio();
+                    clickText(2);
                 }
                 break;
         }
     }
+
+    private void clickText(final int type) {
+        View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
+        TextView tvPlay = view.findViewById(R.id.tv_play);
+        TextView tvDelete = view.findViewById(R.id.tv_delete);
+        tvPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == 1) {
+                    Uri uri = Uri.parse(tvVideo.getText().toString());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "video/mp4");
+                    startActivity(intent);
+                } else {
+                    playAudio(tvAudio.getText().toString());
+                }
+                popupWindow.dismiss();
+            }
+        });
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == 1) {
+                    if (videoFile.exists()) {
+                        videoFile.delete();
+                    }
+                    tvVideo.setText("");
+                    videoFile = null;
+                } else {
+                    File file = new File(audioPath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    tvAudio.setText("");
+                    audioPath = null;
+                }
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+        View rootView = LayoutInflater.from(context).inflate(R.layout.fragment_disaster_report, null);
+        popupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                popupWindow.dismiss();
+                return false;
+            }
+        });
+    }
+
     private String getTime(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(date);
     }
+
     private void save() {
+        DisasterUBean disasterUBean = new DisasterUBean();
+        String reportMan = dReportUser.getText().toString().trim();
+        String phone = dReportPhone.getText().toString().trim();
+        String time = dReportTime.getText().toString().trim();
+        String address = dReportAddress.getText().toString().trim();
+        String location = dReportLocation.getText().toString().trim();
+        String type = dReportType.getText().toString().trim();
+        String factor = dReportFactor.getText().toString().trim();
+        String injured = dReportInjurd.getText().toString().trim();
+        String death = dReportDeath.getText().toString().trim();
+        String miss = dReportMiss.getText().toString().trim();
+        String farm = dReportFram.getText().toString().trim();
+        String house = dReportHouse.getText().toString().trim();
+        String money = dReportMoney.getText().toString().trim();
+        String lon = dReportLon.getText().toString().trim();
+        String lat = dReportLat.getText().toString().trim();
+        String other = dReportOther.getText().toString().trim();
+        String reportName = dReportName.getText().toString().trim();
+        String reportMobile = dReportMobile.getText().toString().trim();
+        disasterUBean.setReportMan(reportMan);
+        disasterUBean.setPhone(phone);
+        disasterUBean.setTime(time);
+        disasterUBean.setAddress(address);
+        disasterUBean.setLocation(location);
+        disasterUBean.setType(type);
+        disasterUBean.setFactor(factor);
+        disasterUBean.setInjured(injured);
+        disasterUBean.setDeath(death);
+        disasterUBean.setMiss(miss);
+        disasterUBean.setFarm(farm);
+        disasterUBean.setHouse(house);
+        disasterUBean.setMoney(money);
+        disasterUBean.setLon(lon);
+        disasterUBean.setLat(lat);
+        disasterUBean.setOther(other);
+        disasterUBean.setReportName(reportName);
+        disasterUBean.setReportMobile(reportMobile);
+        disasterUBean.setId(1L);
+        GreedDaoHelper.insertDisaster(disasterUBean);
+        List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(1);
+        if (queryPhoto != null && queryPhoto.size() > 0) {
+            for (PhotoPath photoPath : queryPhoto) {
+                GreedDaoHelper.deletePhoto(photoPath);
+            }
+        }
         for (PhotoPath photoPath : photoPaths) {
             GreedDaoHelper.insertPhoto(photoPath);
         }
-        VideoPath videoPath=new VideoPath(1L,1,videoFile.getAbsolutePath());
+        VideoPath videoPath = new VideoPath();
+        videoPath.setId(1L);
+        videoPath.setType(1);
+        videoPath.setPath(tvVideo.getText().toString());
         GreedDaoHelper.insertVideo(videoPath);
+        AudioPath audio = new AudioPath();
+        audio.setId(1L);
+        audio.setType(1);
+        audio.setPath(tvAudio.getText().toString());
+        GreedDaoHelper.insertAudio(audio);
     }
 
     private void upload() {
@@ -315,7 +483,7 @@ public class DisasterReportFragment extends Fragment {
         map.put("lossProperty", money);
         map.put("longitude", lon);
         map.put("latitude", lat);
-        map.put("otherThing", other);
+        map.put("otherThing", other);// TODO: 2017/11/17
         setRequest(map);
     }
 
@@ -323,10 +491,16 @@ public class DisasterReportFragment extends Fragment {
         progressDialog.show();
         PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");
         for (PhotoPath photoPath : photoPaths) {
-            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+            if (photoPath != null) {
+                formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+            }
         }
-        formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
-        formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        if (videoFile != null) {
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
+        }
+        if (audioPath != null) {
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        }
         formBuilder.params(map);
         formBuilder.addParams("type", "1");
         build = formBuilder.build();
@@ -349,10 +523,10 @@ public class DisasterReportFragment extends Fragment {
         });
     }
 
-    private void playAudio() {
+    private void playAudio(String s) {
         final MediaPlayer player = new MediaPlayer();
         try {
-            player.setDataSource(audioPath);
+            player.setDataSource(s);
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -458,7 +632,7 @@ public class DisasterReportFragment extends Fragment {
         startActivityForResult(intent, TAKE_VIDEO);
     }
 
-    private void choosePhoto() {
+    private void choosePhoto() {// TODO: 2017/11/17
         View view = LayoutInflater.from(context).inflate(R.layout.popup_view, null);
         TextView tvTake = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tvChoose = (TextView) view.findViewById(R.id.tv_choose_photo);

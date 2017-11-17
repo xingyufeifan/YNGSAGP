@@ -33,4 +33,9 @@
         <item name="android:textSize">14sp</item>
 
     </style>
+    <style name="Transparent">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>
