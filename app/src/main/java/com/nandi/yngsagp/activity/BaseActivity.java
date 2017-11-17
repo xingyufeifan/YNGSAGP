@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nandi.yngsagp.R;
+
 /**
  * Created by qingsong on 2017/11/13.
  */
@@ -32,6 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     public void ToNextActivity(Class<? extends Activity> activity) {
         Intent intent = new Intent(context, activity);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in,R.anim.slide_out);
     }
 
     /**

@@ -97,6 +97,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
          dangerListFragment = new DangerListFragment();
          modifyFragment =  new ModifyFragment();
         addFragment(disasterReportFragment);
+        addFragment(dangerReportFragment);
+        addFragment(disasterListFragment);
+        addFragment(dangerListFragment);
+        addFragment(modifyFragment);
     }
 
     @Override
@@ -107,30 +111,50 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_disaster_edit:
                 if (!navView.getMenu().getItem(0).isChecked()) {
                     tvTitle.setText("灾情直报");
-                    replaceFragment(disasterReportFragment);
+                    showFragment(disasterReportFragment);
+                    hideFragment(dangerReportFragment);
+                    hideFragment(disasterListFragment);
+                    hideFragment(dangerListFragment);
+                    hideFragment(modifyFragment);
                 }
                 break;
             case R.id.nav_danger_edit:
                 if (!navView.getMenu().getItem(1).isChecked()) {
                     tvTitle.setText("险情速报");
-                    replaceFragment(dangerReportFragment);
+                    hideFragment(disasterReportFragment);
+                    showFragment(dangerReportFragment);
+                    hideFragment(disasterListFragment);
+                    hideFragment(dangerListFragment);
+                    hideFragment(modifyFragment);
                 }
                 break;
             case R.id.nav_disaster_handle:
                 if (!navView.getMenu().getItem(2).isChecked()) {
                     tvTitle.setText("灾情处置");
-                    replaceFragment(disasterListFragment);
+                    hideFragment(disasterReportFragment);
+                    hideFragment(dangerReportFragment);
+                    showFragment(disasterListFragment);
+                    hideFragment(dangerListFragment);
+                    hideFragment(modifyFragment);;
                 }
                 break;
             case R.id.nav_danger_handle:
                 if (!navView.getMenu().getItem(3).isChecked()) {
                     tvTitle.setText("险情处置");
-                    replaceFragment(dangerListFragment);
+                    hideFragment(disasterReportFragment);
+                    hideFragment(dangerReportFragment);
+                    hideFragment(disasterListFragment);
+                    showFragment(dangerListFragment);
+                    hideFragment(modifyFragment);
                 }
                 break;
             case R.id.nav_modify_password:
                 tvTitle.setText("修改密码");
-                replaceFragment(modifyFragment);
+                hideFragment(disasterReportFragment);
+                hideFragment(dangerReportFragment);
+                hideFragment(disasterListFragment);
+                hideFragment(dangerListFragment);
+                showFragment(modifyFragment);
                 break;
             case R.id.nav_clear:
                 break;
@@ -141,14 +165,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container,fragment);
-        transaction.commit();
-    }
     private void addFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.main_container,fragment);
+        transaction.commit();
+    }
+    private void showFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.show(fragment);
+        transaction.commit();
+    }
+    private void hideFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.hide(fragment);
         transaction.commit();
     }
 

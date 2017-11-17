@@ -44,6 +44,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.BaseActivity;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.AudioPath;
 import com.nandi.yngsagp.bean.DisasterUBean;
@@ -161,16 +162,17 @@ public class DisasterReportFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disaster_report, container, false);
         unbinder = ButterKnife.bind(this, view);
-        context = getActivity();
+        context=getActivity();
         initData();
         initViews();
         setAdapter();
         setListener();
         return view;
     }
+
 
     private void setAdapter() {
         pictureAdapter = new PictureAdapter(context, photoPaths);
@@ -223,7 +225,12 @@ public class DisasterReportFragment extends Fragment {
                 System.out.println("parent = " + parent);
             }
         });
-
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                build.cancel();
+            }
+        });
     }
 
     private void enlargePhoto(String path) {
@@ -242,7 +249,7 @@ public class DisasterReportFragment extends Fragment {
         progressDialog.setMessage("正在上传...");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        if ("1".equals(SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
+        if ("1".equals(SharedUtils.getShare(context, Constant.TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
@@ -260,6 +267,7 @@ public class DisasterReportFragment extends Fragment {
             dReportTime.setText(disasterUBean.getTime());
             dReportAddress.setText(disasterUBean.getAddress());
             dReportLocation.setText(disasterUBean.getLocation());
+            typePos=Integer.parseInt(disasterUBean.getType());
             dReportType.setSelection(Integer.parseInt(disasterUBean.getType()),true);
             dReportFactor.setText(disasterUBean.getFactor());
             dReportInjurd.setText(disasterUBean.getInjured());
@@ -291,11 +299,6 @@ public class DisasterReportFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
@@ -324,7 +327,7 @@ public class DisasterReportFragment extends Fragment {
                 break;
             case R.id.dReportTime:
                 //时间选择器
-                TimePickerView pvTime = new TimePickerView.Builder(getActivity(), new TimePickerView.OnTimeSelectListener() {
+                TimePickerView pvTime = new TimePickerView.Builder(context, new TimePickerView.OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {//选中事件回调
                         dReportTime.setText(getTime(date));
@@ -555,6 +558,7 @@ public class DisasterReportFragment extends Fragment {
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
+                    Log.d("cp",e.getMessage());
                 }
             }
 
@@ -619,7 +623,7 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void takeAudio() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_recoder, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
         final Button btnStop = (Button) view.findViewById(R.id.btn_stop_recode);
         btnStop.setEnabled(false);
