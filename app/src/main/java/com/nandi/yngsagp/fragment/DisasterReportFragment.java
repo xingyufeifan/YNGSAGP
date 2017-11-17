@@ -484,6 +484,8 @@ public class DisasterReportFragment extends Fragment {
         map.put("longitude", lon);
         map.put("latitude", lat);
         map.put("otherThing", other);// TODO: 2017/11/17
+        map.put("monitorName",reportName);
+        map.put("monitorPhone",reportMobile);
         setRequest(map);
     }
 
