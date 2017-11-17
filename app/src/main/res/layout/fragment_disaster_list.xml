@@ -14,14 +14,14 @@
         app:tabSelectedTextColor="@android:color/holo_blue_dark">
     </android.support.design.widget.TabLayout>
     <LinearLayout
-        android:id="@+id/dangerAlready"
+        android:id="@+id/disasterAlready"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/dangerNo"
+        android:id="@+id/disasterNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

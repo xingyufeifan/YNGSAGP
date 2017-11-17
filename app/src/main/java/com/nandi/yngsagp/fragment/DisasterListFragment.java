@@ -25,10 +25,10 @@ public class DisasterListFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
-    @BindView(R.id.dangerAlready)
-    LinearLayout dangerAlready;
-    @BindView(R.id.dangerNo)
-    LinearLayout dangerNo;
+    @BindView(R.id.disasterAlready)
+    LinearLayout disasterAlready;
+    @BindView(R.id.disasterNo)
+    LinearLayout disasterNo;
 
     @Nullable
     @Override
@@ -46,11 +46,11 @@ public class DisasterListFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (position == 0) {
-                    dangerAlready.setVisibility(View.VISIBLE);
-                    dangerNo.setVisibility(View.INVISIBLE);
+                    disasterAlready.setVisibility(View.VISIBLE);
+                    disasterNo.setVisibility(View.INVISIBLE);
                 } else {
-                    dangerNo.setVisibility(View.INVISIBLE);
-                    dangerAlready.setVisibility(View.VISIBLE);
+                    disasterNo.setVisibility(View.INVISIBLE);
+                    disasterAlready.setVisibility(View.VISIBLE);
                 }
             }
 

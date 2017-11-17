@@ -14,6 +14,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -30,6 +31,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -76,8 +80,6 @@ public class DisasterReportFragment extends Fragment {
     Button ivTakeVideo;
     @BindView(R.id.iv_take_audio)
     Button ivTakeAudio;
-    @BindView(R.id.btn_save)
-    Button btnSave;
     @BindView(R.id.rv_photo)
     RecyclerView rvPhoto;
     @BindView(R.id.text_layout)
@@ -129,6 +131,10 @@ public class DisasterReportFragment extends Fragment {
     LinearLayout llDReport;
     @BindView(R.id.root)
     RelativeLayout root;
+    @BindView(R.id.dReportOther)
+    EditText dReportOther;
+    @BindView(R.id.btn_save)
+    Button btnSave;
     private File videoFile;
     private MediaRecorder recorder;
     private String audioPath;
@@ -195,7 +201,7 @@ public class DisasterReportFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
