@@ -62,6 +62,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity android:name=".activity.ModifyActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation"/>
 
         <service
             android:name="com.baidu.location.f"

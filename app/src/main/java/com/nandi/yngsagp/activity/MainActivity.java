@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DangerReportFragment dangerReportFragment;
     private DisasterListFragment disasterListFragment;
     private DangerListFragment dangerListFragment;
-    private ModifyFragment modifyFragment;
+    private ModifyActivity modifyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +91,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navView.setNavigationItemSelectedListener(this);
         navView.getMenu().getItem(0).setChecked(true);
         tvTitle.setText("灾情直报");
-         disasterReportFragment = new DisasterReportFragment();
-         dangerReportFragment = new DangerReportFragment();
-         disasterListFragment = new DisasterListFragment();
-         dangerListFragment = new DangerListFragment();
-         modifyFragment =  new ModifyFragment();
+        disasterReportFragment = new DisasterReportFragment();
+        dangerReportFragment = new DangerReportFragment();
+        disasterListFragment = new DisasterListFragment();
+        dangerListFragment = new DangerListFragment();
+
         addFragment(disasterReportFragment);
         addFragment(dangerReportFragment);
         addFragment(disasterListFragment);
         addFragment(dangerListFragment);
-        addFragment(modifyFragment);
+
     }
 
     @Override
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     hideFragment(dangerReportFragment);
                     hideFragment(disasterListFragment);
                     hideFragment(dangerListFragment);
-                    hideFragment(modifyFragment);
+
                 }
                 break;
             case R.id.nav_danger_edit:
@@ -125,7 +125,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     showFragment(dangerReportFragment);
                     hideFragment(disasterListFragment);
                     hideFragment(dangerListFragment);
-                    hideFragment(modifyFragment);
                 }
                 break;
             case R.id.nav_disaster_handle:
@@ -135,7 +134,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     hideFragment(dangerReportFragment);
                     showFragment(disasterListFragment);
                     hideFragment(dangerListFragment);
-                    hideFragment(modifyFragment);;
                 }
                 break;
             case R.id.nav_danger_handle:
@@ -145,16 +143,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     hideFragment(dangerReportFragment);
                     hideFragment(disasterListFragment);
                     showFragment(dangerListFragment);
-                    hideFragment(modifyFragment);
                 }
                 break;
             case R.id.nav_modify_password:
-                tvTitle.setText("修改密码");
-                hideFragment(disasterReportFragment);
-                hideFragment(dangerReportFragment);
-                hideFragment(disasterListFragment);
-                hideFragment(dangerListFragment);
-                showFragment(modifyFragment);
+                ToNextActivity(ModifyActivity.class);
                 break;
             case R.id.nav_clear:
                 break;
@@ -167,7 +159,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void addFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.main_container,fragment);
+        transaction.add(R.id.main_container, fragment);
         transaction.commit();
     }
     private void showFragment(Fragment fragment) {

@@ -173,7 +173,6 @@ public class DisasterReportFragment extends Fragment {
         return view;
     }
 
-
     private void setAdapter() {
         pictureAdapter = new PictureAdapter(context, photoPaths);
         rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));

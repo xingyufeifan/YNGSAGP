@@ -13,7 +13,6 @@
     <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@android:color/white</item>
     </style>
-
     <style name="InputStyle"  parent="Theme.AppCompat.Light">
         <!-- 底部线 默认颜色 -->
         <item name="colorControlNormal">@android:color/darker_gray</item>
