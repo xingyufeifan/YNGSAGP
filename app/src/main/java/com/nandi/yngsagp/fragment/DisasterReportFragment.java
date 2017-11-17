@@ -240,7 +240,7 @@ public class DisasterReportFragment extends Fragment {
         progressDialog.setMessage("正在上传...");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        if ("1".equals((String) SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
+        if ("1".equals(SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
@@ -315,7 +315,10 @@ public class DisasterReportFragment extends Fragment {
                 save();
                 break;
             case R.id.btn_upload:
-                upload();
+                if (messageIsTrue()){
+                    upload();
+                }
+
                 break;
             case R.id.dReportTime:
                 //时间选择器
@@ -342,7 +345,28 @@ public class DisasterReportFragment extends Fragment {
                 break;
         }
     }
-
+    private boolean messageIsTrue() {
+        if (TextUtils.isEmpty(dReportTime.getText())){
+            ToastUtils.showShort("请选择时间");
+            return false;
+        }else if (TextUtils.isEmpty(dReportAddress.getText())){
+            dReportAddress.setError("请填写地址");
+            ToastUtils.showShort("请填写地址");
+            return false;
+        }else if (TextUtils.isEmpty(dReportLocation.getText())){
+            dReportLocation.setError("请填写地址");
+            ToastUtils.showShort("请填写地址");
+            return false;
+        }else if (TextUtils.isEmpty(dReportMoney.getText())){
+            dReportMoney.setError("请填写损失财产");
+            ToastUtils.showShort("请填写损失财产");
+            return false;
+        }else if (0 == typePos){
+            ToastUtils.showShort("请选择灾种类型");
+            return false;
+        }
+        return true;
+    }
     private void clickText(final int type) {
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
         TextView tvPlay = view.findViewById(R.id.tv_play);
