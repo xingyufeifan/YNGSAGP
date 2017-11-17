@@ -51,5 +51,7 @@ dependencies {
     compile 'com.aliyun.ams:alicloud-android-push:3.0.11@aar'
     compile 'com.aliyun.ams:alicloud-android-utdid:1.1.5.3'
     compile 'com.aliyun.ams:alicloud-android-ut:5.1.0'
+    compile 'com.contrarywind:Android-PickerView:3.2.6'
     implementation files('libs/BaiduLBS_Android.jar')
+
 }

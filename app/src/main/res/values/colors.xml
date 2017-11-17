@@ -9,4 +9,6 @@
     <color name="header_right_text">#ffffff</color>
     <color name="holo_light_primary">#ffe6e6e6</color>
     <color name="media_title_bg">#888888</color>
+    <color name="lineColor">#dddddd</color>
+    <color name="report_unpressed">#575757</color>
 </resources>

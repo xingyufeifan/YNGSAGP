@@ -9,14 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ScrollView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.nandi.yngsagp.Constant;
+import com.bigkoo.pickerview.TimePickerView;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.utils.SharedUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -29,10 +34,38 @@ public class DangerReportFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+    @BindView(R.id.userDanger)
+    EditText userDanger;
+    @BindView(R.id.phoneDanger)
+    EditText phoneDanger;
+    @BindView(R.id.timeDanger)
+    TextView timeDanger;
+    @BindView(R.id.addressDanger)
+    EditText addressDanger;
+    @BindView(R.id.locationDanger)
+    EditText locationDanger;
+    @BindView(R.id.lonDanger)
+    EditText lonDanger;
+    @BindView(R.id.latDanger)
+    EditText latDanger;
+    @BindView(R.id.typeDanger)
+    EditText typeDanger;
+    @BindView(R.id.factorDanger)
+    EditText factorDanger;
+    @BindView(R.id.personDanger)
+    EditText personDanger;
+    @BindView(R.id.houseDanger)
+    EditText houseDanger;
+    @BindView(R.id.moneyDanger)
+    EditText moneyDanger;
+    @BindView(R.id.areaDanger)
+    EditText areaDanger;
+    @BindView(R.id.otherDanger)
+    EditText otherDanger;
     @BindView(R.id.text_layout)
-    ScrollView textLayout;
+    LinearLayout textLayout;
     @BindView(R.id.media_layout)
-    ScrollView mediaLayout;
+    LinearLayout mediaLayout;
     @BindView(R.id.btn_save)
     Button btnSave;
     @BindView(R.id.btn_upload)
@@ -83,5 +116,32 @@ public class DangerReportFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+    @OnClick({R.id.timeDanger, R.id.btn_save, R.id.btn_upload})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.timeDanger:
+                //时间选择器
+                TimePickerView pvTime = new TimePickerView.Builder(getActivity(), new TimePickerView.OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {//选中事件回调
+                        timeDanger.setText(getTime(date));
+                    }
+                }).setSubmitText("确定")
+                        .setCancelText("取消")
+                        .build();
+                //pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
+                pvTime.show();
+                break;
+            case R.id.btn_save:
+                break;
+            case R.id.btn_upload:
+                break;
+        }
     }
 }

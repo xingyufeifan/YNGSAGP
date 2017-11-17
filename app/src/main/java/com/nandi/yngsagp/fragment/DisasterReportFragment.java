@@ -36,6 +36,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.TimePickerView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
@@ -97,16 +98,16 @@ public class DisasterReportFragment extends Fragment {
     @BindView(R.id.tv_audio)
     TextView tvAudio;
     @BindView(R.id.dReportUser)
-    EditText dReportUser;
+    TextView dReportUser;
     private Context context;
     private File pictureFile;
     private PopupWindow popupWindow;
     private List<PhotoPath> photoPaths = new ArrayList<>();
     private PictureAdapter pictureAdapter;
     @BindView(R.id.dReportPhone)
-    EditText dReportPhone;
+    TextView dReportPhone;
     @BindView(R.id.dReportTime)
-    EditText dReportTime;
+    TextView dReportTime;
     @BindView(R.id.dReportAddress)
     EditText dReportAddress;
     @BindView(R.id.dReportLocation)
@@ -202,6 +203,8 @@ public class DisasterReportFragment extends Fragment {
         if ("1".equals((String) SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
+        dReportUser.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+        dReportPhone.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
     }
 
     private void initData() {
@@ -215,7 +218,7 @@ public class DisasterReportFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload,R.id.dReportTime})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -237,6 +240,19 @@ public class DisasterReportFragment extends Fragment {
             case R.id.btn_upload:
                 upload();
                 break;
+            case R.id.dReportTime:
+                //时间选择器
+                TimePickerView pvTime = new TimePickerView.Builder(getActivity(), new TimePickerView.OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {//选中事件回调
+                        dReportTime.setText(getTime(date));
+                    }
+                }).setSubmitText("确定")
+                        .setCancelText("取消")
+                        .build();
+                //pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
+                pvTime.show();
+                break;
             case R.id.tv_video:
                 if (!TextUtils.isEmpty(tvVideo.getText())) {
                     Uri uri = Uri.parse(videoFile.getAbsolutePath());
@@ -252,7 +268,10 @@ public class DisasterReportFragment extends Fragment {
                 break;
         }
     }
-
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
     private void save() {
         for (PhotoPath photoPath : photoPaths) {
             GreedDaoHelper.insertPhoto(photoPath);

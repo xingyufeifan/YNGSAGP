@@ -22,7 +22,7 @@
     <string name="dReportPersonnel">填报人：</string>
     <string name="dReportPhone">手机号码：</string>
     <string name="dReportTime">发现时间：</string>
-    <string name="dReportAddress">发生地点：</string>
+    <string name="dReportAddress">详细地址：</string>
     <string name="dReportLocation">发生地点：</string>
     <string name="dReportType">灾种类型：</string>
     <string name="dReportFactor">诱发因素：</string>
@@ -38,4 +38,8 @@
     <string name="dReportMobile">联系电话：</string>
     <string name="dReportName">电话通知人：</string>
     <string name="dReportOther">其他信息：</string>
+    <string name="personDanger">威胁人数：</string>
+    <string name="houseDanger">威胁房屋(间)：</string>
+    <string name="moneyDanger">潜在经济损失(万元)：</string>
+    <string name="areaDanger">威胁面积(平方千米)：</string>
 </resources>
