@@ -56,6 +56,9 @@ import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -81,7 +84,6 @@ public class DisasterReportFragment extends Fragment {
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int TAKE_VIDEO = 3;
-    private static final int RECORD_AUDIO = 4;
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -135,9 +137,9 @@ public class DisasterReportFragment extends Fragment {
     @BindView(R.id.dReportMoney)
     EditText dReportMoney;
     @BindView(R.id.dReportLon)
-    EditText dReportLon;
+    TextView dReportLon;
     @BindView(R.id.dReportLat)
-    EditText dReportLat;
+    TextView dReportLat;
     @BindView(R.id.dReportMobile)
     EditText dReportMobile;
     @BindView(R.id.dReportName)
@@ -522,7 +524,7 @@ public class DisasterReportFragment extends Fragment {
         map.put("lossProperty", money);
         map.put("longitude", lon);
         map.put("latitude", lat);
-        map.put("otherThing", other);// TODO: 2017/11/17
+        map.put("otherThing", other);
         map.put("monitorName",reportName);
         map.put("monitorPhone",reportMobile);
         setRequest(map);
@@ -559,9 +561,26 @@ public class DisasterReportFragment extends Fragment {
             @Override
             public void onResponse(String response, int id) {
                 progressDialog.dismiss();
-                Log.d("cp", response);
+                try {
+                    JSONObject object=new JSONObject(response);
+                    JSONObject meta = object.getJSONObject("meta");
+                    String message = object.getString("data");
+                    boolean success = meta.getBoolean("success");
+                    if (success){
+                        ToastUtils.showShort(message);
+                        clean();
+                    }else {
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    private void clean() {
+        // TODO: 2017/11/17
     }
 
     private void playAudio(String s) {
@@ -673,7 +692,7 @@ public class DisasterReportFragment extends Fragment {
         startActivityForResult(intent, TAKE_VIDEO);
     }
 
-    private void choosePhoto() {// TODO: 2017/11/17
+    private void choosePhoto() {
         View view = LayoutInflater.from(context).inflate(R.layout.popup_view, null);
         TextView tvTake = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tvChoose = (TextView) view.findViewById(R.id.tv_choose_photo);
