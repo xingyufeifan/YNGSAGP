@@ -4,6 +4,7 @@ package com.nandi.yngsagp.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,19 +41,28 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.PhotoPath;
+import com.nandi.yngsagp.bean.VideoPath;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 
 /**
@@ -136,6 +146,8 @@ public class DisasterReportFragment extends Fragment {
     private File videoFile;
     private MediaRecorder recorder;
     private String audioPath;
+    private RequestCall build;
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -181,6 +193,10 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void initViews() {
+        progressDialog = new ProgressDialog(context, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("正在上传...");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
         if ("1".equals((String) SharedUtils.getShare(getActivity(), Constant.TYPE, "0"))) {
@@ -216,8 +232,10 @@ public class DisasterReportFragment extends Fragment {
                 takeAudio();
                 break;
             case R.id.btn_save:
+                save();
                 break;
             case R.id.btn_upload:
+                upload();
                 break;
             case R.id.tv_video:
                 if (!TextUtils.isEmpty(tvVideo.getText())) {
@@ -233,6 +251,83 @@ public class DisasterReportFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    private void save() {
+        for (PhotoPath photoPath : photoPaths) {
+            GreedDaoHelper.insertPhoto(photoPath);
+        }
+        VideoPath videoPath=new VideoPath(1L,1,videoFile.getAbsolutePath());
+        GreedDaoHelper.insertVideo(videoPath);
+    }
+
+    private void upload() {
+        Map<String, String> map = new HashMap<>();
+        String reportMan = dReportUser.getText().toString().trim();
+        String phone = dReportPhone.getText().toString().trim();
+        String time = dReportTime.getText().toString().trim();
+        String address = dReportAddress.getText().toString().trim();
+        String location = dReportLocation.getText().toString().trim();
+        String type = dReportType.getText().toString().trim();
+        String factor = dReportFactor.getText().toString().trim();
+        String injured = dReportInjurd.getText().toString().trim();
+        String death = dReportDeath.getText().toString().trim();
+        String miss = dReportMiss.getText().toString().trim();
+        String farm = dReportFram.getText().toString().trim();
+        String house = dReportHouse.getText().toString().trim();
+        String money = dReportMoney.getText().toString().trim();
+        String lon = dReportLon.getText().toString().trim();
+        String lat = dReportLat.getText().toString().trim();
+        String other = dReportOther.getText().toString().trim();
+        String reportName = dReportName.getText().toString().trim();
+        String reportMobile = dReportMobile.getText().toString().trim();
+        map.put("phoneNum", phone);
+        map.put("personel", reportMan);
+        map.put("findTime", time);
+        map.put("currentLocation", location);
+        map.put("address", address);
+        map.put("disasterType", type);
+        map.put("factor", factor);
+        map.put("injurdNum", injured);
+        map.put("deathNum", death);
+        map.put("missingNum", miss);
+        map.put("farmland", farm);
+        map.put("houseNum", house);
+        map.put("lossProperty", money);
+        map.put("longitude", lon);
+        map.put("latitude", lat);
+        map.put("otherThing", other);
+        setRequest(map);
+    }
+
+    private void setRequest(Map<String, String> map) {
+        progressDialog.show();
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");
+        for (PhotoPath photoPath : photoPaths) {
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+        }
+        formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
+        formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        formBuilder.params(map);
+        formBuilder.addParams("type", "1");
+        build = formBuilder.build();
+        build.execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("Canceled".equals(e.getMessage())) {
+                    ToastUtils.showShort("取消上传！");
+                } else {
+                    progressDialog.dismiss();
+                    ToastUtils.showShort("网络连接失败！");
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                progressDialog.dismiss();
+                Log.d("cp", response);
+            }
+        });
     }
 
     private void playAudio() {
@@ -339,7 +434,7 @@ public class DisasterReportFragment extends Fragment {
             uri = Uri.fromFile(videoFile);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0.8);
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         startActivityForResult(intent, TAKE_VIDEO);
     }
@@ -369,7 +464,7 @@ public class DisasterReportFragment extends Fragment {
         popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
         popupWindow.setOutsideTouchable(true);
         popupWindow.setTouchable(true);
-        View rootView = LayoutInflater.from(context).inflate(R.layout.activity_disaster_list, null);
+        View rootView = LayoutInflater.from(context).inflate(R.layout.fragment_disaster_report, null);
         popupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -403,6 +498,7 @@ public class DisasterReportFragment extends Fragment {
                 case TAKE_PHOTO:
                     PhotoPath pathBean = new PhotoPath();
                     pathBean.setPath(pictureFile.getAbsolutePath());
+                    pathBean.setType(1);
                     photoPaths.add(pathBean);
                     pictureAdapter.notifyDataSetChanged();
                     break;
@@ -421,9 +517,11 @@ public class DisasterReportFragment extends Fragment {
                         System.out.println("照片路径：" + path);
                         PhotoPath photoPath = new PhotoPath();
                         photoPath.setPath(path);
+                        photoPath.setType(1);
                         photoPaths.add(photoPath);
                         pictureAdapter.notifyDataSetChanged();
                     }
+                    break;
                 case TAKE_VIDEO:
                     tvVideo.setText(videoFile.getAbsolutePath());
                     break;

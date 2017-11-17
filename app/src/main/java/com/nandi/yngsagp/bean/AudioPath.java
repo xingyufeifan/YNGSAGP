@@ -5,22 +5,22 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * Created by ChenPeng on 2017/11/16.
+ * Created by ChenPeng on 2017/11/17.
  */
 @Entity
-public class PhotoPath {
+public class AudioPath {
     @Id
     private Long id;
     private int type;
     private String path;
-    @Generated(hash = 1787011874)
-    public PhotoPath(Long id, int type, String path) {
+    @Generated(hash = 651719036)
+    public AudioPath(Long id, int type, String path) {
         this.id = id;
         this.type = type;
         this.path = path;
     }
-    @Generated(hash = 1895854510)
-    public PhotoPath() {
+    @Generated(hash = 45577862)
+    public AudioPath() {
     }
     public Long getId() {
         return this.id;

@@ -8,6 +8,8 @@ import android.util.Log;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.blankj.utilcode.util.Utils;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
 import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
@@ -26,6 +28,8 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Utils.init(this);
+        GreedDaoHelper.initDatabase(this);
 //        initCloudChannel(getApplicationContext());
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()

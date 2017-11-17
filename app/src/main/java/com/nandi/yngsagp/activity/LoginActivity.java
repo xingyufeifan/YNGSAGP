@@ -213,7 +213,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void loginPost() {
-        OkHttpHelper.sendHttpGet(this, "http://192.168.10.195:8080/yncmd/appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
+        OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url)+"appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 SharedUtils.putShare(mContext, Constant.MOBILE, mobile);

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DangerUBean;
 import com.nandi.yngsagp.bean.DisasterUBean;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHolder> {
     private Context mContext;
-    private List<DangerUBean> bean;
+    private List<DisasterUBean> bean;
 
     public DangerAdapter(Context context, List bean) {
         mContext = context;
@@ -38,9 +37,6 @@ public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(DangerAdapter.MyViewHolder holder, int position) {
-        holder.textPlace.setText(bean.get(position).getPlace());
-        holder.textType.setText(bean.get(position).getType());
-        holder.textToTime.setText(bean.get(position).getToTime());
     }
 
     @Override

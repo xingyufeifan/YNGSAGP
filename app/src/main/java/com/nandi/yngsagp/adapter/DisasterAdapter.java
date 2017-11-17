@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterUBean;
+import com.nandi.yngsagp.bean.DangerUBean;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyViewHolder> {
     private Context mContext;
-    private List<DisasterUBean> bean;
+    private List<DangerUBean> bean;
 
     public DisasterAdapter(Context context, List bean) {
         mContext = context;
