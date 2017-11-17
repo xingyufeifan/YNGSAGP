@@ -22,7 +22,9 @@
                 android:layout_weight="1"
                 android:text="@string/dReportPersonnel" />
 
-            <EditText style="@style/disasterStyle" />
+            <EditText
+                android:id="@+id/dReportUser"
+                style="@style/disasterStyle" />
         </LinearLayout>
 
         <TextView
