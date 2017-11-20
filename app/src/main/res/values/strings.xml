@@ -41,5 +41,5 @@
     <string name="personDanger">威胁人数：</string>
     <string name="houseDanger">威胁房屋(间)：</string>
     <string name="moneyDanger">潜在经济损失(万元)：</string>
-    <string name="areaDanger">威胁面积(平方千米)：</string>
+    <string name="areaDanger">威胁农田(亩)：</string>
 </resources>

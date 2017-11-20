@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -38,6 +40,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.bigkoo.pickerview.TimePickerView;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -51,6 +57,7 @@ import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
+import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -159,7 +166,7 @@ public class DisasterReportFragment extends Fragment {
     private RequestCall build;
     private ProgressDialog progressDialog;
     private int typePos;
-
+    private LocationClient locationClient;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -280,13 +287,25 @@ public class DisasterReportFragment extends Fragment {
             dReportOther.setText(disasterUBean.getOther());
             dReportMobile.setText(disasterUBean.getReportMobile());
             dReportName.setText(disasterUBean.getReportName());
+        }else {
+            locationClient=new LocationClient(getActivity().getApplicationContext());
+            LocationClientOption option = new LocationClientOption();
+            option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+            option.setCoorType("gcj02");
+            //可选，默认gcj02，设置返回的定位结果坐标系
+            option.setScanSpan(1000 * 2);
+            //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+            option.setOpenGps(true);
+            //可选，默认false,设置是否使用gps
+            locationClient.setLocOption(option);
+            locationClient.registerLocationListener(new LocationListener());
+            locationClient.start();
         }
         if (queryPhoto != null && queryPhoto.size() > 0) {
             photoPaths.clear();
             photoPaths.addAll(queryPhoto);
         }
         if (queryVideo != null&&!TextUtils.isEmpty(queryVideo.getPath())) {
-
             videoFile = new File(queryVideo.getPath());
             tvVideo.setText(videoFile.getAbsolutePath());
         }
@@ -297,7 +316,29 @@ public class DisasterReportFragment extends Fragment {
 
     }
 
+    private class LocationListener extends BDAbstractLocationListener {
 
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            int locType = bdLocation.getLocType();
+            if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
+                double lon = bdLocation.getLongitude();
+                double lat = bdLocation.getLatitude();
+                dReportLon.setText(lon + "");
+                dReportLat.setText(lat + "");
+                locationClient.stop();
+            }
+        }
+
+        @Override
+        public void onLocDiagnosticMessage(int locType, int diagnosticType, String diagnosticMessage) {
+            if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_GPS) {
+                ToastUtils.showShort( "请打开GPS");
+            } else if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_WIFI) {
+                ToastUtils.showShort( "建议打开WIFI提高定位经度");
+            }
+        }
+    }
 
     @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
@@ -538,12 +579,15 @@ public class DisasterReportFragment extends Fragment {
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+                Log.d("cp","图片添加");
             }
         }
-        if (videoFile != null) {
+        if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
+                Log.d("cp","视频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
         }
-        if (audioPath != null) {
+        if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
+                Log.d("cp","音频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
         }
         formBuilder.params(map);
@@ -752,6 +796,8 @@ public class DisasterReportFragment extends Fragment {
 
             switch (requestCode) {
                 case TAKE_PHOTO:
+                    Bitmap bitmap = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
+                    PictureUtils.compressImageToFile(bitmap, pictureFile);
                     PhotoPath pathBean = new PhotoPath();
                     pathBean.setPath(pictureFile.getAbsolutePath());
                     pathBean.setType(1);
@@ -771,6 +817,8 @@ public class DisasterReportFragment extends Fragment {
                         // 最后根据索引值获取图片路径
                         String path = cursor.getString(column_index);
                         System.out.println("照片路径：" + path);
+                        Bitmap bitmap1 = BitmapFactory.decodeFile(new File(path).getAbsolutePath());
+                        PictureUtils.compressImageToFile(bitmap1, new File(path));
                         PhotoPath photoPath = new PhotoPath();
                         photoPath.setPath(path);
                         photoPath.setType(1);

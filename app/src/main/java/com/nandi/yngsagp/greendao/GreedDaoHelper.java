@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nandi.yngsagp.bean.AudioPath;
+import com.nandi.yngsagp.bean.DangerUBean;
 import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
@@ -96,5 +97,20 @@ public class GreedDaoHelper {
 
     public static void deleteDisaster() {
         daoSession.getDisasterUBeanDao().deleteAll();
+    }
+    public static void insertDanger(DangerUBean dangerUBean) {
+        daoSession.getDangerUBeanDao().insertOrReplace(dangerUBean);
+    }
+
+    public static void updateDanger(DangerUBean dangerUBean) {
+        daoSession.getDangerUBeanDao().update(dangerUBean);
+    }
+
+    public static DangerUBean queryDanger() {
+        return daoSession.getDangerUBeanDao().queryBuilder().unique();
+    }
+
+    public static void deleteDanger() {
+        daoSession.getDangerUBeanDao().deleteAll();
     }
 }

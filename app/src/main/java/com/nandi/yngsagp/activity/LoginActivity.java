@@ -239,7 +239,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onError(Exception error) {
-                showToast(error.getMessage());
+                showToast("网络连接失败");
                 progressDialog.dismiss();
             }
         });

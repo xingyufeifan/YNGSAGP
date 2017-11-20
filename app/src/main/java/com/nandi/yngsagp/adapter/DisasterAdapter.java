@@ -37,9 +37,6 @@ public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyView
 
     @Override
     public void onBindViewHolder(DisasterAdapter.MyViewHolder holder, int position) {
-        holder.textPlace.setText(bean.get(position).getPlace());
-        holder.textType.setText(bean.get(position).getType());
-        holder.textToTime.setText(bean.get(position).getToTime());
     }
 
     @Override
