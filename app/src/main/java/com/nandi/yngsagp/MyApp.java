@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient;
 
 public class MyApp extends Application {
     private static final String TAG = "MyApplication";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,6 +41,7 @@ public class MyApp extends Application {
                 .build();
         OkHttpUtils.initClient(okHttpClient);
     }
+
 
     /**
      * 初始化云推送通道

@@ -30,7 +30,7 @@ public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHold
     @Override
     public DangerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
-        View view = LayoutInflater.from(mContext).inflate(R.layout.disaster_item, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_disaster_list, null);
         DangerAdapter.MyViewHolder holderA = new DangerAdapter.MyViewHolder(view);
         return holderA;
     }
@@ -54,8 +54,8 @@ public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHold
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            textPlace = (TextView) itemView.findViewById(R.id.place);
-            textType = (TextView) itemView.findViewById(R.id.type);
+            textPlace = (TextView) itemView.findViewById(R.id.address);
+            textType = (TextView) itemView.findViewById(R.id.disNum);
             textToTime = (TextView) itemView.findViewById(R.id.toTime);
         }
     }

@@ -8,7 +8,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/colorLine"/>
+        android:background="@color/lineColor"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,13 +19,13 @@
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorLine"/>
+            android:background="@color/lineColor"/>
 
         <TextView
-            android:id="@+id/place"
+            android:id="@+id/disNum"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="center"
             android:text="隐患点编号"
             android:textColor="#00f3f3"
@@ -33,35 +33,48 @@
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorLine"/>
+            android:background="@color/lineColor"/>
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/address"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:gravity="center"
-            android:text="名称"
+            android:text="地点"
             android:textColor="#00f3f3"
             android:textSize="16sp"/>
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorLine"/>
+            android:background="@color/lineColor"/>
 
         <TextView
             android:id="@+id/toTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="center"
-            android:text="等级"
+            android:text="@string/dReportTime"
             android:textColor="#00f3f3"
             android:textSize="16sp"/>
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorLine"/>
+            android:background="@color/lineColor"/>
+        <TextView
+            android:id="@+id/toNext"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="详情"
+            android:textColor="#00f3f3"
+            android:textSize="16sp"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="@color/lineColor"/>
 
     </LinearLayout>
     <View
@@ -69,5 +82,5 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/colorLine"/>
+        android:background="@color/lineColor"/>
 </LinearLayout>

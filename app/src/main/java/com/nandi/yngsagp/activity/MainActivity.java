@@ -49,7 +49,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DangerReportFragment dangerReportFragment;
     private DisasterListFragment disasterListFragment;
     private DangerListFragment dangerListFragment;
-    private ModifyActivity modifyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +71,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         View headerView = navView.getHeaderView(0);
-        TextView tvName = (TextView) headerView.findViewById(R.id.tv_name);
-        TextView tvAccount = (TextView) headerView.findViewById(R.id.tv_account);
-        TextView tvAddress = (TextView) headerView.findViewById(R.id.tv_address);
-        TextView tvDuty = (TextView) headerView.findViewById(R.id.tv_duty);
+        TextView tvName = headerView.findViewById(R.id.tv_name);
+        TextView tvAccount = headerView.findViewById(R.id.tv_account);
+        TextView tvAddress = headerView.findViewById(R.id.tv_address);
+        TextView tvDuty =  headerView.findViewById(R.id.tv_duty);
         tvName.setText(name);
         tvAccount.setText(mobile);
         tvAddress.setText(address);
