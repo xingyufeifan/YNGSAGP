@@ -52,7 +52,8 @@
             android:name="com.alibaba.app.appsecret"
             android:value="98c048c2ed6ab28dd97197a0a50c1d71" />
 
-        <activity android:name=".activity.WelcomeActivity"
+        <activity
+            android:name=".activity.WelcomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,19 +62,26 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.LoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|navigation"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
         <activity
             android:name=".activity.ModifyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity
+            android:name=".activity.DisasterPosActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity android:name=".activity.DangerPosActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+
 
     </application>
 

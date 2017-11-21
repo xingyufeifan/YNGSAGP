@@ -2,6 +2,7 @@ package com.nandi.yngsagp.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -11,18 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.google.gson.Gson;
+import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.adapter.DisasterAdapter;
 import com.nandi.yngsagp.bean.DisasterListBean;
+import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
+import com.nandi.yngsagp.utils.SharedUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +59,11 @@ public class DisasterListFragment extends Fragment {
     private DisasterAdapter disasterAdapter;
     private int isDisaster = 1;
     private int isDisPose = 0;
+    private int page = 1;
+    private int rows = 15;
+    private String areaId;
+    private List<DisasterListBean> disasterList;
+
 
     @Nullable
     @Override
@@ -59,15 +77,29 @@ public class DisasterListFragment extends Fragment {
 
 
     private void request() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/13987786880/" + isDisPose + "/" + isDisaster;
+        page = 1;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
-                Gson gson = new Gson();
-                DisasterListBean monitorData = gson.fromJson(response, DisasterListBean.class);
-                setAdapter(monitorData);
-                refreshLayout.finishRefresh();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
+                    boolean isSuccess = jsonMeta.optBoolean("success");
+                    String message = jsonMeta.optString("message");
+                    if (isSuccess) {
+                        disasterList = JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class);
+                        setAdapter();
+                        refreshLayout.finishRefresh();
+                    } else {
+                        ToastUtils.showShort(message);
+                        refreshLayout.finishRefresh();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -80,14 +112,27 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void requestFirst() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/13987786880/" + isDisPose + "/" + isDisaster;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                Gson gson = new Gson();
-                DisasterListBean monitorData = gson.fromJson(response, DisasterListBean.class);
-                setAdapter(monitorData);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
+                    System.out.println("jsonData = " + jsonData.toString());
+                    boolean isSuccess = jsonMeta.optBoolean("success");
+                    String message = jsonMeta.optString("message");
+                    if (isSuccess) {
+                        disasterList = JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class);
+                        setAdapter();
+                    } else {
+
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -97,17 +142,37 @@ public class DisasterListFragment extends Fragment {
         });
 
     }
+
     private void loadMore() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/13987786880/" + isDisPose + "/" + isDisaster;
+        page += 1;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
-                Gson gson = new Gson();
-                DisasterListBean monitorData = gson.fromJson(response, DisasterListBean.class);
-                disasterAdapter.notifyDataSetChanged();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
+                    System.out.println("jsonData = " + jsonData.toString());
+                    boolean isSuccess = jsonMeta.optBoolean("success");
+                    String message = jsonMeta.optString("message");
+                    if (isSuccess) {
+                        if ("[]".equals(jsonData.toString())){
+                          ToastUtils.showShort("没有更多数据了");
+                        }
+                        disasterList.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class));
+                        disasterAdapter.notifyDataSetChanged();
+                        refreshLayout.finishLoadmore();
+                    } else {
+                        refreshLayout.finishLoadmore();
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                refreshLayout.finishLoadmore(true);
+
             }
 
             @Override
@@ -118,9 +183,19 @@ public class DisasterListFragment extends Fragment {
 
     }
 
-    private void setAdapter(DisasterListBean disasterListBean) {
+    private void setAdapter() {
         disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        disasterAdapter = new DisasterAdapter(getActivity(), disasterListBean);
+        disasterAdapter = new DisasterAdapter(getActivity(), disasterList);
+        disasterAdapter.setOnItemClickListener(new DisasterAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
+                intent.putExtra("list", (Serializable) disasterList);
+                intent.putExtra("position", position);
+                intent.putExtra("isDisPose", isDisPose);
+                startActivity(intent);
+            }
+        });
         disasterShow.setAdapter(disasterAdapter);
 
     }
@@ -130,9 +205,12 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
+
+                if (position !=isDisPose){
+                    page = 1;
+                }
                 isDisPose = position;
                 requestFirst();
-                ToastUtils.showShort("我点了" + position);
             }
 
             @Override
@@ -149,6 +227,7 @@ public class DisasterListFragment extends Fragment {
     private void initViews() {
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 1);
+        areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -158,9 +237,10 @@ public class DisasterListFragment extends Fragment {
         refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-             loadMore();
+                loadMore();
             }
         });
+        requestFirst();
     }
 
 

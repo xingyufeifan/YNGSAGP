@@ -42,4 +42,6 @@
     <string name="houseDanger">威胁房屋(间)：</string>
     <string name="moneyDanger">潜在经济损失(万元)：</string>
     <string name="areaDanger">威胁农田(亩)：</string>
+    <string name="disasterNum">灾情编号：</string>
+    <string name="xqNum">险情编号：</string>
 </resources>

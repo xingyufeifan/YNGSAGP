@@ -25,7 +25,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/userDanger"
+                android:id="@+id/userShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -46,7 +46,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/phoneDanger"
+                android:id="@+id/phoneShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -67,8 +67,9 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/timeDanger"
-                style="@style/disasterStyle" />
+                android:id="@+id/timeShow"
+                style="@style/disasterStyle"
+                android:hint="请选择...(必填)" />
         </LinearLayout>
 
         <TextView
@@ -80,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="地点"
+            android:text="位置"
             android:textSize="18sp" />
 
 
@@ -97,7 +98,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/locationDanger"
+                android:id="@+id/locationShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)" />
         </LinearLayout>
@@ -117,10 +118,11 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/addressDanger"
+                android:id="@+id/addressShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)" />
         </LinearLayout>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -138,8 +140,8 @@
                 android:text="@string/dReportLon"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/lonDanger"
+            <EditText
+                android:id="@+id/lonShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -159,8 +161,8 @@
                 android:text="@string/dReportLat"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/latDanger"
+            <EditText
+                android:id="@+id/latShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -175,7 +177,26 @@
             android:gravity="center"
             android:text="原因/类型"
             android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/disasterNum"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/disNumShow"
+                style="@style/disasterStyle" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,13 +209,11 @@
                 android:textSize="16sp" />
 
             <Spinner
-                android:id="@+id/typeDanger"
-                android:layout_width="0dp"
+                android:id="@+id/typeShow"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:entries="@array/dangerType" />
-
         </LinearLayout>
 
         <TextView
@@ -210,12 +229,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="请输入...(必填)"
                 android:text="@string/dReportFactor"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/factorDanger"
+                android:id="@+id/factorShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
@@ -228,7 +246,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="险情"
+            android:text="灾情"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -239,11 +257,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/personDanger"
+                android:text="@string/dReportInjurd"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/personDanger"
+                android:id="@+id/injurdShow"
                 style="@style/disasterStyle"
                 android:inputType="number" />
         </LinearLayout>
@@ -261,11 +279,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/houseDanger"
+                android:text="@string/dReportDeath"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/houseDanger"
+                android:id="@+id/deathShow"
                 style="@style/disasterStyle"
                 android:inputType="number" />
         </LinearLayout>
@@ -283,36 +301,80 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/moneyDanger"
+                android:text="@string/dReportMiss"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/moneyDanger"
+                android:id="@+id/missShow"
+                style="@style/disasterStyle"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dReportFram"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/farmShow"
+                style="@style/disasterStyle"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dReportHouse"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/houseShow"
+                style="@style/disasterStyle"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dReportMoney"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/moneyShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)"
-                android:inputType="number" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/areaDanger"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/areaDanger"
-                style="@style/disasterStyle"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <TextView
@@ -326,7 +388,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -347,7 +409,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/dReportMobile"
+                    android:id="@+id/mobileShow"
                     style="@style/disasterStyle" />
             </LinearLayout>
 
@@ -368,7 +430,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/dReportName"
+                    android:id="@+id/nameShow"
                     style="@style/disasterStyle" />
             </LinearLayout>
 
@@ -377,7 +439,6 @@
                 android:layout_height="1dp"
                 android:background="@color/report_unpressed" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -391,7 +452,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/otherDanger"
+                android:id="@+id/otherShow"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@drawable/shape_report"

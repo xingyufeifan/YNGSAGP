@@ -50,7 +50,6 @@ public class ModifyActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify);
-        System.out.println("我竟来了");
         ButterKnife.bind(this);
         mContext = this;
         modifyUser.setText((String) SharedUtils.getShare(this, Constant.MOBILE, ""));
@@ -76,12 +75,13 @@ public class ModifyActivity extends BaseActivity {
                 modifyNpsw.setText("");
                 break;
             case R.id.modify_sure:
-                String url = "http://192.168.10.195:8080/yncmd/appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim() + "/" + SharedUtils.getShare(mContext, Constant.TYPE, "");
+                String url = "http://192.168.10.195:8080/yncmd/appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim() + "/" + SharedUtils.getShare(mContext, Constant.PERSON_TYPE, "");
                 if (textInput()) {
                     OkHttpHelper.sendHttpGet(this, url, new OkHttpCallback() {
                         @Override
                         public void onSuccess(String response) {
                             try {
+                                System.out.println("response = " + response);
                                 JSONObject jsonObject = new JSONObject(response);
                                 String meta = jsonObject.optString("meta");
                                 JSONObject metaJson = new JSONObject(meta);

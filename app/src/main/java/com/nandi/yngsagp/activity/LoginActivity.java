@@ -216,6 +216,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url)+"appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
+                System.out.println("response = " + response);
                 SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
                 SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
                 progressDialog.dismiss();
@@ -255,8 +256,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SharedUtils.putShare(mContext, Constant.NAME,name);
         String userName = jsonData.optString("userName");
         SharedUtils.putShare(mContext, Constant.USER_NAME,userName);
-        String type = jsonData.optString("type");
-        SharedUtils.putShare(mContext, Constant.TYPE,type);
+        String personType = jsonData.optString("personType");
+        SharedUtils.putShare(mContext, Constant.PERSON_TYPE,personType);
         SharedUtils.putShare(mContext,Constant.IS_LOGIN,true);
     }
 

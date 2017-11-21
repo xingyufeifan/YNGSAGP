@@ -101,7 +101,7 @@ public class DangerReportFragment extends Fragment {
     @BindView(R.id.addressDanger)
     EditText addressDanger;
     @BindView(R.id.locationDanger)
-    EditText locationDanger;
+    TextView locationDanger;
     @BindView(R.id.lonDanger)
     TextView lonDanger;
     @BindView(R.id.latDanger)
@@ -323,13 +323,14 @@ public class DangerReportFragment extends Fragment {
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在上传...");
-        if ("1".equals(SharedUtils.getShare(context, Constant.TYPE, "0"))) {
+        if ("1".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
         userDanger.setText((CharSequence) SharedUtils.getShare(getActivity(), Constant.NAME, ""));
         phoneDanger.setText((CharSequence) SharedUtils.getShare(getActivity(), Constant.MOBILE, ""));
+        locationDanger.setText((CharSequence) SharedUtils.getShare(context, Constant.ADDRESS, ""));
     }
 
     @Override
@@ -363,7 +364,7 @@ public class DangerReportFragment extends Fragment {
                 save();
                 break;
             case R.id.btn_upload:
-                if (messageIsTrue()){
+                if (messageIsTrue()) {
                     upload();
                 }
                 break;
@@ -394,7 +395,7 @@ public class DangerReportFragment extends Fragment {
     }
 
     private void upload() {
-        Map<String,String> map=new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         String reportMan = userDanger.getText().toString().trim();
         String phone = phoneDanger.getText().toString().trim();
         String time = timeDanger.getText().toString().trim();
@@ -411,22 +412,26 @@ public class DangerReportFragment extends Fragment {
         String other = otherDanger.getText().toString().trim();
         String mobile = dReportMobile.getText().toString().trim();
         String name = dReportName.getText().toString().trim();
-        map.put("phoneNum",phone);
-        map.put("personel",reportMan);
-        map.put("currentLocation",location);
-        map.put("address",address);
-        map.put("disasterType",type);
-        map.put("factor",factor);
-        map.put("personNum",person);
-        map.put("houseNum",house);
-        map.put("area",farm);
-        map.put("longitude",lon);
-        map.put("latitude",lat);
-        map.put("otherThing",other);
-        map.put("happenTime",time);
-        map.put("potentialLoss ",money);
-        map.put("monitorName ",mobile);
-        map.put("monitorPhone ",name);
+        String areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "0");
+        String personType = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "0");
+        map.put("phoneNum", phone);
+        map.put("personel", reportMan);
+        map.put("currentLocation", location);
+        map.put("address", address);
+        map.put("disasterType", type);
+        map.put("factor", factor);
+        map.put("personNum", person);
+        map.put("houseNum", house);
+        map.put("area", farm);
+        map.put("longitude", lon);
+        map.put("latitude", lat);
+        map.put("otherThing", other);
+        map.put("happenTime", time);
+        map.put("potentialLoss ", money);
+        map.put("monitorName ", mobile);
+        map.put("monitorPhone ", name);
+        map.put("areaId", areaId);
+        map.put("personType", personType);
         setRequest(map);
     }
 
@@ -436,15 +441,15 @@ public class DangerReportFragment extends Fragment {
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
-                Log.d("cp","图片添加");
+                Log.d("cp", "图片添加");
             }
         }
         if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
-            Log.d("cp","视频添加");
+            Log.d("cp", "视频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
         }
         if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
-            Log.d("cp","音频添加");
+            Log.d("cp", "音频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
         }
         formBuilder.params(map);
@@ -458,7 +463,7 @@ public class DangerReportFragment extends Fragment {
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
-                    Log.d("cp",e.getMessage());
+                    Log.d("cp", e.getMessage());
                 }
             }
 
@@ -466,14 +471,14 @@ public class DangerReportFragment extends Fragment {
             public void onResponse(String response, int id) {
                 progressDialog.dismiss();
                 try {
-                    JSONObject object=new JSONObject(response);
+                    JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
                     String message = object.getString("data");
                     boolean success = meta.getBoolean("success");
-                    if (success){
+                    if (success) {
                         ToastUtils.showShort(message);
-                        clean();
-                    }else {
+//                        clean();
+                    } else {
                         ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {

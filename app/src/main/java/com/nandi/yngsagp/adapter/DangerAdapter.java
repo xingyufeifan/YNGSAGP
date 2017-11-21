@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterUBean;
+import com.nandi.yngsagp.bean.DangerListBean;
 
 import java.util.List;
 
@@ -19,13 +19,21 @@ import java.util.List;
 
 public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHolder> {
     private Context mContext;
-    private List<DisasterUBean> bean;
+    public DisasterAdapter.OnItemClickListener mOnItemClickListener;
+    private List<DangerListBean> listBeans;
 
-    public DangerAdapter(Context context, List bean) {
+    public DangerAdapter(Context context,List<DangerListBean> listBeans) {
         mContext = context;
-        this.bean = bean;
+        this.listBeans = listBeans;
     }
 
+    public interface OnItemClickListener {
+        void onClick(int position);
+    }
+
+    public void setOnItemClickListener(DisasterAdapter.OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
 
     @Override
     public DangerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,27 +44,40 @@ public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(DangerAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(DangerAdapter.MyViewHolder holder, final int position) {
+        holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
+//        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
+//        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());
+        if (mOnItemClickListener != null) {
+            holder.toNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onClick(position);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         //生成的item的数量
-        return bean.size();
+        return listBeans.size();
     }
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textPlace;
-        public TextView textType;
+        public TextView textDisNum;
+        public TextView textAddress;
         public TextView textToTime;
+        public TextView toNext;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            textPlace = (TextView) itemView.findViewById(R.id.address);
-            textType = (TextView) itemView.findViewById(R.id.disNum);
-            textToTime = (TextView) itemView.findViewById(R.id.toTime);
+            textDisNum = itemView.findViewById(R.id.disNum);
+            textAddress = itemView.findViewById(R.id.address);
+            textToTime = itemView.findViewById(R.id.toTime);
+            toNext = itemView.findViewById(R.id.toNext);
         }
     }
 }

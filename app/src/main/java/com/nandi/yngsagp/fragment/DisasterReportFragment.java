@@ -127,7 +127,7 @@ public class DisasterReportFragment extends Fragment {
     @BindView(R.id.dReportAddress)
     EditText dReportAddress;
     @BindView(R.id.dReportLocation)
-    EditText dReportLocation;
+    TextView dReportLocation;
     @BindView(R.id.dReportType)
     Spinner dReportType;
     @BindView(R.id.dReportFactor)
@@ -167,12 +167,13 @@ public class DisasterReportFragment extends Fragment {
     private ProgressDialog progressDialog;
     private int typePos;
     private LocationClient locationClient;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_disaster_report, container, false);
         unbinder = ButterKnife.bind(this, view);
-        context=getActivity();
+        context = getActivity();
         initData();
         initViews();
         setAdapter();
@@ -255,11 +256,12 @@ public class DisasterReportFragment extends Fragment {
         progressDialog.setMessage("正在上传...");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        if ("1".equals(SharedUtils.getShare(context, Constant.TYPE, "0"))) {
+        if ("1".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
         dReportPhone.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
+        dReportLocation.setText((CharSequence) SharedUtils.getShare(context, Constant.ADDRESS, ""));
     }
 
     private void initData() {
@@ -273,8 +275,8 @@ public class DisasterReportFragment extends Fragment {
             dReportTime.setText(disasterUBean.getTime());
             dReportAddress.setText(disasterUBean.getAddress());
             dReportLocation.setText(disasterUBean.getLocation());
-            typePos=Integer.parseInt(disasterUBean.getType());
-            dReportType.setSelection(Integer.parseInt(disasterUBean.getType()),true);
+            typePos = Integer.parseInt(disasterUBean.getType());
+            dReportType.setSelection(Integer.parseInt(disasterUBean.getType()), true);
             dReportFactor.setText(disasterUBean.getFactor());
             dReportInjurd.setText(disasterUBean.getInjured());
             dReportDeath.setText(disasterUBean.getDeath());
@@ -287,8 +289,8 @@ public class DisasterReportFragment extends Fragment {
             dReportOther.setText(disasterUBean.getOther());
             dReportMobile.setText(disasterUBean.getReportMobile());
             dReportName.setText(disasterUBean.getReportName());
-        }else {
-            locationClient=new LocationClient(getActivity().getApplicationContext());
+        } else {
+            locationClient = new LocationClient(getActivity().getApplicationContext());
             LocationClientOption option = new LocationClientOption();
             option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
             option.setCoorType("gcj02");
@@ -305,7 +307,7 @@ public class DisasterReportFragment extends Fragment {
             photoPaths.clear();
             photoPaths.addAll(queryPhoto);
         }
-        if (queryVideo != null&&!TextUtils.isEmpty(queryVideo.getPath())) {
+        if (queryVideo != null && !TextUtils.isEmpty(queryVideo.getPath())) {
             videoFile = new File(queryVideo.getPath());
             tvVideo.setText(videoFile.getAbsolutePath());
         }
@@ -333,9 +335,9 @@ public class DisasterReportFragment extends Fragment {
         @Override
         public void onLocDiagnosticMessage(int locType, int diagnosticType, String diagnosticMessage) {
             if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_GPS) {
-                ToastUtils.showShort( "请打开GPS");
+                ToastUtils.showShort("请打开GPS");
             } else if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_WIFI) {
-                ToastUtils.showShort( "建议打开WIFI提高定位经度");
+                ToastUtils.showShort("建议打开WIFI提高定位经度");
             }
         }
     }
@@ -360,7 +362,7 @@ public class DisasterReportFragment extends Fragment {
                 save();
                 break;
             case R.id.btn_upload:
-                if (messageIsTrue()){
+                if (messageIsTrue()) {
                     upload();
                 }
 
@@ -390,28 +392,30 @@ public class DisasterReportFragment extends Fragment {
                 break;
         }
     }
+
     private boolean messageIsTrue() {
-        if (TextUtils.isEmpty(dReportTime.getText())){
+        if (TextUtils.isEmpty(dReportTime.getText())) {
             ToastUtils.showShort("请选择时间");
             return false;
-        }else if (TextUtils.isEmpty(dReportAddress.getText())){
+        } else if (TextUtils.isEmpty(dReportAddress.getText())) {
             dReportAddress.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        }else if (TextUtils.isEmpty(dReportLocation.getText())){
+        } else if (TextUtils.isEmpty(dReportLocation.getText())) {
             dReportLocation.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        }else if (TextUtils.isEmpty(dReportMoney.getText())){
+        } else if (TextUtils.isEmpty(dReportMoney.getText())) {
             dReportMoney.setError("请填写损失财产");
             ToastUtils.showShort("请填写损失财产");
             return false;
-        }else if (0 == typePos){
+        } else if (0 == typePos) {
             ToastUtils.showShort("请选择灾种类型");
             return false;
         }
         return true;
     }
+
     private void clickText(final int type) {
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
         TextView tvPlay = view.findViewById(R.id.tv_play);
@@ -478,7 +482,7 @@ public class DisasterReportFragment extends Fragment {
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = typePos+"";
+        String type = typePos + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
         String death = dReportDeath.getText().toString().trim();
@@ -540,7 +544,7 @@ public class DisasterReportFragment extends Fragment {
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = typePos+"";
+        String type = typePos + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
         String death = dReportDeath.getText().toString().trim();
@@ -553,6 +557,8 @@ public class DisasterReportFragment extends Fragment {
         String other = dReportOther.getText().toString().trim();
         String reportName = dReportName.getText().toString().trim();
         String reportMobile = dReportMobile.getText().toString().trim();
+        String areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "0");
+        String personType = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "0");
         map.put("phoneNum", phone);
         map.put("personel", reportMan);
         map.put("findTime", time);
@@ -569,8 +575,10 @@ public class DisasterReportFragment extends Fragment {
         map.put("longitude", lon);
         map.put("latitude", lat);
         map.put("otherThing", other);
-        map.put("monitorName",reportName);
-        map.put("monitorPhone",reportMobile);
+        map.put("monitorName", reportName);
+        map.put("monitorPhone", reportMobile);
+        map.put("areaId", areaId);
+        map.put("personType", personType);
         setRequest(map);
     }
 
@@ -580,15 +588,15 @@ public class DisasterReportFragment extends Fragment {
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
-                Log.d("cp","图片添加");
+                Log.d("cp", "图片添加");
             }
         }
         if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
-                Log.d("cp","视频添加");
+            Log.d("cp", "视频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
         }
         if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
-                Log.d("cp","音频添加");
+            Log.d("cp", "音频添加");
             formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
         }
         formBuilder.params(map);
@@ -602,7 +610,7 @@ public class DisasterReportFragment extends Fragment {
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
-                    Log.d("cp",e.getMessage());
+                    Log.d("cp", e.getMessage());
                 }
             }
 
@@ -610,14 +618,14 @@ public class DisasterReportFragment extends Fragment {
             public void onResponse(String response, int id) {
                 progressDialog.dismiss();
                 try {
-                    JSONObject object=new JSONObject(response);
+                    JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
                     String message = object.getString("data");
                     boolean success = meta.getBoolean("success");
-                    if (success){
+                    if (success) {
                         ToastUtils.showShort(message);
-                        clean();
-                    }else {
+//                        clean();
+                    } else {
                         ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
@@ -632,7 +640,7 @@ public class DisasterReportFragment extends Fragment {
         dReportTime.setText("");
         dReportAddress.setText("");
         dReportLocation.setText("");
-        typePos=0;
+        typePos = 0;
         dReportType.setSelection(0);
         dReportFactor.setText("");
         dReportInjurd.setText("");
@@ -650,9 +658,9 @@ public class DisasterReportFragment extends Fragment {
         tvVideo.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
-        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(1));
-        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(1));
-        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(1));
+//        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(1));
+//        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(1));
+//        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(1));
     }
 
     private void playAudio(String s) {

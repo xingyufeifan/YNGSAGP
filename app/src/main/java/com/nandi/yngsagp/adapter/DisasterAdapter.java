@@ -20,12 +20,21 @@ import java.util.List;
 public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyViewHolder> {
     private Context mContext;
     private DisasterListBean disasterListBean;
+    public DisasterAdapter.OnItemClickListener mOnItemClickListener;
+    private List<DisasterListBean> listBeans;
 
-    public DisasterAdapter(Context context, DisasterListBean ListBean) {
+    public DisasterAdapter(Context context,List<DisasterListBean> listBeans) {
         mContext = context;
-        this.disasterListBean = ListBean;
+        this.listBeans = listBeans;
     }
 
+    public interface OnItemClickListener {
+        void onClick(int position);
+    }
+
+    public void setOnItemClickListener(DisasterAdapter.OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
 
     @Override
     public DisasterAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,16 +45,24 @@ public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(DisasterAdapter.MyViewHolder holder, int position) {
-        holder.textDisNum.setText(disasterListBean.getData().get(position).getCurrentLocation());
-        holder.textAddress.setText((String)disasterListBean.getData().get(position).getAddress());
-        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());
+    public void onBindViewHolder(DisasterAdapter.MyViewHolder holder, final int position) {
+        holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
+//        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
+//        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());
+        if (mOnItemClickListener != null) {
+            holder.toNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onClick(position);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         //生成的item的数量
-        return disasterListBean.getData().size();
+        return listBeans.size();
     }
 
 
@@ -53,6 +70,7 @@ public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyView
         public TextView textDisNum;
         public TextView textAddress;
         public TextView textToTime;
+        public TextView toNext;
 
 
         public MyViewHolder(View itemView) {
@@ -60,6 +78,7 @@ public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyView
             textDisNum = itemView.findViewById(R.id.disNum);
             textAddress = itemView.findViewById(R.id.address);
             textToTime = itemView.findViewById(R.id.toTime);
+            toNext = itemView.findViewById(R.id.toNext);
         }
     }
 }
