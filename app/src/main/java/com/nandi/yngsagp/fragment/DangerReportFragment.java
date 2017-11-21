@@ -57,18 +57,28 @@ import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 
 /**
@@ -147,6 +157,7 @@ public class DangerReportFragment extends Fragment {
     private MediaRecorder recorder;
     private ProgressDialog progressDialog;
     private LocationClient locationClient;
+    private RequestCall build;
 
     @Nullable
     @Override
@@ -166,7 +177,7 @@ public class DangerReportFragment extends Fragment {
         List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(2);
         VideoPath queryVideo = GreedDaoHelper.queryVideo(2);
         AudioPath queryAudio = GreedDaoHelper.queryAudio(2);
-        if (queryDanger!=null){
+        if (queryDanger != null) {
             userDanger.setText(queryDanger.getReportMan());
             phoneDanger.setText(queryDanger.getPhone());
             timeDanger.setText(queryDanger.getTime());
@@ -174,7 +185,7 @@ public class DangerReportFragment extends Fragment {
             locationDanger.setText(queryDanger.getLocation());
             lonDanger.setText(queryDanger.getLon());
             latDanger.setText(queryDanger.getLat());
-            typePos=Integer.parseInt(queryDanger.getType());
+            typePos = Integer.parseInt(queryDanger.getType());
             typeDanger.setSelection(Integer.parseInt(queryDanger.getType()));
             factorDanger.setText(queryDanger.getFactor());
             personDanger.setText(queryDanger.getPerson());
@@ -184,8 +195,8 @@ public class DangerReportFragment extends Fragment {
             otherDanger.setText(queryDanger.getOther());
             dReportMobile.setText(queryDanger.getMobile());
             dReportName.setText(queryDanger.getName());
-        }else {
-            locationClient=new LocationClient(getActivity().getApplicationContext());
+        } else {
+            locationClient = new LocationClient(getActivity().getApplicationContext());
             LocationClientOption option = new LocationClientOption();
             option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
             option.setCoorType("gcj02");
@@ -202,7 +213,7 @@ public class DangerReportFragment extends Fragment {
             photoPaths.clear();
             photoPaths.addAll(queryPhoto);
         }
-        if (queryVideo != null&&!TextUtils.isEmpty(queryVideo.getPath())) {
+        if (queryVideo != null && !TextUtils.isEmpty(queryVideo.getPath())) {
 
             videoFile = new File(queryVideo.getPath());
             tvVideo.setText(videoFile.getAbsolutePath());
@@ -212,6 +223,7 @@ public class DangerReportFragment extends Fragment {
             tvAudio.setText(audioPath);
         }
     }
+
     private class LocationListener extends BDAbstractLocationListener {
 
         @Override
@@ -229,12 +241,13 @@ public class DangerReportFragment extends Fragment {
         @Override
         public void onLocDiagnosticMessage(int locType, int diagnosticType, String diagnosticMessage) {
             if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_GPS) {
-                ToastUtils.showShort( "请打开GPS");
+                ToastUtils.showShort("请打开GPS");
             } else if (diagnosticType == LocationClient.LOC_DIAGNOSTIC_TYPE_BETTER_OPEN_WIFI) {
-                ToastUtils.showShort( "建议打开WIFI提高定位经度");
+                ToastUtils.showShort("建议打开WIFI提高定位经度");
             }
         }
     }
+
     private void setAdapter() {
         pictureAdapter = new PictureAdapter(context, photoPaths);
         rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));
@@ -287,7 +300,12 @@ public class DangerReportFragment extends Fragment {
                 System.out.println("parent = " + parent);
             }
         });
-
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                // TODO: 2017/11/20  取消请求
+            }
+        });
     }
 
     private void enlargePhoto(String path) {
@@ -344,7 +362,9 @@ public class DangerReportFragment extends Fragment {
                 save();
                 break;
             case R.id.btn_upload:
-                messageIsTrue();
+                if (messageIsTrue()){
+                    upload();
+                }
                 break;
             case R.id.iv_take_photo:
                 if (photoPaths.size() < 5) {
@@ -370,6 +390,121 @@ public class DangerReportFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    private void upload() {
+        Map<String,String> map=new HashMap<>();
+        String reportMan = userDanger.getText().toString().trim();
+        String phone = phoneDanger.getText().toString().trim();
+        String time = timeDanger.getText().toString().trim();
+        String address = addressDanger.getText().toString().trim();
+        String location = locationDanger.getText().toString().trim();
+        String lon = lonDanger.getText().toString().trim();
+        String lat = latDanger.getText().toString().trim();
+        String type = typePos + "";
+        String factor = factorDanger.getText().toString().trim();
+        String person = personDanger.getText().toString().trim();
+        String house = houseDanger.getText().toString().trim();
+        String money = moneyDanger.getText().toString().trim();
+        String farm = areaDanger.getText().toString().trim();
+        String other = otherDanger.getText().toString().trim();
+        String mobile = dReportMobile.getText().toString().trim();
+        String name = dReportName.getText().toString().trim();
+        map.put("phoneNum",phone);
+        map.put("personel",reportMan);
+        map.put("currentLocation",location);
+        map.put("address",address);
+        map.put("disasterType",type);
+        map.put("factor",factor);
+        map.put("personNum",person);
+        map.put("houseNum",house);
+        map.put("area",farm);
+        map.put("longitude",lon);
+        map.put("latitude",lat);
+        map.put("otherThing",other);
+        map.put("happenTime",time);
+        map.put("potentialLoss ",money);
+        map.put("monitorName ",mobile);
+        map.put("monitorPhone ",name);
+        setRequest(map);
+    }
+
+    private void setRequest(Map<String, String> map) {
+        progressDialog.show();
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");
+        for (PhotoPath photoPath : photoPaths) {
+            if (photoPath != null) {
+                formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+                Log.d("cp","图片添加");
+            }
+        }
+        if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
+            Log.d("cp","视频添加");
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
+        }
+        if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
+            Log.d("cp","音频添加");
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        }
+        formBuilder.params(map);
+        formBuilder.addParams("type", "2");
+        build = formBuilder.build();
+        build.execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("Canceled".equals(e.getMessage())) {
+                    ToastUtils.showShort("取消上传！");
+                } else {
+                    progressDialog.dismiss();
+                    ToastUtils.showShort("网络连接失败！");
+                    Log.d("cp",e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject object=new JSONObject(response);
+                    JSONObject meta = object.getJSONObject("meta");
+                    String message = object.getString("data");
+                    boolean success = meta.getBoolean("success");
+                    if (success){
+                        ToastUtils.showShort(message);
+                        clean();
+                    }else {
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void clean() {
+        timeDanger.setText("");
+        addressDanger.setText("");
+        locationDanger.setText("");
+        lonDanger.setText("");
+        latDanger.setText("");
+        typePos = 0;
+        typeDanger.setSelection(0);
+        factorDanger.setText("");
+        personDanger.setText("");
+        houseDanger.setText("");
+        moneyDanger.setText("");
+        areaDanger.setText("");
+        otherDanger.setText("");
+        dReportMobile.setText("");
+        dReportName.setText("");
+        tvAudio.setText("");
+        tvVideo.setText("");
+        photoPaths.clear();
+        pictureAdapter.notifyDataSetChanged();
+        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(2));
+        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(2));
+        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(2));
     }
 
     private void save() {

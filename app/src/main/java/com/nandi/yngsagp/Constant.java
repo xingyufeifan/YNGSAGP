@@ -12,4 +12,5 @@ public class Constant {
     public  static  final  String TYPE = "TYPE";
     public  static  final  String MOBILE = "MOBILE";
     public  static  final  String PASSWORD = "PASSWORD";
+    public  static  final  String IS_LOGIN = "isLogin";
 }

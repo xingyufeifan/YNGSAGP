@@ -257,6 +257,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SharedUtils.putShare(mContext, Constant.USER_NAME,userName);
         String type = jsonData.optString("type");
         SharedUtils.putShare(mContext, Constant.TYPE,type);
+        SharedUtils.putShare(mContext,Constant.IS_LOGIN,true);
     }
 
     //权限申请

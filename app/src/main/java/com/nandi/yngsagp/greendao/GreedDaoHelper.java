@@ -50,6 +50,10 @@ public class GreedDaoHelper {
 
     public static void deletePhoto(PhotoPath photoPath) {
         daoSession.getPhotoPathDao().delete(photoPath);
+        daoSession.getPhotoPathDao().deleteInTx();
+    }
+    public static void deletePhotoList(List<PhotoPath> photoPaths) {
+        daoSession.getPhotoPathDao().deleteInTx(photoPaths);
     }
     public static void insertVideo(VideoPath videoPath) {
         daoSession.getVideoPathDao().insertOrReplace(videoPath);

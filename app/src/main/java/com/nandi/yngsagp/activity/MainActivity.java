@@ -180,6 +180,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // TODO: 2017/11/16 清空数据
+                        SharedUtils.removeShare(context,Constant.IS_LOGIN );
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
                     }

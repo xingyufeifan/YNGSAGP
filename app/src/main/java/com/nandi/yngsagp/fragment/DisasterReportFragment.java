@@ -530,6 +530,7 @@ public class DisasterReportFragment extends Fragment {
         audio.setType(1);
         audio.setPath(tvAudio.getText().toString());
         GreedDaoHelper.insertAudio(audio);
+        ToastUtils.showShort("保存成功");
     }
 
     private void upload() {
@@ -628,6 +629,30 @@ public class DisasterReportFragment extends Fragment {
 
     private void clean() {
         // TODO: 2017/11/17
+        dReportTime.setText("");
+        dReportAddress.setText("");
+        dReportLocation.setText("");
+        typePos=0;
+        dReportType.setSelection(0);
+        dReportFactor.setText("");
+        dReportInjurd.setText("");
+        dReportDeath.setText("");
+        dReportMiss.setText("");
+        dReportFram.setText("");
+        dReportHouse.setText("");
+        dReportMoney.setText("");
+        dReportLon.setText("");
+        dReportLat.setText("");
+        dReportOther.setText("");
+        dReportMobile.setText("");
+        dReportName.setText("");
+        tvAudio.setText("");
+        tvVideo.setText("");
+        photoPaths.clear();
+        pictureAdapter.notifyDataSetChanged();
+        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(1));
+        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(1));
+        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(1));
     }
 
     private void playAudio(String s) {
