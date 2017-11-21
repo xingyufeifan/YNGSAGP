@@ -169,6 +169,7 @@ public class DangerReportFragment extends Fragment {
         initViews();
         setAdapter();
         setListener();
+        System.out.println(3);
         return view;
     }
 
