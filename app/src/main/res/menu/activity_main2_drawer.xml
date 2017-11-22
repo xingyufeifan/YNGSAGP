@@ -20,6 +20,14 @@
             android:id="@+id/nav_danger_handle"
             android:icon="@mipmap/ic_setting"
             android:title="险情处理" />
+        <item
+            android:id="@+id/nav_disaster_data"
+            android:icon="@mipmap/ic_setting"
+            android:title="灾情数据" />
+        <item
+            android:id="@+id/nav_danger_data"
+            android:icon="@mipmap/ic_setting"
+            android:title="险情数据" />
     </group>
 
     <item android:title="其他操作">

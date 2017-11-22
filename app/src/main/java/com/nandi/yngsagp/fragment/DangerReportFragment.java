@@ -501,7 +501,6 @@ public class DangerReportFragment extends Fragment {
 
     private void clean() {
         timeDanger.setText("");
-        addressDanger.setText("");
         locationDanger.setText("");
         lonDanger.setText("");
         latDanger.setText("");

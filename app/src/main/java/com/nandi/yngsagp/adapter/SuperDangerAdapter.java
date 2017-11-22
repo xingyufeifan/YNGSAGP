@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DangerListABean;
-import com.nandi.yngsagp.bean.DangerListUBean;
+import com.nandi.yngsagp.bean.SuperDangerBean;
+import com.nandi.yngsagp.bean.SuperDisasterBean;
 
 import java.util.List;
 
@@ -18,12 +18,12 @@ import java.util.List;
  */
 
 
-public class DangerUPosAdapter extends RecyclerView.Adapter<DangerUPosAdapter.MyViewHolder> {
+public class SuperDangerAdapter extends RecyclerView.Adapter<SuperDangerAdapter.MyViewHolder> {
     private Context mContext;
-    public DisasterAPosAdapter.OnItemClickListener mOnItemClickListener;
-    private List<DangerListUBean> listBeans;
+    public SuperDangerAdapter.OnItemClickListener mOnItemClickListener;
+    private List<SuperDangerBean> listBeans;
 
-    public DangerUPosAdapter(Context context, List<DangerListUBean> listBeans) {
+    public SuperDangerAdapter(Context context, List<SuperDangerBean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }
@@ -32,20 +32,20 @@ public class DangerUPosAdapter extends RecyclerView.Adapter<DangerUPosAdapter.My
         void onClick(int position);
     }
 
-    public void setOnItemClickListener(DisasterAPosAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(SuperDangerAdapter.OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
     @Override
-    public DangerUPosAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SuperDangerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_disaster_list, null);
-        DangerUPosAdapter.MyViewHolder holderA = new DangerUPosAdapter.MyViewHolder(view);
+        SuperDangerAdapter.MyViewHolder holderA = new SuperDangerAdapter.MyViewHolder(view);
         return holderA;
     }
 
     @Override
-    public void onBindViewHolder(DangerUPosAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(SuperDangerAdapter.MyViewHolder holder, final int position) {
         holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
 //        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
 //        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());

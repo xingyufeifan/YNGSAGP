@@ -6,39 +6,41 @@ import java.io.Serializable;
  * Created by qingsong on 2017/11/20.
  */
 
-public class DangerListUBean implements Serializable {
+public class SuperDangerBean implements Serializable {
 
     /**
-     * id : 81
-     * disasterNum : xq20171120185750800
+     * id : 82
+     * disasterNum : zq20171121093743445
      * phoneNum : 13987786880
      * personel : 刀海祥
-     * currentLocation : 元江哈尼族彝族傣族自治县
-     * address : 太寂寞
-     * disasterType : 4
-     * factor : 1
-     * personNum : 1
-     * houseNum : 1
-     * injurdNum : 1
-     * farmland : 1
-     * missingNum : 1
-     * lossProperty : 1
-     * deathNum : 1
-     * area : 1
-     * longitude : 106.509941
-     * latitude : 29.610532
-     * type : 2
-     * happenTime : 2017-11-20 11:42:53.0
-     * otherThing : 1
-     * isDisaster : 1
-     * findTime : 2017-11-21 09:30:25.0
+     * currentLocation : 阿里郎
+     * address : 天空
+     * disasterType : 5
+     * factor : null
+     * personNum : null
+     * houseNum : null
+     * injurdNum : null
+     * farmland : null
+     * missingNum : null
+     * lossProperty : 546646
+     * deathNum : null
+     * area : null
+     * longitude : 106.509673
+     * latitude : 29.608733
+     * type : 1
+     * happenTime : null
+     * otherThing : null
+     * isDisaster : 0
+     * findTime : 2017-11-21 09:37:11.0
      * isDispose : 1
-     * potentialLoss : 54455
-     * isDanger : 1
-     * monitorPhone : 1
-     * monitorName : 1
+     * potentialLoss : null
+     * isDanger : 0
+     * monitorPhone : null
+     * monitorName : null
      * areaId : null
-     * personType : 1
+     * personType : 0
+     * level : 1
+     * forecastLevel : 1
      */
 
     private int id;
@@ -48,35 +50,55 @@ public class DangerListUBean implements Serializable {
     private String currentLocation;
     private String address;
     private String disasterType;
-    private String factor;
-    private String personNum;
-    private String houseNum;
-    private String injurdNum;
-    private String farmland;
-    private String missingNum;
+    private Object factor;
+    private Object personNum;
+    private Object houseNum;
+    private Object injurdNum;
+    private Object farmland;
+    private Object missingNum;
     private String lossProperty;
-    private String deathNum;
-    private String area;
+    private Object deathNum;
+    private Object area;
     private String longitude;
     private String latitude;
     private String type;
-    private String happenTime;
-    private String otherThing;
+    private Object happenTime;
+    private Object otherThing;
     private int isDisaster;
     private String findTime;
     private int isDispose;
-    private String potentialLoss;
+    private Object potentialLoss;
     private int isDanger;
-    private String monitorPhone;
-    private String monitorName;
+    private Object monitorPhone;
+    private Object monitorName;
     private Object areaId;
     private String personType;
-    public void setPersonType(String personType) {
-        this.personType = personType;
+    private String level;
+    private String forecastLevel;
+
+    public String getLevel() {
+        return level;
     }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getForecastLevel() {
+        return forecastLevel;
+    }
+
+    public void setForecastLevel(String forecastLevel) {
+        this.forecastLevel = forecastLevel;
+    }
+
 
     public String getPersonType() {
         return personType;
+    }
+
+    public void setPersonType(String personType) {
+        this.personType = personType;
     }
 
 
@@ -136,51 +158,51 @@ public class DangerListUBean implements Serializable {
         this.disasterType = disasterType;
     }
 
-    public String getFactor() {
+    public Object getFactor() {
         return factor;
     }
 
-    public void setFactor(String factor) {
+    public void setFactor(Object factor) {
         this.factor = factor;
     }
 
-    public String getPersonNum() {
+    public Object getPersonNum() {
         return personNum;
     }
 
-    public void setPersonNum(String personNum) {
+    public void setPersonNum(Object personNum) {
         this.personNum = personNum;
     }
 
-    public String getHouseNum() {
+    public Object getHouseNum() {
         return houseNum;
     }
 
-    public void setHouseNum(String houseNum) {
+    public void setHouseNum(Object houseNum) {
         this.houseNum = houseNum;
     }
 
-    public String getInjurdNum() {
+    public Object getInjurdNum() {
         return injurdNum;
     }
 
-    public void setInjurdNum(String injurdNum) {
+    public void setInjurdNum(Object injurdNum) {
         this.injurdNum = injurdNum;
     }
 
-    public String getFarmland() {
+    public Object getFarmland() {
         return farmland;
     }
 
-    public void setFarmland(String farmland) {
+    public void setFarmland(Object farmland) {
         this.farmland = farmland;
     }
 
-    public String getMissingNum() {
+    public Object getMissingNum() {
         return missingNum;
     }
 
-    public void setMissingNum(String missingNum) {
+    public void setMissingNum(Object missingNum) {
         this.missingNum = missingNum;
     }
 
@@ -192,19 +214,19 @@ public class DangerListUBean implements Serializable {
         this.lossProperty = lossProperty;
     }
 
-    public String getDeathNum() {
+    public Object getDeathNum() {
         return deathNum;
     }
 
-    public void setDeathNum(String deathNum) {
+    public void setDeathNum(Object deathNum) {
         this.deathNum = deathNum;
     }
 
-    public String getArea() {
+    public Object getArea() {
         return area;
     }
 
-    public void setArea(String area) {
+    public void setArea(Object area) {
         this.area = area;
     }
 
@@ -232,19 +254,19 @@ public class DangerListUBean implements Serializable {
         this.type = type;
     }
 
-    public String getHappenTime() {
+    public Object getHappenTime() {
         return happenTime;
     }
 
-    public void setHappenTime(String happenTime) {
+    public void setHappenTime(Object happenTime) {
         this.happenTime = happenTime;
     }
 
-    public String getOtherThing() {
+    public Object getOtherThing() {
         return otherThing;
     }
 
-    public void setOtherThing(String otherThing) {
+    public void setOtherThing(Object otherThing) {
         this.otherThing = otherThing;
     }
 
@@ -272,11 +294,11 @@ public class DangerListUBean implements Serializable {
         this.isDispose = isDispose;
     }
 
-    public String getPotentialLoss() {
+    public Object getPotentialLoss() {
         return potentialLoss;
     }
 
-    public void setPotentialLoss(String potentialLoss) {
+    public void setPotentialLoss(Object potentialLoss) {
         this.potentialLoss = potentialLoss;
     }
 
@@ -288,19 +310,19 @@ public class DangerListUBean implements Serializable {
         this.isDanger = isDanger;
     }
 
-    public String getMonitorPhone() {
+    public Object getMonitorPhone() {
         return monitorPhone;
     }
 
-    public void setMonitorPhone(String monitorPhone) {
+    public void setMonitorPhone(Object monitorPhone) {
         this.monitorPhone = monitorPhone;
     }
 
-    public String getMonitorName() {
+    public Object getMonitorName() {
         return monitorName;
     }
 
-    public void setMonitorName(String monitorName) {
+    public void setMonitorName(Object monitorName) {
         this.monitorName = monitorName;
     }
 

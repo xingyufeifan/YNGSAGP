@@ -17,7 +17,9 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.DangerAPosAdapter;
+import com.nandi.yngsagp.adapter.SuperDisasterAdapter;
 import com.nandi.yngsagp.bean.DangerListABean;
+import com.nandi.yngsagp.bean.SuperDisasterBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -41,7 +43,7 @@ import butterknife.Unbinder;
  * Created by qingsong on 2017/11/15.
  */
 
-public class DangerListFragment extends Fragment {
+public class SuperDisasterFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -57,16 +59,16 @@ public class DangerListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private DangerAPosAdapter dangerAdapter;
-    private DangerAPosAdapter dangerUAdapter;
+    private SuperDisasterAdapter superAdapter;
+    private SuperDisasterAdapter superUAdapter;
     private int isDisaster = 2;
     private int isDisPose = 0;
     private int pageA = 1;
     private int pageU = 1;
     private int rows = 15;
     private String areaId;
-    private List<DangerListABean> dangerListA;
-    private List<DangerListABean> dangerListU;
+    private List<SuperDisasterBean> superListA;
+    private List<SuperDisasterBean> superListU;
     private String role;
     private JSONObject jsonObject;
     private JSONObject jsonMeta;
@@ -78,7 +80,7 @@ public class DangerListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_danger_list, container, false);
+        View view = inflater.inflate(R.layout.super_disaster_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         initViews();
         setListener();
@@ -87,7 +89,7 @@ public class DangerListFragment extends Fragment {
 
 
     private void requestA(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -95,9 +97,9 @@ public class DangerListFragment extends Fragment {
                 try {
                   initJson(response);
                     if (isSuccess) {
-                        dangerListA.clear();
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerAdapter.notifyDataSetChanged();
+                        superListA.clear();
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
                     } else {
@@ -119,16 +121,16 @@ public class DangerListFragment extends Fragment {
     }
 
     private void requestU(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        dangerListU.clear();
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerUAdapter.notifyDataSetChanged();
+                        superListU.clear();
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superUAdapter.notifyDataSetChanged();
                         pageU = 1;
                         refreshlayouts.finishRefresh();
                     } else {
@@ -160,7 +162,7 @@ public class DangerListFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -171,8 +173,8 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerAdapter.notifyDataSetChanged();
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
                         refreshLayout.finishLoadmore();
@@ -194,7 +196,7 @@ public class DangerListFragment extends Fragment {
     }
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/2/" + isDisaster + "/" + pageU + "/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageU + "/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -204,8 +206,8 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerUAdapter.notifyDataSetChanged();
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superUAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
                         refreshLayout.finishLoadmore();
@@ -278,14 +280,14 @@ public class DangerListFragment extends Fragment {
     }
 
     private void initViews() {
-        dangerListA = new ArrayList<>();
-        dangerListU = new ArrayList<>();
+        superListA = new ArrayList<>();
+        superListU = new ArrayList<>();
         dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dangerAdapter = new DangerAPosAdapter(getActivity(), dangerListA);
-        dangerUAdapter = new DangerAPosAdapter(getActivity(), dangerListU);
-        dangerShow.setAdapter(dangerAdapter);
-        dangerNShow.setAdapter(dangerUAdapter);
+        superAdapter = new SuperDisasterAdapter(getActivity(), superListA);
+        superUAdapter = new SuperDisasterAdapter(getActivity(), superListU);
+        dangerShow.setAdapter(superAdapter);
+        dangerNShow.setAdapter(superUAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("未处理险情"), 1);
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
@@ -295,15 +297,16 @@ public class DangerListFragment extends Fragment {
     }
 
     private void requestAPos() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/2/1/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
+                System.out.println(response);
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerAdapter.notifyDataSetChanged();
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
                     }
@@ -320,15 +323,15 @@ public class DangerListFragment extends Fragment {
     }
 
     private void requestUPos() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/2/1/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
                    initJson(response);
                     if (isSuccess) {
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
-                        dangerUAdapter.notifyDataSetChanged();
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDisasterBean.class));
+                        superUAdapter.notifyDataSetChanged();
                     } else {
 
                         ToastUtils.showShort(message);

@@ -28,6 +28,8 @@ import com.nandi.yngsagp.fragment.DangerListFragment;
 import com.nandi.yngsagp.fragment.DangerReportFragment;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.fragment.DisasterReportFragment;
+import com.nandi.yngsagp.fragment.SuperDangerFragment;
+import com.nandi.yngsagp.fragment.SuperDisasterFragment;
 import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.DownloadUtils;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -64,6 +66,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DangerReportFragment dangerReportFragment;
     private DisasterListFragment disasterListFragment;
     private DangerListFragment dangerListFragment;
+    private SuperDisasterFragment superDisasterFragment;
+    private SuperDangerFragment superDangerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,29 +163,61 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
-        navView.getMenu().getItem(0).setChecked(true);
-        tvTitle.setText("灾情直报");
         disasterReportFragment = new DisasterReportFragment();
         dangerReportFragment = new DangerReportFragment();
         disasterListFragment = new DisasterListFragment();
         dangerListFragment = new DangerListFragment();
+        superDisasterFragment = new SuperDisasterFragment();
+        superDangerFragment = new SuperDangerFragment();
         if ("1".equals(type)) {
+            tvTitle.setText("灾情直报");
+            navView.getMenu().getItem(0).setChecked(true);
             navView.getMenu().getItem(2).setVisible(false);
             navView.getMenu().getItem(3).setVisible(false);
+            navView.getMenu().getItem(4).setVisible(false);
+            navView.getMenu().getItem(5).setVisible(false);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
             tvDuty.setText("监测员");
         }else if("2".equals(type)){
+            tvTitle.setText("灾情直报");
+            navView.getMenu().getItem(0).setChecked(true);
+            navView.getMenu().getItem(4).setVisible(false);
+            navView.getMenu().getItem(5).setVisible(false);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
             addFragment(disasterListFragment);
             addFragment(dangerListFragment);
             tvDuty.setText("审核员");
         }else if ("3".equals(type)){
+            tvTitle.setText("灾情数据");
+            navView.getMenu().getItem(4).setChecked(true);
+            navView.getMenu().getItem(0).setVisible(false);
+            navView.getMenu().getItem(1).setVisible(false);
+            navView.getMenu().getItem(2).setVisible(false);
+            navView.getMenu().getItem(3).setVisible(false);
+            addFragment(superDisasterFragment);
+            addFragment(superDangerFragment);
             tvDuty.setText("县级");
         }else if ("4".equals(type)){
+            tvTitle.setText("灾情数据");
+            navView.getMenu().getItem(4).setChecked(true);
+            navView.getMenu().getItem(0).setVisible(false);
+            navView.getMenu().getItem(1).setVisible(false);
+            navView.getMenu().getItem(2).setVisible(false);
+            navView.getMenu().getItem(3).setVisible(false);
+            addFragment(superDisasterFragment);
+            addFragment(superDangerFragment);
             tvDuty.setText("市级");
         }else if ("5".equals(type)){
+            tvTitle.setText("灾情数据");
+            navView.getMenu().getItem(4).setChecked(true);
+            navView.getMenu().getItem(0).setVisible(false);
+            navView.getMenu().getItem(1).setVisible(false);
+            navView.getMenu().getItem(2).setVisible(false);
+            navView.getMenu().getItem(3).setVisible(false);
+            addFragment(superDisasterFragment);
+            addFragment(superDangerFragment);
             tvDuty.setText("省级");
         }
 
@@ -197,9 +233,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     tvTitle.setText("灾情直报");
                     showFragment(disasterReportFragment);
                     hideFragment(dangerReportFragment);
-                    hideFragment(disasterListFragment);
-                    hideFragment(dangerListFragment);
-
                 }
                 break;
             case R.id.nav_danger_edit:
@@ -207,8 +240,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     tvTitle.setText("险情速报");
                     hideFragment(disasterReportFragment);
                     showFragment(dangerReportFragment);
-                    hideFragment(disasterListFragment);
-                    hideFragment(dangerListFragment);
                 }
                 break;
             case R.id.nav_disaster_handle:
@@ -227,6 +258,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     hideFragment(dangerReportFragment);
                     hideFragment(disasterListFragment);
                     showFragment(dangerListFragment);
+                }
+                break;
+                case R.id.nav_disaster_data:
+                if (!navView.getMenu().getItem(4).isChecked()) {
+                    tvTitle.setText("灾情数据");
+                    hideFragment(superDangerFragment);
+                    showFragment(superDisasterFragment);
+                }
+                break;
+            case R.id.nav_danger_data:
+                if (!navView.getMenu().getItem(5).isChecked()) {
+                    tvTitle.setText("险情数据");
+                    showFragment(superDangerFragment);
+                    hideFragment(superDisasterFragment);
                 }
                 break;
             case R.id.nav_modify_password:
