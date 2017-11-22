@@ -394,6 +394,7 @@ public class DangerReportFragment extends Fragment {
                 break;
         }
     }
+
     private File createFileDir(String dir) {
         String path = Environment.getExternalStorageDirectory() + "/" + dir;
         boolean orExistsDir = FileUtils.createOrExistsDir(path);
@@ -403,6 +404,7 @@ public class DangerReportFragment extends Fragment {
             return null;
         }
     }
+
     private void upload() {
         Map<String, String> map = new HashMap<>();
         String reportMan = userDanger.getText().toString().trim();
@@ -517,9 +519,18 @@ public class DangerReportFragment extends Fragment {
         tvVideo.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
-        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(2));
-        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(2));
-        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(2));
+        List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(2);
+        if (photoPaths != null && photoPaths.size() > 0) {
+            GreedDaoHelper.deletePhotoList(photoPaths);
+        }
+        VideoPath videoPath = GreedDaoHelper.queryVideo(2);
+        if (videoPath != null) {
+            GreedDaoHelper.deleteVideo(videoPath);
+        }
+        AudioPath audioPath = GreedDaoHelper.queryAudio(2);
+        if (audioPath != null) {
+            GreedDaoHelper.deleteAudio(audioPath);
+        }
     }
 
     private void save() {
@@ -610,7 +621,7 @@ public class DangerReportFragment extends Fragment {
                 File audio = createFileDir("Audio");
                 if (audio != null) {
                     audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
-                }else {
+                } else {
                     ToastUtils.showShort("文件夹创建失败");
                 }
                 recorder = new MediaRecorder();

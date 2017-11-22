@@ -229,19 +229,6 @@ public class DisasterListFragment extends Fragment {
 
     }
 
-    private void setAdapter() {
-
-        disasterAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
-                intent.putExtra(Constant.DISASTER, disasterListA.get(position));
-                startActivity(intent);
-            }
-        });
-
-
-    }
 
     private void setListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -288,6 +275,22 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 requestN(refreshlayout);
+            }
+        });
+        disasterAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
+                intent.putExtra(Constant.DISASTER, disasterListA.get(position));
+                startActivity(intent);
+            }
+        });
+        disasterNAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
+                intent.putExtra(Constant.DISASTER, disasterListN.get(position));
+                startActivity(intent);
             }
         });
 //        setAdapter();

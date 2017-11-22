@@ -1,5 +1,6 @@
 package com.nandi.yngsagp.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +14,21 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.bean.DisasterListABean;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import okhttp3.Call;
 
 public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.back)
@@ -105,20 +114,47 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.ll_1)
     LinearLayout ll1;
     private DisasterListABean disasterListBean;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_disaster_pos);
         ButterKnife.bind(this);
-        initView();
         initData();
+        initView();
+        setListener();
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("正在获取数据");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        disasterListBean = (DisasterListABean) getIntent().getSerializableExtra(Constant.DISASTER);
+        userShow.setText((CharSequence) disasterListBean.getPersonel());
+        disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
+        phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
+        timeShow.setText((CharSequence) disasterListBean.getFindTime());
+        locationShow.setText((CharSequence) disasterListBean.getCurrentLocation());
+        addressShow.setText((CharSequence) disasterListBean.getAddress());
+        typeShow.setSelection(Integer.parseInt(disasterListBean.getDisasterType()));
+        factorShow.setText((CharSequence) disasterListBean.getFactor());
+        injurdShow.setText((CharSequence) disasterListBean.getInjurdNum());
+        deathShow.setText((CharSequence) disasterListBean.getDeathNum());
+        missShow.setText((CharSequence) disasterListBean.getMissingNum());
+        farmShow.setText((CharSequence) disasterListBean.getFarmland());
+        houseShow.setText((CharSequence) disasterListBean.getHouseNum());
+        moneyShow.setText((CharSequence) disasterListBean.getLossProperty());
+        lonShow.setText((CharSequence) disasterListBean.getLongitude());
+        latShow.setText((CharSequence) disasterListBean.getLatitude());
+        otherShow.setText((CharSequence) disasterListBean.getOtherThing());
+        mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
+        nameShow.setText((CharSequence) disasterListBean.getMonitorName());
+        if ("0".equals((CharSequence) disasterListBean.getPersonType())) {
+            llDReport.setVisibility(View.GONE);
+        }
         int isDispose = disasterListBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
@@ -129,10 +165,9 @@ public class DisasterPosActivity extends AppCompatActivity {
             tvTitle.setText("未处理灾情");
             llHandle.setVisibility(View.GONE);
         }
-        initListener();
     }
 
-    private void initListener() {
+    private void setListener() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,28 +198,47 @@ public class DisasterPosActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        disasterListBean = (DisasterListABean) getIntent().getSerializableExtra(Constant.DISASTER);
+        setRequest();
+    }
 
-        userShow.setText((CharSequence) disasterListBean.getPersonel());
-        disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
-        phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
-        timeShow.setText((CharSequence) disasterListBean.getFindTime());
-        locationShow.setText((CharSequence) disasterListBean.getCurrentLocation());
-        addressShow.setText((CharSequence) disasterListBean.getAddress());
-        typeShow.setSelection(Integer.parseInt(disasterListBean.getDisasterType()));
-        factorShow.setText((CharSequence) disasterListBean.getFactor());
-        injurdShow.setText((CharSequence) disasterListBean.getInjurdNum());
-        deathShow.setText((CharSequence) disasterListBean.getDeathNum());
-        missShow.setText((CharSequence) disasterListBean.getMissingNum());
-        farmShow.setText((CharSequence) disasterListBean.getFarmland());
-        houseShow.setText((CharSequence) disasterListBean.getHouseNum());
-        moneyShow.setText((CharSequence) disasterListBean.getLossProperty());
-        lonShow.setText((CharSequence) disasterListBean.getLongitude());
-        latShow.setText((CharSequence) disasterListBean.getLatitude());
-        otherShow.setText((CharSequence) disasterListBean.getOtherThing());
-        mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
-        nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        if ("0".equals((CharSequence) disasterListBean.getPersonType())) {
-            llDReport.setVisibility(View.GONE);
+    private void setRequest() {
+        progressDialog.show();
+        OkHttpUtils.get().url(getString(R.string.local_base_url)+"dangerous/findMedia/"+disasterListBean.getId())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("网络连接失败");
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject object=new JSONObject(response);
+                            JSONArray data = object.getJSONArray("data");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_take_photo:
+                break;
+            case R.id.iv_take_video:
+                break;
+            case R.id.iv_take_audio:
+                break;
+            case R.id.btn_save:
+                break;
+            case R.id.btn_upload:
+                break;
         }
     }
 }
