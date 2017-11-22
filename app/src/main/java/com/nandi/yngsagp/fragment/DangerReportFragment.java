@@ -436,9 +436,9 @@ public class DangerReportFragment extends Fragment {
         map.put("latitude", lat);
         map.put("otherThing", other);
         map.put("happenTime", time);
-        map.put("potentialLoss ", money);
-        map.put("monitorName ", mobile);
-        map.put("monitorPhone ", name);
+        map.put("potentialLoss", money);
+        map.put("monitorName", mobile);
+        map.put("monitorPhone", name);
         map.put("areaId", areaId);
         map.put("personType", personType);
         setRequest(map);
@@ -486,7 +486,7 @@ public class DangerReportFragment extends Fragment {
                     boolean success = meta.getBoolean("success");
                     if (success) {
                         ToastUtils.showShort(message);
-//                        clean();
+                        clean();
                     } else {
                         ToastUtils.showShort(message);
                     }

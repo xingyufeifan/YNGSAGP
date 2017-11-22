@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterListBean;
+import com.nandi.yngsagp.bean.DisasterListABean;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,7 +104,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     Button btnUpload;
     @BindView(R.id.ll_1)
     LinearLayout ll1;
-    private DisasterListBean disasterListBean;
+    private DisasterListABean disasterListBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     private void initView() {
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        disasterListBean = (DisasterListBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        disasterListBean = (DisasterListABean) getIntent().getSerializableExtra(Constant.DISASTER);
         int isDispose = disasterListBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {

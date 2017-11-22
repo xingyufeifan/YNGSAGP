@@ -12,9 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DangerListBean;
+import com.nandi.yngsagp.bean.DangerListABean;
 
 import java.util.ArrayList;
 
@@ -76,7 +75,7 @@ public class DangerPosActivity extends AppCompatActivity {
     Button btnSave;
     @BindView(R.id.btn_upload)
     Button btnUpload;
-    private DangerListBean dangerListBean;
+    private DangerListABean dangerListBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void initView() {
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        ArrayList<DangerListBean> list = (ArrayList<DangerListBean>) getIntent().getSerializableExtra("list");
+        ArrayList<DangerListABean> list = (ArrayList<DangerListABean>) getIntent().getSerializableExtra("list");
         int position = getIntent().getIntExtra("position", 0);
         int isDisPose = getIntent().getIntExtra("isDisPose", 0);
         System.out.println("isDisPose = " + isDisPose);
@@ -154,7 +153,7 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText(dangerListBean.getOtherThing());
         dReportMobileShow.setText(dangerListBean.getMonitorPhone());
         dReportNameShow.setText(dangerListBean.getMonitorName());
-        if ("0".equals(dangerListBean.getPersonType())){
+        if ("1".equals(dangerListBean.getPersonType())){
             llDReport.setVisibility(View.GONE);
         }
 

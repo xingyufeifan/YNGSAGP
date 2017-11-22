@@ -178,7 +178,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(dangerListFragment);
             tvDuty.setText("审核员");
         }else if ("3".equals(type)){
-            showToast("暂时没哟");
+            tvDuty.setText("县级");
+        }else if ("4".equals(type)){
+            tvDuty.setText("市级");
+        }else if ("5".equals(type)){
+            tvDuty.setText("省级");
         }
 
     }

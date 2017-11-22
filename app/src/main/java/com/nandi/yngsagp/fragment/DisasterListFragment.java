@@ -12,29 +12,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
-import com.nandi.yngsagp.adapter.DisasterAdapter;
-import com.nandi.yngsagp.bean.DisasterListBean;
+import com.nandi.yngsagp.adapter.DisasterAPosAdapter;
+import com.nandi.yngsagp.bean.DisasterListABean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,13 +53,29 @@ public class DisasterListFragment extends Fragment {
     RecyclerView disasterShow;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    private DisasterAdapter disasterAdapter;
+    @BindView(R.id.disasterN_show)
+    RecyclerView disasterNShow;
+    @BindView(R.id.refreshNLayout)
+    SmartRefreshLayout refreshNLayout;
+    @BindView(R.id.disasterNo)
+    LinearLayout disasterNo;
+    private DisasterAPosAdapter disasterAdapter;
+    private DisasterAPosAdapter disasterNAdapter;
+
     private int isDisaster = 1;
     private int isDisPose = 0;
-    private int page = 1;
+    private int pageA = 1;
+    private int pageN = 1;
     private int rows = 15;
     private String areaId;
-    private List<DisasterListBean> disasterList;
+    private List<DisasterListABean> disasterListA;
+    private List<DisasterListABean> disasterListN;
+    private String role;
+    private JSONObject jsonObject;
+    private JSONObject jsonMeta;
+    private JSONArray jsonData;
+    private boolean isSuccess;
+    private String message;
 
 
     @Nullable
@@ -76,96 +89,95 @@ public class DisasterListFragment extends Fragment {
     }
 
 
-    private void request() {
-        page = 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
-                    boolean isSuccess = jsonMeta.optBoolean("success");
-                    String message = jsonMeta.optString("message");
-                    if (isSuccess) {
-                        disasterList = JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class);
-                        setAdapter();
-                        refreshLayout.finishRefresh();
-                    } else {
-                        ToastUtils.showShort(message);
-                        refreshLayout.finishRefresh();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void requestA(final RefreshLayout refreshlayouts) {
 
-            @Override
-            public void onError(Exception error) {
-                refreshLayout.finishRefresh();
-
-            }
-        });
-
-    }
-
-    private void requestFirst() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
-                    System.out.println("jsonData = " + jsonData.toString());
-                    boolean isSuccess = jsonMeta.optBoolean("success");
-                    String message = jsonMeta.optString("message");
+                    initJson(response);
                     if (isSuccess) {
-                        disasterList = JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class);
-                        setAdapter();
-                    } else {
-
-                        ToastUtils.showShort(message);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-
-            }
-        });
-
-    }
-
-    private void loadMore() {
-        page += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/" + isDisaster + "/" + page + "/" + rows;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                    JSONArray jsonData = new JSONArray(jsonObject.optString("data"));
-                    System.out.println("jsonData = " + jsonData.toString());
-                    boolean isSuccess = jsonMeta.optBoolean("success");
-                    String message = jsonMeta.optString("message");
-                    if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())){
-                          ToastUtils.showShort("没有更多数据了");
-                        }
-                        disasterList.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListBean.class));
+                        disasterListA.clear();
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
                         disasterAdapter.notifyDataSetChanged();
-                        refreshLayout.finishLoadmore();
+                        pageA = 1;
+                        refreshlayouts.finishRefresh();
                     } else {
-                        refreshLayout.finishLoadmore();
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception error) {
+                refreshlayouts.finishRefresh();
+            }
+        });
+
+    }
+
+    private void requestN(final RefreshLayout refreshlayouts) {
+
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
+        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    initJson(response);
+                    if (isSuccess) {
+                        disasterListN.clear();
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterNAdapter.notifyDataSetChanged();
+                        pageN = 1;
+                        refreshlayouts.finishRefresh();
+                    } else {
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception error) {
+                refreshlayouts.finishRefresh();
+            }
+        });
+
+    }
+
+    private void initJson(String response) throws JSONException {
+        jsonObject = new JSONObject(response);
+        jsonMeta = new JSONObject(jsonObject.optString("meta"));
+        jsonData = new JSONArray(jsonObject.optString("data"));
+        isSuccess = jsonMeta.optBoolean("success");
+        message = jsonMeta.optString("message");
+    }
+
+
+    private void loadMoreA(final RefreshLayout refreshlayouts) {
+        pageA += 1;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/" + rows + "/" + role;
+        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    initJson(response);
+                    if (isSuccess) {
+                        if ("[]".equals(jsonData.toString())) {
+                            ToastUtils.showShort("没有更多数据了");
+                        }
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterAdapter.notifyDataSetChanged();
+
+                        refreshlayouts.finishLoadmore();
+                    } else {
+                        refreshlayouts.finishLoadmore();
                         ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
@@ -177,24 +189,57 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-                refreshLayout.finishLoadmore();
+                refreshlayouts.finishLoadmore();
+            }
+        });
+
+    }
+
+    private void loadMoreN(final RefreshLayout refreshlayouts) {
+        pageN += 1;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/" + rows + "/" + role;
+        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    initJson(response);
+                    if (isSuccess) {
+                        if ("[]".equals(jsonData.toString())) {
+                            ToastUtils.showShort("没有更多数据了");
+                        }
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterNAdapter.notifyDataSetChanged();
+                        refreshlayouts.finishLoadmore();
+                    } else {
+                        refreshlayouts.finishLoadmore();
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+                refreshlayouts.finishLoadmore();
             }
         });
 
     }
 
     private void setAdapter() {
-        disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        disasterAdapter = new DisasterAdapter(getActivity(), disasterList);
-        disasterAdapter.setOnItemClickListener(new DisasterAdapter.OnItemClickListener() {
+
+        disasterAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
-                intent.putExtra(Constant.DISASTER, disasterList.get(position));
+                intent.putExtra(Constant.DISASTER, disasterListA.get(position));
                 startActivity(intent);
             }
         });
-        disasterShow.setAdapter(disasterAdapter);
+
 
     }
 
@@ -203,12 +248,14 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-
-                if (position !=isDisPose){
-                    page = 1;
+                if (0 == position) {
+                    disasterAlready.setVisibility(View.VISIBLE);
+                    disasterNo.setVisibility(View.INVISIBLE);
+                } else {
+                    disasterAlready.setVisibility(View.INVISIBLE);
+                    disasterNo.setVisibility(View.VISIBLE);
                 }
                 isDisPose = position;
-                requestFirst();
             }
 
             @Override
@@ -219,26 +266,99 @@ public class DisasterListFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        refreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                loadMoreA(refreshlayout);
+                System.out.println("refreshLayout");
+            }
 
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                requestA(refreshlayout);
+
+            }
+        });
+        refreshNLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                loadMoreN(refreshlayout);
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                requestN(refreshlayout);
+            }
+        });
+//        setAdapter();
     }
 
     private void initViews() {
+        disasterListA = new ArrayList<>();
+        disasterListN = new ArrayList<>();
+        disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterNAdapter = new DisasterAPosAdapter(getActivity(), disasterListN);
+        disasterAdapter = new DisasterAPosAdapter(getActivity(), disasterListA);
+        disasterShow.setAdapter(disasterAdapter);
+        disasterNShow.setAdapter(disasterNAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 1);
+        role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "2");
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        requestAPos();
+        requestUPos();
+    }
+
+    private void requestAPos() {
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1" + "/" + pageA + "/" + rows + "/" + role;
+        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                request();
+            public void onSuccess(String response) {
+                try {
+                    initJson(response);
+                    if (isSuccess) {
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterAdapter.notifyDataSetChanged();
+                    } else {
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception error) {
+
             }
         });
-        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+    }
+
+    private void requestUPos() {
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1" + "/" + pageN + "/" + rows + "/" + role;
+        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                loadMore();
+            public void onSuccess(String response) {
+                try {
+                    initJson(response);
+                    if (isSuccess) {
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterNAdapter.notifyDataSetChanged();
+                    } else {
+
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception error) {
+
             }
         });
-        requestFirst();
     }
 
 

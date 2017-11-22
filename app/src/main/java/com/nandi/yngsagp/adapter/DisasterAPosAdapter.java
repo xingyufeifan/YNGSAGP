@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterListBean;
+import com.nandi.yngsagp.bean.DisasterListABean;
 
 import java.util.List;
 
@@ -17,13 +17,13 @@ import java.util.List;
  */
 
 
-public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyViewHolder> {
+public class DisasterAPosAdapter extends RecyclerView.Adapter<DisasterAPosAdapter.MyViewHolder> {
     private Context mContext;
-    private DisasterListBean disasterListBean;
-    public DisasterAdapter.OnItemClickListener mOnItemClickListener;
-    private List<DisasterListBean> listBeans;
+    private DisasterListABean disasterListBean;
+    public DisasterAPosAdapter.OnItemClickListener mOnItemClickListener;
+    private List<DisasterListABean> listBeans;
 
-    public DisasterAdapter(Context context,List<DisasterListBean> listBeans) {
+    public DisasterAPosAdapter(Context context, List<DisasterListABean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }
@@ -32,20 +32,20 @@ public class DisasterAdapter extends RecyclerView.Adapter<DisasterAdapter.MyView
         void onClick(int position);
     }
 
-    public void setOnItemClickListener(DisasterAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(DisasterAPosAdapter.OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
     @Override
-    public DisasterAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DisasterAPosAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_disaster_list, null);
-        DisasterAdapter.MyViewHolder holderA = new DisasterAdapter.MyViewHolder(view);
+        DisasterAPosAdapter.MyViewHolder holderA = new DisasterAPosAdapter.MyViewHolder(view);
         return holderA;
     }
 
     @Override
-    public void onBindViewHolder(DisasterAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(DisasterAPosAdapter.MyViewHolder holder, final int position) {
         holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
 //        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
 //        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());
