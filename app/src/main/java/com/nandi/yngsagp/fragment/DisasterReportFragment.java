@@ -624,7 +624,7 @@ public class DisasterReportFragment extends Fragment {
                     boolean success = meta.getBoolean("success");
                     if (success) {
                         ToastUtils.showShort(message);
-//                        clean();
+                        clean();
                     } else {
                         ToastUtils.showShort(message);
                     }
@@ -636,7 +636,6 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void clean() {
-        // TODO: 2017/11/17
         dReportTime.setText("");
         dReportAddress.setText("");
         dReportLocation.setText("");
@@ -658,9 +657,18 @@ public class DisasterReportFragment extends Fragment {
         tvVideo.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
-//        GreedDaoHelper.deletePhotoList(GreedDaoHelper.queryPhoto(1));
-//        GreedDaoHelper.deleteVideo(GreedDaoHelper.queryVideo(1));
-//        GreedDaoHelper.deleteAudio(GreedDaoHelper.queryAudio(1));
+        List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(1);
+        if (photoPaths != null && photoPaths.size() > 0) {
+            GreedDaoHelper.deletePhotoList(photoPaths);
+        }
+        VideoPath videoPath = GreedDaoHelper.queryVideo(1);
+        if (videoPath != null) {
+            GreedDaoHelper.deleteVideo(videoPath);
+        }
+        AudioPath audioPath = GreedDaoHelper.queryAudio(1);
+        if (audioPath != null) {
+            GreedDaoHelper.deleteAudio(audioPath);
+        }
     }
 
     private void playAudio(String s) {
