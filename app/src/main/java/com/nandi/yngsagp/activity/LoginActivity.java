@@ -252,11 +252,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SharedUtils.putShare(mContext, Constant.AREA_ID,area_id);
         String address = jsonData.optString("address");
         SharedUtils.putShare(mContext, Constant.ADDRESS,address);
-        String name = jsonData.optString("name");
+        String name = jsonData.optString("nickname");
         SharedUtils.putShare(mContext, Constant.NAME,name);
-        String userName = jsonData.optString("userName");
-        SharedUtils.putShare(mContext, Constant.USER_NAME,userName);
-        String personType = jsonData.optString("personType");
+        String personType = jsonData.optString("role");
         SharedUtils.putShare(mContext, Constant.PERSON_TYPE,personType);
         SharedUtils.putShare(mContext,Constant.IS_LOGIN,true);
     }

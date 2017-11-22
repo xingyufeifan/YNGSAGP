@@ -14,19 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DangerPosActivity;
-import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.adapter.DangerAdapter;
 import com.nandi.yngsagp.adapter.DisasterAdapter;
 import com.nandi.yngsagp.bean.DangerListBean;
-import com.nandi.yngsagp.bean.DisasterListBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
