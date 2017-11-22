@@ -736,7 +736,11 @@ public class DisasterReportFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 File audio = createFileDir("Audio");
-                audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                if (audio != null) {
+                    audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                }else {
+                    ToastUtils.showShort("文件夹创建失败");
+                }
                 recorder = new MediaRecorder();
                 recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);

@@ -44,6 +44,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bigkoo.pickerview.TimePickerView;
+import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -304,7 +305,7 @@ public class DangerReportFragment extends Fragment {
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                // TODO: 2017/11/20  取消请求
+                build.cancel();
             }
         });
     }
@@ -393,7 +394,15 @@ public class DangerReportFragment extends Fragment {
                 break;
         }
     }
-
+    private File createFileDir(String dir) {
+        String path = Environment.getExternalStorageDirectory() + "/" + dir;
+        boolean orExistsDir = FileUtils.createOrExistsDir(path);
+        if (orExistsDir) {
+            return new File(path);
+        } else {
+            return null;
+        }
+    }
     private void upload() {
         Map<String, String> map = new HashMap<>();
         String reportMan = userDanger.getText().toString().trim();
@@ -598,7 +607,12 @@ public class DangerReportFragment extends Fragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                audioPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                File audio = createFileDir("Audio");
+                if (audio != null) {
+                    audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                }else {
+                    ToastUtils.showShort("文件夹创建失败");
+                }
                 recorder = new MediaRecorder();
                 recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
@@ -720,7 +734,7 @@ public class DangerReportFragment extends Fragment {
 
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        videoFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
+        videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
             uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
@@ -771,7 +785,7 @@ public class DangerReportFragment extends Fragment {
 
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        pictureFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
+        pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
         Uri imageUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
             imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
