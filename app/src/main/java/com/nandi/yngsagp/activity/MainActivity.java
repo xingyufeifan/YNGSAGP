@@ -153,11 +153,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvName.setText(name);
         tvAccount.setText(mobile);
         tvAddress.setText(address);
-        tvDuty.setText("0".equals(type) ? "监测员" : "审核员");
-        if ("0".equals(type)) {
-            navView.getMenu().getItem(2).setVisible(false);
-            navView.getMenu().getItem(3).setVisible(false);
-        }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
@@ -169,11 +165,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         dangerReportFragment = new DangerReportFragment();
         disasterListFragment = new DisasterListFragment();
         dangerListFragment = new DangerListFragment();
-
-        addFragment(disasterReportFragment);
-        addFragment(dangerReportFragment);
-        addFragment(disasterListFragment);
-        addFragment(dangerListFragment);
+        if ("1".equals(type)) {
+            navView.getMenu().getItem(2).setVisible(false);
+            navView.getMenu().getItem(3).setVisible(false);
+            addFragment(disasterReportFragment);
+            addFragment(dangerReportFragment);
+            tvDuty.setText("监测员");
+        }else if("2".equals(type)){
+            addFragment(disasterReportFragment);
+            addFragment(dangerReportFragment);
+            addFragment(disasterListFragment);
+            addFragment(dangerListFragment);
+            tvDuty.setText("审核员");
+        }else if ("3".equals(type)){
+            showToast("暂时没哟");
+        }
 
     }
 
