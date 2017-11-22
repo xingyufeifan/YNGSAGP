@@ -817,15 +817,17 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
-    private File createFileDir(String dir){
+
+    private File createFileDir(String dir) {
         String path = Environment.getExternalStorageDirectory() + "/" + dir;
         boolean orExistsDir = FileUtils.createOrExistsDir(path);
-        if (orExistsDir){
+        if (orExistsDir) {
             return new File(path);
-        }else {
+        } else {
             return null;
         }
     }
+
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
@@ -839,6 +841,7 @@ public class DisasterReportFragment extends Fragment {
         Log.d("cp", "图片保存路径：" + pictureFile.getAbsolutePath());
         startActivityForResult(intent, TAKE_PHOTO);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

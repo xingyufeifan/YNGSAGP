@@ -190,9 +190,7 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
-                intent.putExtra("list", (Serializable) disasterList);
-                intent.putExtra("position", position);
-                intent.putExtra("isDisPose", isDisPose);
+                intent.putExtra(Constant.DISASTER, disasterList.get(position));
                 startActivity(intent);
             }
         });
