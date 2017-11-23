@@ -74,14 +74,14 @@
         android:padding="10dp">
 
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_error"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="误报" />
 
         <Button
-            android:id="@+id/btn_upload"
+            android:id="@+id/btn_confirm"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"

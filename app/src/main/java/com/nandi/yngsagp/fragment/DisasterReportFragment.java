@@ -673,38 +673,10 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void playAudio(String s) {
-        final MediaPlayer player = new MediaPlayer();
-        try {
-            player.setDataSource(s);
-            player.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
-        Button btnStart = (Button) view.findViewById(R.id.btn_dialog_play);
-        Button btnPause = (Button) view.findViewById(R.id.btn_dialog_pause);
-        new AlertDialog.Builder(context)
-                .setView(view)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        player.stop();
-                    }
-                }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                player.start();
-            }
-        });
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (player.isPlaying()) {
-                    player.pause();
-                }
-            }
-        });
+        Intent it = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("file://" + s);
+        it.setDataAndType(uri, "audio/mp3");
+        startActivity(it);
     }
 
     private void takeAudio() {
