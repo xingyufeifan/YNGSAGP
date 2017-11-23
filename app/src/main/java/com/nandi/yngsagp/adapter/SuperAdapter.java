@@ -13,7 +13,7 @@ import com.nandi.yngsagp.bean.SuperBean;
 import java.util.List;
 
 /**
- * Created by qingsong on 2017/10/26.
+ * @author qingsong  on 2017/10/26.
  */
 
 
@@ -38,7 +38,7 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
     @Override
     public SuperAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_disaster_list, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_super_list, null);
         SuperAdapter.MyViewHolder holderA = new SuperAdapter.MyViewHolder(view);
         return holderA;
     }
@@ -46,8 +46,8 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(SuperAdapter.MyViewHolder holder, final int position) {
         holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
-//        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
-//        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());
+        holder.textAddress.setText(listBeans.get(position).getPersonel());
+        holder.textToTime.setText(listBeans.get(position).getAddress());
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {
                 @Override

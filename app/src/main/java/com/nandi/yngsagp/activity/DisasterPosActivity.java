@@ -29,6 +29,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,9 +52,11 @@ import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.PictureUtils;
+import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +67,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -157,6 +162,10 @@ public class DisasterPosActivity extends AppCompatActivity {
     Button btnConfirm;
     @BindView(R.id.ll_1)
     LinearLayout ll1;
+    @BindView(R.id.disposePerson)
+    EditText disposePerson;
+    @BindView(R.id.disposeMobile)
+    EditText disposeMobile;
     private SuperBean disasterListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
@@ -174,6 +183,8 @@ public class DisasterPosActivity extends AppCompatActivity {
     private String audioPath;
     private MediaRecorder recorder;
     private MediaPlayer player;
+    private RequestCall build;
+    private int typePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +195,15 @@ public class DisasterPosActivity extends AppCompatActivity {
         initData();
         initView();
         setListener();
+    }
+    private void initData() {
+        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("正在获取数据");
+
+        disasterListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        setRequest();
     }
 
     private void initView() {
@@ -274,6 +294,17 @@ public class DisasterPosActivity extends AppCompatActivity {
                 pictureAdapter.notifyDataSetChanged();
             }
         });
+        typeShow.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typePos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("parent = " + parent);
+            }
+        });
     }
 
     private void enlargePicture(String path) {
@@ -295,15 +326,6 @@ public class DisasterPosActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void initData() {
-        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("正在获取数据");
-
-        disasterListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
-        setRequest();
-    }
 
     private void setRequest() {
         progressDialog.show();
@@ -388,6 +410,54 @@ public class DisasterPosActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void upload() {
+        Map<String, String> map = new HashMap<>();
+        String reportMan = userShow.getText().toString().trim();
+        String phone = phoneShow.getText().toString().trim();
+        String time = timeShow.getText().toString().trim();
+        String address = addressShow.getText().toString().trim();
+        String location = locationShow.getText().toString().trim();
+        String type = typePos + "";
+        String factor = factorShow.getText().toString().trim();
+        String injured = injurdShow.getText().toString().trim();
+        String death = deathShow.getText().toString().trim();
+        String miss = missShow.getText().toString().trim();
+        String farm = farmShow.getText().toString().trim();
+        String house = houseShow.getText().toString().trim();
+        String money = moneyShow.getText().toString().trim();
+        String lon = lonShow.getText().toString().trim();
+        String lat = latShow.getText().toString().trim();
+        String other = otherShow.getText().toString().trim();
+        String reportName = nameShow.getText().toString().trim();
+        String reportMobile = mobileShow.getText().toString().trim();
+        etHandle.getText().toString().trim();
+        disposeMobile.getText().toString().trim();
+        disposePerson.getText().toString().trim();
+        String areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "0");
+        String personType = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "0");
+        map.put("phoneNum", phone);
+        map.put("personel", reportMan);
+        map.put("findTime", time);
+        map.put("currentLocation", location);
+        map.put("address", address);
+        map.put("disasterType", type);
+        map.put("factor", factor);
+        map.put("injurdNum", injured);
+        map.put("deathNum", death);
+        map.put("missingNum", miss);
+        map.put("farmland", farm);
+        map.put("houseNum", house);
+        map.put("lossProperty", money);
+        map.put("longitude", lon);
+        map.put("latitude", lat);
+        map.put("otherThing", other);
+        map.put("monitorName", reportName);
+        map.put("monitorPhone", reportMobile);
+        map.put("areaId", areaId);
+        map.put("personType", personType);
+    }
+
 
     private void clickText(final int type) {
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
@@ -605,14 +675,14 @@ public class DisasterPosActivity extends AppCompatActivity {
     }
 
     private void playAudio(String s) {
-        player=new MediaPlayer();
+        player = new MediaPlayer();
         try {
             player.setDataSource(s);
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
         Button btnStart = view.findViewById(R.id.btn_dialog_play);
         Button btnPause = view.findViewById(R.id.btn_dialog_pause);
         new AlertDialog.Builder(context)
@@ -644,7 +714,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri=Uri.parse(response.getAbsolutePath());
+            uri = Uri.parse(response.getAbsolutePath());
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.parse("file://" + response.getAbsolutePath());
         }

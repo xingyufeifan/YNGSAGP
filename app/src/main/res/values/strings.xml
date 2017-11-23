@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">灾险情上报</string>
-    <string name="loginName">云南群测群防</string>
+    <string name="loginName">云南省地质灾害</string>
     <string name="inputUser">请输入手机号</string>
     <string name="login">登录</string>
     <string name="local_base_url">"http://192.168.10.195:8080/yncmd/</string>

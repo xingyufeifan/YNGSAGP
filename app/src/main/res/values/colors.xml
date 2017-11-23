@@ -11,4 +11,8 @@
     <color name="media_title_bg">#888888</color>
     <color name="lineColor">#dddddd</color>
     <color name="report_unpressed">#575757</color>
+    <color name="loginBtn">#207bd8</color>
+    <color name="linerNColor">#dedede</color>
+    <color name="linerYColor">#80b9ea</color>
+    <color name="loginInput">#207bd8</color>
 </resources>

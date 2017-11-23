@@ -2,6 +2,7 @@ package com.nandi.yngsagp.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,6 +17,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.DangerPosActivity;
+import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
@@ -273,6 +276,22 @@ public class DangerListFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 requestU(refreshlayout);
+            }
+        });
+        dangerAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DangerPosActivity.class);
+                intent.putExtra(Constant.DISASTER, dangerListA.get(position));
+                startActivity(intent);
+            }
+        });
+        dangerUAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DangerPosActivity.class);
+                intent.putExtra(Constant.DISASTER, dangerListU.get(position));
+                startActivity(intent);
             }
         });
 
