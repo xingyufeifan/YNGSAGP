@@ -18,7 +18,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.SuperDangerActivity;
-import com.nandi.yngsagp.adapter.SuperDangerAdapter;
+import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -59,8 +59,8 @@ public class SuperDangerFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private SuperDangerAdapter superAdapter;
-    private SuperDangerAdapter superUAdapter;
+    private SuperAdapter superAdapter;
+    private SuperAdapter superUAdapter;
     private int isDisPose = 0;
     private int pageA = 1;
     private int pageU = 1;
@@ -274,7 +274,7 @@ public class SuperDangerFragment extends Fragment {
                 requestU(refreshlayout);
             }
         });
-        superUAdapter.setOnItemClickListener(new SuperDangerAdapter.OnItemClickListener() {
+        superUAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), SuperDangerActivity.class);
@@ -282,7 +282,7 @@ public class SuperDangerFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        superAdapter.setOnItemClickListener(new SuperDangerAdapter.OnItemClickListener() {
+        superAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), SuperDangerActivity.class);
@@ -297,8 +297,8 @@ public class SuperDangerFragment extends Fragment {
         superListU = new ArrayList<>();
         dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        superAdapter = new SuperDangerAdapter(getActivity(), superListA);
-        superUAdapter = new SuperDangerAdapter(getActivity(), superListU);
+        superAdapter = new SuperAdapter(getActivity(), superListA);
+        superUAdapter = new SuperAdapter(getActivity(), superListU);
         dangerShow.setAdapter(superAdapter);
         dangerNShow.setAdapter(superUAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 0, true);

@@ -18,7 +18,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
-import com.nandi.yngsagp.adapter.DisasterAPosAdapter;
+import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -59,8 +59,8 @@ public class DisasterListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private DisasterAPosAdapter disasterAdapter;
-    private DisasterAPosAdapter disasterNAdapter;
+    private SuperAdapter disasterAdapter;
+    private SuperAdapter disasterNAdapter;
 
     private int isDisPose = 0;
     private int pageA = 1;
@@ -274,7 +274,7 @@ public class DisasterListFragment extends Fragment {
                 requestN(refreshlayout);
             }
         });
-        disasterAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
+        disasterAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
@@ -282,7 +282,7 @@ public class DisasterListFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        disasterNAdapter.setOnItemClickListener(new DisasterAPosAdapter.OnItemClickListener() {
+        disasterNAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
@@ -297,8 +297,8 @@ public class DisasterListFragment extends Fragment {
         disasterListN = new ArrayList<>();
         disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         disasterNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        disasterNAdapter = new DisasterAPosAdapter(getActivity(), disasterListN);
-        disasterAdapter = new DisasterAPosAdapter(getActivity(), disasterListA);
+        disasterNAdapter = new SuperAdapter(getActivity(), disasterListN);
+        disasterAdapter = new SuperAdapter(getActivity(), disasterListA);
         disasterShow.setAdapter(disasterAdapter);
         disasterNShow.setAdapter(disasterNAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 0, true);

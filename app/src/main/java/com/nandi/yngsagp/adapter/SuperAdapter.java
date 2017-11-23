@@ -17,12 +17,12 @@ import java.util.List;
  */
 
 
-public class SuperDangerAdapter extends RecyclerView.Adapter<SuperDangerAdapter.MyViewHolder> {
+public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder> {
     private Context mContext;
-    public SuperDangerAdapter.OnItemClickListener mOnItemClickListener;
+    public SuperAdapter.OnItemClickListener mOnItemClickListener;
     private List<SuperBean> listBeans;
 
-    public SuperDangerAdapter(Context context, List<SuperBean> listBeans) {
+    public SuperAdapter(Context context, List<SuperBean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }
@@ -31,20 +31,20 @@ public class SuperDangerAdapter extends RecyclerView.Adapter<SuperDangerAdapter.
         void onClick(int position);
     }
 
-    public void setOnItemClickListener(SuperDangerAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(SuperAdapter.OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
     @Override
-    public SuperDangerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SuperAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_disaster_list, null);
-        SuperDangerAdapter.MyViewHolder holderA = new SuperDangerAdapter.MyViewHolder(view);
+        SuperAdapter.MyViewHolder holderA = new SuperAdapter.MyViewHolder(view);
         return holderA;
     }
 
     @Override
-    public void onBindViewHolder(SuperDangerAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(SuperAdapter.MyViewHolder holder, final int position) {
         holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
 //        holder.textAddress.setText(disasterListBean.getData().get(position).getPersonel());
 //        holder.textToTime.setText(disasterListBean.getData().get(position).getFindTime());

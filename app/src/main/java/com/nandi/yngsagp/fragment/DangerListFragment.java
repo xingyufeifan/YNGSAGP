@@ -16,7 +16,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.adapter.DangerAPosAdapter;
+import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -57,8 +57,9 @@ public class DangerListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private DangerAPosAdapter dangerAdapter;
-    private DangerAPosAdapter dangerUAdapter;
+    private SuperAdapter dangerAdapter;
+    private SuperAdapter dangerUAdapter;
+    
     private int isDisaster = 2;
     private int isDisPose = 0;
     private int pageA = 1;
@@ -282,8 +283,8 @@ public class DangerListFragment extends Fragment {
         dangerListU = new ArrayList<>();
         dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dangerAdapter = new DangerAPosAdapter(getActivity(), dangerListA);
-        dangerUAdapter = new DangerAPosAdapter(getActivity(), dangerListU);
+        dangerAdapter = new SuperAdapter(getActivity(), dangerListA);
+        dangerUAdapter = new SuperAdapter(getActivity(), dangerListU);
         dangerShow.setAdapter(dangerAdapter);
         dangerNShow.setAdapter(dangerUAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 0, true);
