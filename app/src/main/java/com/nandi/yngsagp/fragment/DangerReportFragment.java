@@ -159,6 +159,7 @@ public class DangerReportFragment extends Fragment {
     private ProgressDialog progressDialog;
     private LocationClient locationClient;
     private RequestCall build;
+    private MediaPlayer player;
 
     @Nullable
     @Override
@@ -521,14 +522,19 @@ public class DangerReportFragment extends Fragment {
         List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(2);
         if (photoPaths != null && photoPaths.size() > 0) {
             GreedDaoHelper.deletePhotoList(photoPaths);
+            for (PhotoPath photoPath : photoPaths) {
+                FileUtils.deleteFile(new File(photoPath.getPath()));
+            }
         }
         VideoPath videoPath = GreedDaoHelper.queryVideo(2);
         if (videoPath != null) {
             GreedDaoHelper.deleteVideo(videoPath);
+            FileUtils.deleteFile(new File(videoPath.getPath()));
         }
         AudioPath audioPath = GreedDaoHelper.queryAudio(2);
         if (audioPath != null) {
             GreedDaoHelper.deleteAudio(audioPath);
+            FileUtils.deleteFile(new File(audioPath.getPath()));
         }
     }
 
@@ -596,6 +602,7 @@ public class DangerReportFragment extends Fragment {
         btnStop.setEnabled(false);
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setCancelable(false)
                 .setView(view)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -708,10 +715,39 @@ public class DangerReportFragment extends Fragment {
     }
 
     private void playAudio(String s) {
-        Intent it = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file://" + s);
-        it.setDataAndType(uri, "audio/mp3");
-        startActivity(it);
+        player=new MediaPlayer();
+        try {
+            player.setDataSource(s);
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        Button btnStart = view.findViewById(R.id.btn_dialog_play);
+        Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setCancelable(false)
+                .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        player.stop();
+                    }
+                }).show();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player.start();
+            }
+        });
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+            }
+        });
     }
 
     private void takeVideo() {

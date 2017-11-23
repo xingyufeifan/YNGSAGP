@@ -168,6 +168,7 @@ public class DisasterReportFragment extends Fragment {
     private ProgressDialog progressDialog;
     private int typePos;
     private LocationClient locationClient;
+    private MediaPlayer player;
 
     @Nullable
     @Override
@@ -661,22 +662,57 @@ public class DisasterReportFragment extends Fragment {
         List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(1);
         if (photoPaths != null && photoPaths.size() > 0) {
             GreedDaoHelper.deletePhotoList(photoPaths);
+            for (PhotoPath photoPath : photoPaths) {
+                FileUtils.deleteFile(new File(photoPath.getPath()));
+            }
         }
         VideoPath videoPath = GreedDaoHelper.queryVideo(1);
         if (videoPath != null) {
             GreedDaoHelper.deleteVideo(videoPath);
+            FileUtils.deleteFile(new File(videoPath.getPath()));
         }
         AudioPath audioPath = GreedDaoHelper.queryAudio(1);
         if (audioPath != null) {
             GreedDaoHelper.deleteAudio(audioPath);
+            FileUtils.deleteFile(new File(audioPath.getPath()));
         }
     }
 
     private void playAudio(String s) {
-        Intent it = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file://" + s);
-        it.setDataAndType(uri, "audio/mp3");
-        startActivity(it);
+        player=new MediaPlayer();
+        try {
+            player.setDataSource(s);
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        Button btnStart = view.findViewById(R.id.btn_dialog_play);
+        Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setCancelable(false)
+                .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        player.stop();
+                    }
+                }).show();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player.start();
+            }
+        });
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+            }
+        });
+
     }
 
     private void takeAudio() {
@@ -686,6 +722,7 @@ public class DisasterReportFragment extends Fragment {
         btnStop.setEnabled(false);
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setCancelable(false)
                 .setView(view)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override

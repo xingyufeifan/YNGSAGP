@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
@@ -173,6 +174,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     private PopupWindow popupWindow;
     private String audioPath;
     private MediaRecorder recorder;
+    private MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +191,8 @@ public class DisasterPosActivity extends AppCompatActivity {
         photoAdapter = new PhotoAdapter(context, photoInfos);
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
-        pictureAdapter=new PictureAdapter(context,photoPaths);
-        rvPhoto.setLayoutManager(new GridLayoutManager(context,3));
+        pictureAdapter = new PictureAdapter(context, photoPaths);
+        rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhoto.setAdapter(pictureAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
@@ -387,6 +389,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 break;
         }
     }
+
     private void clickText(final int type) {
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
         TextView tvPlay = view.findViewById(R.id.tv_play);
@@ -395,9 +398,9 @@ public class DisasterPosActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (type == 1) {
-                    playMedia(videoFile,"video/mp4");
+                    playMedia(videoFile, "video/mp4");
                 } else {
-                    playMedia(new File(audioPath),"audio/mp3");
+                    playAudio(audioPath);
                 }
                 popupWindow.dismiss();
             }
@@ -437,6 +440,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             }
         });
     }
+
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
@@ -445,6 +449,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
+                .setCancelable(false)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -468,7 +473,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 File audio = createFileDir("Audio");
                 if (audio != null) {
                     audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
-                }else {
+                } else {
                     ToastUtils.showShort("文件夹创建失败");
                 }
                 recorder = new MediaRecorder();
@@ -500,6 +505,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             }
         });
     }
+
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
@@ -514,6 +520,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         startActivityForResult(intent, TAKE_VIDEO);
     }
+
     private void choosePhoto() {
         View view = LayoutInflater.from(context).inflate(R.layout.popup_view, null);
         TextView tvTake = (TextView) view.findViewById(R.id.tv_take_photo);
@@ -549,6 +556,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             }
         });
     }
+
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
@@ -572,6 +580,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             return null;
         }
     }
+
     private void playNetAudio() {
         if (audioNetFile == null) {
             progressDialog.show();
@@ -588,7 +597,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                         public void onResponse(File response, int id) {
                             audioNetFile = response;
                             progressDialog.dismiss();
-                            playMedia(response, "audio/mp3");
+                            playAudio(response.getAbsolutePath());
                         }
                     });
         } else {
@@ -596,9 +605,50 @@ public class DisasterPosActivity extends AppCompatActivity {
         }
     }
 
+    private void playAudio(String s) {
+        player=new MediaPlayer();
+        try {
+            player.setDataSource(s);
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        Button btnStart = view.findViewById(R.id.btn_dialog_play);
+        Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setCancelable(false)
+                .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        player.stop();
+                    }
+                }).show();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player.start();
+            }
+        });
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+            }
+        });
+    }
+
     private void playMedia(File response, String type) {
         Intent it = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file://" + response.getAbsolutePath());
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+            uri=Uri.parse(response.getAbsolutePath());
+        } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
+            uri = Uri.parse("file://" + response.getAbsolutePath());
+        }
         it.setDataAndType(uri, type);
         startActivity(it);
     }
