@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterListABean;
+import com.nandi.yngsagp.bean.SuperBean;
 
 import java.util.List;
 
@@ -19,11 +19,10 @@ import java.util.List;
 
 public class DisasterAPosAdapter extends RecyclerView.Adapter<DisasterAPosAdapter.MyViewHolder> {
     private Context mContext;
-    private DisasterListABean disasterListBean;
     public DisasterAPosAdapter.OnItemClickListener mOnItemClickListener;
-    private List<DisasterListABean> listBeans;
+    private List<SuperBean> listBeans;
 
-    public DisasterAPosAdapter(Context context, List<DisasterListABean> listBeans) {
+    public DisasterAPosAdapter(Context context, List<SuperBean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }

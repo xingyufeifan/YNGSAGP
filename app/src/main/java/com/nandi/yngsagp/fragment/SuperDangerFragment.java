@@ -2,6 +2,7 @@ package com.nandi.yngsagp.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,10 +17,9 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.SuperDangerActivity;
 import com.nandi.yngsagp.adapter.SuperDangerAdapter;
-import com.nandi.yngsagp.adapter.SuperDisasterAdapter;
-import com.nandi.yngsagp.bean.SuperDangerBean;
-import com.nandi.yngsagp.bean.SuperDisasterBean;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -40,7 +40,7 @@ import butterknife.Unbinder;
 
 
 /**
- * Created by qingsong on 2017/11/15.
+ * @author qingsong  on 2017/11/15.
  */
 
 public class SuperDangerFragment extends Fragment {
@@ -61,17 +61,14 @@ public class SuperDangerFragment extends Fragment {
     LinearLayout disasterNo;
     private SuperDangerAdapter superAdapter;
     private SuperDangerAdapter superUAdapter;
-    private int isDisaster = 2;
     private int isDisPose = 0;
     private int pageA = 1;
     private int pageU = 1;
     private int rows = 15;
     private String areaId;
-    private List<SuperDangerBean> superListA;
-    private List<SuperDangerBean> superListU;
+    private List<SuperBean> superListA;
+    private List<SuperBean> superListU;
     private String role;
-    private JSONObject jsonObject;
-    private JSONObject jsonMeta;
     private JSONArray jsonData;
     private boolean isSuccess;
     private String message;
@@ -95,10 +92,10 @@ public class SuperDangerFragment extends Fragment {
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
                 try {
-                  initJson(response);
+                    initJson(response);
                     if (isSuccess) {
                         superListA.clear();
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
@@ -129,7 +126,7 @@ public class SuperDangerFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         superListU.clear();
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superUAdapter.notifyDataSetChanged();
                         pageU = 1;
                         refreshlayouts.finishRefresh();
@@ -152,8 +149,8 @@ public class SuperDangerFragment extends Fragment {
     }
 
     private void initJson(String response) throws JSONException {
-        jsonObject = new JSONObject(response);
-        jsonMeta = new JSONObject(jsonObject.optString("meta"));
+        JSONObject jsonObject = new JSONObject(response);
+        JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
         jsonData = new JSONArray(jsonObject.optString("data"));
         isSuccess = jsonMeta.optBoolean("success");
         message = jsonMeta.optString("message");
@@ -173,7 +170,7 @@ public class SuperDangerFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -194,6 +191,7 @@ public class SuperDangerFragment extends Fragment {
         });
 
     }
+
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
         String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/" + rows + "/" + role;
@@ -206,7 +204,7 @@ public class SuperDangerFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superUAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -276,7 +274,22 @@ public class SuperDangerFragment extends Fragment {
                 requestU(refreshlayout);
             }
         });
-
+        superUAdapter.setOnItemClickListener(new SuperDangerAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), SuperDangerActivity.class);
+                intent.putExtra(Constant.DISASTER, superListU.get(position));
+                startActivity(intent);
+            }
+        });
+        superAdapter.setOnItemClickListener(new SuperDangerAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), SuperDangerActivity.class);
+                intent.putExtra(Constant.DISASTER, superListA.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews() {
@@ -305,7 +318,7 @@ public class SuperDangerFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
@@ -328,9 +341,9 @@ public class SuperDangerFragment extends Fragment {
             @Override
             public void onSuccess(String response) {
                 try {
-                   initJson(response);
+                    initJson(response);
                     if (isSuccess) {
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperDangerBean.class));
+                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superUAdapter.notifyDataSetChanged();
                     } else {
 

@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -85,7 +86,7 @@ import okhttp3.Call;
 
 
 /**
- * Created by qingsong on 2017/11/15.
+ * @author  qingsong on 2017/11/15.
  */
 
 public class DisasterReportFragment extends Fragment {
@@ -244,7 +245,7 @@ public class DisasterReportFragment extends Fragment {
 
     private void enlargePhoto(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
-        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+        PhotoView photoView = view.findViewById(R.id.photo_view);
         photoView.setImageBitmap(ImageUtils.getBitmap(path, 1280, 720));
         new android.support.v7.app.AlertDialog.Builder(context, R.style.Transparent)
                 .setView(view)
@@ -322,6 +323,7 @@ public class DisasterReportFragment extends Fragment {
 
     private class LocationListener extends BDAbstractLocationListener {
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
@@ -419,6 +421,7 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void clickText(final int type) {
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
         TextView tvPlay = view.findViewById(R.id.tv_play);
         TextView tvDelete = view.findViewById(R.id.tv_delete);
@@ -584,6 +587,7 @@ public class DisasterReportFragment extends Fragment {
         setRequest(map);
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void setRequest(Map<String, String> map) {
         progressDialog.show();
         PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");

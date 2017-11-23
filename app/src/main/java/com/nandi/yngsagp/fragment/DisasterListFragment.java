@@ -19,7 +19,7 @@ import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.adapter.DisasterAPosAdapter;
-import com.nandi.yngsagp.bean.DisasterListABean;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -40,7 +40,7 @@ import butterknife.Unbinder;
 
 
 /**
- * Created by qingsong on 2017/11/15.
+ * @author  qingsong on 2017/11/15.
  */
 
 public class DisasterListFragment extends Fragment {
@@ -62,17 +62,14 @@ public class DisasterListFragment extends Fragment {
     private DisasterAPosAdapter disasterAdapter;
     private DisasterAPosAdapter disasterNAdapter;
 
-    private int isDisaster = 1;
     private int isDisPose = 0;
     private int pageA = 1;
     private int pageN = 1;
     private int rows = 15;
     private String areaId;
-    private List<DisasterListABean> disasterListA;
-    private List<DisasterListABean> disasterListN;
+    private List<SuperBean> disasterListA;
+    private List<SuperBean> disasterListN;
     private String role;
-    private JSONObject jsonObject;
-    private JSONObject jsonMeta;
     private JSONArray jsonData;
     private boolean isSuccess;
     private String message;
@@ -99,7 +96,7 @@ public class DisasterListFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         disasterListA.clear();
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
@@ -130,7 +127,7 @@ public class DisasterListFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         disasterListN.clear();
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         pageN = 1;
                         refreshlayouts.finishRefresh();
@@ -152,8 +149,8 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void initJson(String response) throws JSONException {
-        jsonObject = new JSONObject(response);
-        jsonMeta = new JSONObject(jsonObject.optString("meta"));
+        JSONObject jsonObject = new JSONObject(response);
+        JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
         jsonData = new JSONArray(jsonObject.optString("data"));
         isSuccess = jsonMeta.optBoolean("success");
         message = jsonMeta.optString("message");
@@ -172,7 +169,7 @@ public class DisasterListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
 
                         refreshlayouts.finishLoadmore();
@@ -207,7 +204,7 @@ public class DisasterListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -293,7 +290,6 @@ public class DisasterListFragment extends Fragment {
                 startActivity(intent);
             }
         });
-//        setAdapter();
     }
 
     private void initViews() {
@@ -321,7 +317,7 @@ public class DisasterListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
@@ -346,7 +342,7 @@ public class DisasterListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisasterListABean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                     } else {
 

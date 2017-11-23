@@ -45,4 +45,6 @@
     <string name="areaDanger">威胁农田(亩)：</string>
     <string name="disasterNum">灾情编号：</string>
     <string name="xqNum">险情编号：</string>
+    <string name="foreLevel">预报灾情等级：</string>
+    <string name="level">灾情等级：</string>
 </resources>

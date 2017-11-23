@@ -17,7 +17,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.DangerAPosAdapter;
-import com.nandi.yngsagp.bean.DangerListABean;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -65,8 +65,8 @@ public class DangerListFragment extends Fragment {
     private int pageU = 1;
     private int rows = 15;
     private String areaId;
-    private List<DangerListABean> dangerListA;
-    private List<DangerListABean> dangerListU;
+    private List<SuperBean> dangerListA;
+    private List<SuperBean> dangerListU;
     private String role;
     private JSONObject jsonObject;
     private JSONObject jsonMeta;
@@ -96,7 +96,7 @@ public class DangerListFragment extends Fragment {
                   initJson(response);
                     if (isSuccess) {
                         dangerListA.clear();
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
@@ -127,7 +127,7 @@ public class DangerListFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         dangerListU.clear();
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                         pageU = 1;
                         refreshlayouts.finishRefresh();
@@ -171,7 +171,7 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -204,7 +204,7 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -302,7 +302,7 @@ public class DangerListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
@@ -327,7 +327,7 @@ public class DangerListFragment extends Fragment {
                 try {
                    initJson(response);
                     if (isSuccess) {
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DangerListABean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                     } else {
 

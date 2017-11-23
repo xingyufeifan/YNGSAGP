@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -71,7 +70,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-public class DisasterPosActivity extends AppCompatActivity {
+public class SuperDisasterActivity extends AppCompatActivity {
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int TAKE_VIDEO = 3;
@@ -83,6 +82,10 @@ public class DisasterPosActivity extends AppCompatActivity {
     RelativeLayout headRl;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+    @BindView(R.id.foreLevel)
+    TextView foreLevel;
+    @BindView(R.id.level)
+    TextView level;
     @BindView(R.id.userShow)
     TextView userShow;
     @BindView(R.id.phoneShow)
@@ -92,39 +95,39 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.locationShow)
     TextView locationShow;
     @BindView(R.id.addressShow)
-    EditText addressShow;
+    TextView addressShow;
     @BindView(R.id.lonShow)
-    EditText lonShow;
+    TextView lonShow;
     @BindView(R.id.latShow)
-    EditText latShow;
+    TextView latShow;
     @BindView(R.id.disNumShow)
     TextView disNumShow;
     @BindView(R.id.typeShow)
     Spinner typeShow;
     @BindView(R.id.factorShow)
-    EditText factorShow;
+    TextView factorShow;
     @BindView(R.id.injurdShow)
-    EditText injurdShow;
+    TextView injurdShow;
     @BindView(R.id.deathShow)
-    EditText deathShow;
+    TextView deathShow;
     @BindView(R.id.missShow)
-    EditText missShow;
+    TextView missShow;
     @BindView(R.id.farmShow)
-    EditText farmShow;
+    TextView farmShow;
     @BindView(R.id.houseShow)
-    EditText houseShow;
+    TextView houseShow;
     @BindView(R.id.moneyShow)
-    EditText moneyShow;
+    TextView moneyShow;
     @BindView(R.id.mobileShow)
-    EditText mobileShow;
+    TextView mobileShow;
     @BindView(R.id.nameShow)
-    EditText nameShow;
+    TextView nameShow;
     @BindView(R.id.ll_dReport)
     LinearLayout llDReport;
     @BindView(R.id.otherShow)
-    EditText otherShow;
+    TextView otherShow;
     @BindView(R.id.et_handle)
-    EditText etHandle;
+    TextView etHandle;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
     @BindView(R.id.text_layout)
@@ -151,12 +154,6 @@ public class DisasterPosActivity extends AppCompatActivity {
     LinearLayout llAddMedia;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
-    @BindView(R.id.btn_error)
-    Button btnError;
-    @BindView(R.id.btn_confirm)
-    Button btnConfirm;
-    @BindView(R.id.ll_1)
-    LinearLayout ll1;
     private SuperBean disasterListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
@@ -178,7 +175,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disaster_pos);
+        setContentView(R.layout.activity_disaster_super);
         ButterKnife.bind(this);
         context = this;
         initData();
@@ -214,6 +211,27 @@ public class DisasterPosActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) disasterListBean.getOtherThing());
         mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
         nameShow.setText((CharSequence) disasterListBean.getMonitorName());
+        ToastUtils.showShort(disasterListBean.getForecastLevel());
+        if ("1".equals(disasterListBean.getLevel())) {
+            level.setText("小型");
+        } else if ("2".equals(disasterListBean.getLevel())) {
+            level.setText("中型");
+        } else if ("3".equals(disasterListBean.getLevel())) {
+            level.setText("大型");
+        } else if ("4".equals(disasterListBean.getLevel())) {
+            level.setText("特大型");
+        }
+        if (disasterListBean.getForecastLevel().equals(null)) {
+            foreLevel.setText(disasterListBean.getForecastLevel());
+        } else if ("1".equals(disasterListBean.getForecastLevel())) {
+            foreLevel.setText("小型");
+        } else if ("2".equals(disasterListBean.getForecastLevel())) {
+            foreLevel.setText("中型");
+        } else if ("3".equals(disasterListBean.getForecastLevel())) {
+            foreLevel.setText("大型");
+        } else if ("4".equals(disasterListBean.getForecastLevel())) {
+            foreLevel.setText("特大型");
+        }
         if ("0".equals((CharSequence) disasterListBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
@@ -221,7 +239,6 @@ public class DisasterPosActivity extends AppCompatActivity {
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
             tvTitle.setText("已处理灾情");
-            ll1.setVisibility(View.GONE);
             llAddMedia.setVisibility(View.GONE);
         } else {
             tvTitle.setText("未处理灾情");
@@ -348,7 +365,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video_uploaded, R.id.tv_audio_uploaded, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video_uploaded, R.id.tv_audio_uploaded, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -363,12 +380,6 @@ public class DisasterPosActivity extends AppCompatActivity {
                 break;
             case R.id.iv_take_audio:
                 takeAudio();
-                break;
-            case R.id.btn_error:
-
-                break;
-            case R.id.btn_confirm:
-
                 break;
             case R.id.tv_video_uploaded:
                 playNetVideo();
@@ -605,14 +616,14 @@ public class DisasterPosActivity extends AppCompatActivity {
     }
 
     private void playAudio(String s) {
-        player=new MediaPlayer();
+        player = new MediaPlayer();
         try {
             player.setDataSource(s);
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
         Button btnStart = view.findViewById(R.id.btn_dialog_play);
         Button btnPause = view.findViewById(R.id.btn_dialog_pause);
         new AlertDialog.Builder(context)
@@ -644,7 +655,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri=Uri.parse(response.getAbsolutePath());
+            uri = Uri.parse(response.getAbsolutePath());
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.parse("file://" + response.getAbsolutePath());
         }

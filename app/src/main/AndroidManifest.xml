@@ -76,7 +76,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
         <activity android:name=".activity.DangerPosActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
-
+        <activity android:name=".activity.SuperDangerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity android:name=".activity.SuperDisasterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

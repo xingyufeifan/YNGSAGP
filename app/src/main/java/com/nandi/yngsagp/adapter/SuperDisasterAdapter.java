@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.bean.DisasterListABean;
-import com.nandi.yngsagp.bean.SuperDisasterBean;
+import com.nandi.yngsagp.bean.SuperBean;
 
 import java.util.List;
 
@@ -21,9 +20,9 @@ import java.util.List;
 public class SuperDisasterAdapter extends RecyclerView.Adapter<SuperDisasterAdapter.MyViewHolder> {
     private Context mContext;
     public SuperDisasterAdapter.OnItemClickListener mOnItemClickListener;
-    private List<SuperDisasterBean> listBeans;
+    private List<SuperBean> listBeans;
 
-    public SuperDisasterAdapter(Context context, List<SuperDisasterBean> listBeans) {
+    public SuperDisasterAdapter(Context context, List<SuperBean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }

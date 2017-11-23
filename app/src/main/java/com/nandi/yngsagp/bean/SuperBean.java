@@ -3,10 +3,10 @@ package com.nandi.yngsagp.bean;
 import java.io.Serializable;
 
 /**
- * Created by qingsong on 2017/11/20.
+ * @author qingsong on 2017/11/20.
  */
 
-public class SuperDangerBean implements Serializable {
+public class SuperBean implements Serializable {
 
     /**
      * id : 82

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DangerPosActivity extends AppCompatActivity {
+public class SuperDangerActivity extends AppCompatActivity {
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.ll_1)
@@ -80,7 +80,7 @@ public class DangerPosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_danger_pos);
+        setContentView(R.layout.activity_danger_super);
         ButterKnife.bind(this);
         initView();
         initData();
