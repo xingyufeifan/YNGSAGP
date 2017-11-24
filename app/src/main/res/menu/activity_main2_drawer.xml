@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_disaster_edit"
             android:icon="@mipmap/ic_update"

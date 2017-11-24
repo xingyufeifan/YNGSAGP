@@ -40,4 +40,7 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">40sp</item>
     </style>
+    <style name="navigation_text_size">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
