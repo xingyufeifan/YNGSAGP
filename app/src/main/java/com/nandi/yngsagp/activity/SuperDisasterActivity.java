@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -50,6 +51,7 @@ import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.PictureUtils;
+import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -126,6 +128,10 @@ public class SuperDisasterActivity extends AppCompatActivity {
     LinearLayout llDReport;
     @BindView(R.id.otherShow)
     TextView otherShow;
+    @BindView(R.id.disposePerson)
+    TextView disposePerson;
+    @BindView(R.id.disposeMobile)
+    TextView disposeMobile;
     @BindView(R.id.et_handle)
     TextView etHandle;
     @BindView(R.id.ll_handle)
@@ -211,6 +217,11 @@ public class SuperDisasterActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) disasterListBean.getOtherThing());
         mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
         nameShow.setText((CharSequence) disasterListBean.getMonitorName());
+        disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+        disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+        if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
+            llDReport.setVisibility(View.GONE);
+        }
         ToastUtils.showShort(disasterListBean.getForecastLevel());
         if ("1".equals(disasterListBean.getLevel())) {
             level.setText("小型");
@@ -232,14 +243,12 @@ public class SuperDisasterActivity extends AppCompatActivity {
         } else if ("4".equals(disasterListBean.getForecastLevel())) {
             foreLevel.setText("特大型");
         }
-        if ("0".equals((CharSequence) disasterListBean.getPersonType())) {
-            llDReport.setVisibility(View.GONE);
-        }
         int isDispose = disasterListBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
             tvTitle.setText("已处理灾情");
             llAddMedia.setVisibility(View.GONE);
+            etHandle.setText("没得数据");
         } else {
             tvTitle.setText("未处理灾情");
         }

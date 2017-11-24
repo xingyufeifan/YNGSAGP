@@ -128,6 +128,10 @@ public class DisasterPosActivity extends AppCompatActivity {
     LinearLayout llDReport;
     @BindView(R.id.otherShow)
     EditText otherShow;
+    @BindView(R.id.disposePerson)
+    TextView disposePerson;
+    @BindView(R.id.disposeMobile)
+    TextView disposeMobile;
     @BindView(R.id.et_handle)
     EditText etHandle;
     @BindView(R.id.ll_handle)
@@ -162,10 +166,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     Button btnConfirm;
     @BindView(R.id.ll_1)
     LinearLayout ll1;
-    @BindView(R.id.disposePerson)
-    EditText disposePerson;
-    @BindView(R.id.disposeMobile)
-    EditText disposeMobile;
+
     private SuperBean disasterListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
@@ -196,6 +197,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         initView();
         setListener();
     }
+
     private void initData() {
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
@@ -234,7 +236,9 @@ public class DisasterPosActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) disasterListBean.getOtherThing());
         mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
         nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        if ("0".equals((CharSequence) disasterListBean.getPersonType())) {
+        disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+        disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+        if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         int isDispose = disasterListBean.getIsDispose();

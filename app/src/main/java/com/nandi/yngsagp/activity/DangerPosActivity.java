@@ -51,6 +51,7 @@ import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.PictureUtils;
+import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -150,6 +151,14 @@ public class DangerPosActivity extends AppCompatActivity {
     Button btnError;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
+    @BindView(R.id.et_handle)
+    EditText etHandle;
+    @BindView(R.id.ll_handle)
+    LinearLayout llHandle;
+    @BindView(R.id.disposePerson)
+    EditText disposePerson;
+    @BindView(R.id.disposeMobile)
+    EditText disposeMobile;
 
     private SuperBean dangerListBean;
     private ProgressDialog progressDialog;
@@ -168,7 +177,6 @@ public class DangerPosActivity extends AppCompatActivity {
     private String audioPath;
     private MediaRecorder recorder;
     private MediaPlayer player;
-    private RequestCall build;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +190,10 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("正在获取数据");
         photoAdapter = new PhotoAdapter(context, photoInfos);
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
@@ -196,6 +208,10 @@ public class DangerPosActivity extends AppCompatActivity {
             ll1.setVisibility(View.GONE);
         } else {
             tvTitle.setText("未处理险情");
+        }
+        String personType = dangerListBean.getPersonType();
+        if ("1".equals(personType)){
+            llDReport.setVisibility(View.GONE);
         }
         setRequest();
     }
@@ -267,6 +283,8 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) dangerListBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) dangerListBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) dangerListBean.getMonitorName());
+        disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+        disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
         if ("1".equals(dangerListBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }

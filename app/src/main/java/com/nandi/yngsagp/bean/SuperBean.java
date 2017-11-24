@@ -75,6 +75,33 @@ public class SuperBean implements Serializable {
     private String personType;
     private String level;
     private String forecastLevel;
+    private String opinion;
+    private String disposePerson;
+    private String disposeMobile;
+    public String getOpinion() {
+        return opinion;
+    }
+
+    public void setOpinion(String opinion) {
+        this.opinion = opinion;
+    }
+
+    public String getDisposePerson() {
+        return disposePerson;
+    }
+
+    public void setDisposePerson(String disposePerson) {
+        this.disposePerson = disposePerson;
+    }
+
+    public String getDisposeMobile() {
+        return disposeMobile;
+    }
+
+    public void setDisposeMobile(String disposeMobile) {
+        this.disposeMobile = disposeMobile;
+    }
+
 
     public String getLevel() {
         return level;
