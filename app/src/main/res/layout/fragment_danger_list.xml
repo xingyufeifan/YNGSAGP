@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -11,13 +10,14 @@
         android:layout_height="50dp"
         app:tabBackground="@color/holo_light_primary"
         app:tabIndicatorColor="@color/colorLine"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabSelectedTextColor="@android:color/holo_blue_dark" />
 
     <LinearLayout
         android:id="@+id/disasterAlready"
-        android:layout_below="@id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tab_layout"
         android:orientation="vertical">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -35,9 +35,9 @@
 
     <LinearLayout
         android:id="@+id/disasterNo"
-        android:layout_below="@id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tab_layout"
         android:orientation="vertical"
         android:visibility="invisible">
 

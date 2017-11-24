@@ -313,6 +313,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // TODO: 2017/11/16 清空数据
                         SharedUtils.removeShare(context, Constant.IS_LOGIN);
+                        SharedUtils.removeShare(context, Constant.PASSWORD);
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
                     }

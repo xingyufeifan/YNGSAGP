@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,14 +54,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 public class SuperDisasterActivity extends AppCompatActivity {
+
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.head_rl)
     RelativeLayout headRl;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
     @BindView(R.id.foreLevel)
     TextView foreLevel;
     @BindView(R.id.level)
@@ -115,8 +113,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView etHandle;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
-    @BindView(R.id.text_layout)
-    LinearLayout textLayout;
     @BindView(R.id.rv_photo_uploaded)
     RecyclerView rvPhotoUploaded;
     @BindView(R.id.tv_video_uploaded)
@@ -125,6 +121,8 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView tvAudioUploaded;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
+    @BindView(R.id.text_layout)
+    LinearLayout textLayout;
     private SuperBean disasterListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
@@ -154,8 +152,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
-        tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
+
         userShow.setText((CharSequence) disasterListBean.getPersonel());
         disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
         phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
@@ -217,27 +214,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
-                    textLayout.setVisibility(View.VISIBLE);
-                    mediaLayout.setVisibility(View.INVISIBLE);
-                } else {
-                    textLayout.setVisibility(View.INVISIBLE);
-                    mediaLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
         photoAdapter.setOnItemViewClickListener(new PhotoAdapter.OnItemViewClickListener() {
