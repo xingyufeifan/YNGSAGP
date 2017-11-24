@@ -37,7 +37,7 @@
     <string name="pleaseInput">请输入...</string>
     <string name="dReportMobile">联系电话：</string>
     <string name="dReportName">电话通知人：</string>
-    <string name="dReportOther">其他信息：</string>
+    <string name="dReportOther">其他信息</string>
     <string name="dReportHandle">处置意见：</string>
     <string name="personDanger">威胁人数：</string>
     <string name="houseDanger">威胁房屋(间)：</string>

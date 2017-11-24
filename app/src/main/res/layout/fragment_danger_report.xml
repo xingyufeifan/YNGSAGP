@@ -49,17 +49,14 @@
 
         <Button
             android:id="@+id/btn_save"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            style="@style/myButtonSave"
+            android:layout_marginRight="10dp"
             android:text="保存" />
 
         <Button
             android:id="@+id/btn_upload"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            style="@style/myButtonReport"
             android:text="上传" />
-
     </LinearLayout>
+
 </RelativeLayout>

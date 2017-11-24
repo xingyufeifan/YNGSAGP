@@ -6,7 +6,8 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,13 +17,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportPersonnel"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportPersonnel" />
 
             <TextView
                 android:id="@+id/userShow"
@@ -30,20 +31,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportPhone"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportPhone" />
 
             <TextView
                 android:id="@+id/phoneShow"
@@ -51,20 +50,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportTime"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportTime" />
 
             <TextView
                 android:id="@+id/timeShow"
@@ -73,28 +70,23 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/report_unpressed" />
+            style="@style/myDivide"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="位置"
-            android:textSize="18sp" />
-
+            style="@style/myTextTitle"
+            android:text="位置" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLocation"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLocation" />
 
             <TextView
                 android:id="@+id/locationShow"
@@ -103,20 +95,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportAddress"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportAddress" />
 
             <EditText
                 android:id="@+id/addressShow"
@@ -126,20 +116,18 @@
 
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLon"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLon" />
 
             <EditText
                 android:id="@+id/lonShow"
@@ -147,20 +135,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLat"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLat" />
 
             <EditText
                 android:id="@+id/latShow"
@@ -168,27 +154,23 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/report_unpressed" />
+            style="@style/myDivide"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="原因/类型"
-            android:textSize="18sp" />
+            style="@style/myTextTitle"
+            android:text="原因/类型" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disasterNum"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/disasterNum" />
 
             <TextView
                 android:id="@+id/disNumShow"
@@ -196,20 +178,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportType"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportType" />
 
             <Spinner
                 android:id="@+id/typeShow"
@@ -220,20 +200,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportFactor"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportFactor" />
 
             <EditText
                 android:id="@+id/factorShow"
@@ -241,27 +219,23 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/report_unpressed" />
+            style="@style/myDivide"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="灾情"
-            android:textSize="18sp" />
+            style="@style/myTextTitle"
+            android:text="灾情" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportInjurd"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportInjurd" />
 
             <EditText
                 android:id="@+id/injurdShow"
@@ -270,20 +244,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportDeath"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportDeath" />
 
             <EditText
                 android:id="@+id/deathShow"
@@ -292,20 +264,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportMiss"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportMiss" />
 
             <EditText
                 android:id="@+id/missShow"
@@ -314,20 +284,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportFram"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportFram" />
 
             <EditText
                 android:id="@+id/farmShow"
@@ -336,20 +304,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportHouse"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportHouse" />
 
             <EditText
                 android:id="@+id/houseShow"
@@ -358,20 +324,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportMoney"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportMoney" />
 
             <EditText
                 android:id="@+id/moneyShow"
@@ -381,10 +345,8 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="2dp"
-            android:background="@color/report_unpressed" />
+            style="@style/myDivide"
+            android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:id="@+id/ll_dReport"
@@ -393,22 +355,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="电话通知填报"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="电话通知填报" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportMobile"
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="@string/dReportMobile" />
 
                 <EditText
                     android:id="@+id/mobileShow"
@@ -417,20 +376,18 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
+                style="@style/myDivide" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportName"
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="@string/dReportName" />
 
                 <EditText
                     android:id="@+id/nameShow"
@@ -438,36 +395,23 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/report_unpressed" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportOther"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/otherShow"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@drawable/shape_report"
-                android:hint="@string/pleaseInput"
-                android:padding="5dp"
-                android:textSize="16sp" />
+                style="@style/myDivide"
+                android:layout_marginBottom="10dp"/>
         </LinearLayout>
 
         <TextView
+            style="@style/myTextTitle"
+            android:text="@string/dReportOther" />
+
+        <EditText
+            android:id="@+id/otherShow"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/report_unpressed" />
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_report"
+            android:hint="@string/pleaseInput"
+            android:padding="5dp"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:id="@+id/ll_handle"
@@ -476,23 +420,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="处置信息"
-                android:textSize="20sp" />
-
+                style="@style/myTextTitle"
+                android:text="处置信息" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处置人："
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="处置人：" />
 
                 <TextView
                     android:id="@+id/disposePerson"
@@ -500,20 +440,18 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
+                style="@style/myDivide" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处置人电话："
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="处置人电话：" />
 
                 <TextView
                     android:id="@+id/disposeMobile"
@@ -521,35 +459,24 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportHandle"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/et_handle"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@drawable/shape_report"
-                    android:hint="@string/pleaseInput"
-                    android:padding="5dp"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                style="@style/myDivide" />
 
             <TextView
+                style="@style/myLeftText"
+                android:text="@string/dReportHandle"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/et_handle"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/report_unpressed" />
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_report"
+                android:hint="@string/pleaseInput"
+                android:padding="5dp"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
     </LinearLayout>

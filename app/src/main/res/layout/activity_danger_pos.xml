@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimaryDark"
-        >
+        android:background="@color/statusColor">
         <ImageView
             android:id="@+id/back"
             android:layout_marginLeft="5dp"
@@ -52,7 +51,6 @@
         <include layout="@layout/layout_danger_text_pos" />
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/media_layout"
         android:layout_width="match_parent"
@@ -75,16 +73,14 @@
 
         <Button
             android:id="@+id/btn_error"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            style="@style/myButtonSave"
+            android:background="@drawable/error_btn_shape"
+            android:layout_marginRight="10dp"
             android:text="误报" />
 
         <Button
             android:id="@+id/btn_confirm"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            style="@style/myButtonSave"
             android:text="确认信息" />
 
     </LinearLayout>

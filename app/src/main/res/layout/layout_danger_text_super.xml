@@ -6,32 +6,27 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/report_unpressed" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/lineColor"
-            android:text="必要信息"
-            android:textSize="18sp" />
+            style="@style/myTextTitle"
+            android:text="必要信息" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/foreLevel"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/foreLevel" />
 
             <TextView
                 android:id="@+id/foreLevel"
@@ -39,19 +34,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/level"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/level" />
 
             <TextView
                 android:id="@+id/level"
@@ -60,20 +54,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportPersonnel"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportPersonnel" />
 
             <TextView
                 android:id="@+id/userDangerShow"
@@ -81,20 +73,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportPhone"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportPhone" />
 
             <TextView
                 android:id="@+id/phoneDangerShow"
@@ -102,26 +92,23 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportTime"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportTime" />
 
             <TextView
                 android:id="@+id/timeDangerShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
-
 
         <TextView
             android:layout_width="match_parent"
@@ -129,21 +116,19 @@
             android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/lineColor"
-            android:text="地点信息"
-            android:textSize="18sp" />
+            style="@style/myTextTitle"
+            android:text="地点信息" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportAddress"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportAddress" />
 
             <TextView
                 android:id="@+id/addressDangerShow"
@@ -152,20 +137,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLocation"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLocation" />
 
             <TextView
                 android:id="@+id/locationDangerShow"
@@ -174,20 +157,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLon"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLon" />
 
             <TextView
                 android:id="@+id/lonDangerShow"
@@ -195,20 +176,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportLat"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportLat" />
 
             <TextView
                 android:id="@+id/latDangerShow"
@@ -222,43 +201,40 @@
             android:background="@color/report_unpressed" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/lineColor"
+            style="@style/myTextTitle"
             android:text="诱因／类型"
             android:textSize="18sp" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="请输入...(必填)"
-                android:text="@string/xqNum"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/xqNum" />
 
             <TextView
                 android:id="@+id/xqNumShow"
-                style="@style/disasterStyle" />
+                style="@style/disasterStyle"
+                android:hint="请输入...(必填)"/>
         </LinearLayout>
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportType"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportType" />
 
             <Spinner
                 android:id="@+id/typeDangerShow"
@@ -271,25 +247,23 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="请输入...(必填)"
-                android:text="@string/dReportFactor"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/dReportFactor" />
 
             <TextView
                 android:id="@+id/factorDangerShow"
-                style="@style/disasterStyle" />
+                style="@style/disasterStyle"
+                android:hint="请输入...(必填)"/>
         </LinearLayout>
 
         <TextView
@@ -299,22 +273,19 @@
             android:background="@color/report_unpressed" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/lineColor"
-            android:text="险情信息"
-            android:textSize="18sp" />
+            style="@style/myTextTitle"
+            android:text="险情信息" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/personDanger"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/personDanger" />
 
             <TextView
                 android:id="@+id/personDangerShow"
@@ -323,20 +294,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/houseDanger"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/houseDanger" />
 
             <TextView
                 android:id="@+id/houseDangerShow"
@@ -345,20 +314,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/moneyDanger"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/moneyDanger" />
 
             <TextView
                 android:id="@+id/moneyDangerShow"
@@ -368,20 +335,18 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/lineColor" />
+            style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/areaDanger"
-                android:textSize="16sp" />
+                style="@style/myLeftText"
+                android:text="@string/areaDanger" />
 
             <TextView
                 android:id="@+id/areaDangerShow"
@@ -399,26 +364,22 @@
             android:id="@+id/ll_dReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/lineColor"
-                android:text="电话通知填报"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="电话通知填报" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportMobile"
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="@string/dReportMobile"/>
 
                 <TextView
                     android:id="@+id/dReportMobileShow"
@@ -426,20 +387,18 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
+                style="@style/myDivide" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportName"
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="@string/dReportName" />
 
                 <TextView
                     android:id="@+id/dReportNameShow"
@@ -447,32 +406,25 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
+                style="@style/myDivide" />
         </LinearLayout>
 
+        <TextView
+            style="@style/myLeftText"
+            android:text="@string/dReportOther"
+            android:paddingTop="18dp"
+            android:paddingLeft="10dp"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/otherDangerShow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dReportOther"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/otherDangerShow"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@drawable/shape_report"
-                android:hint="@string/pleaseInput"
-                android:padding="5dp"
-                android:textSize="16sp" />
-        </LinearLayout>
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_report"
+            android:hint="@string/pleaseInput"
+            android:padding="5dp"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -487,23 +439,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/lineColor"
-                android:text="处置信息"
-                android:textSize="18sp" />
-
+                style="@style/myTextTitle"
+                android:text="处置信息" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处置人："
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="处置人：" />
 
                 <TextView
                     android:id="@+id/disposePerson"
@@ -511,20 +459,18 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
+                style="@style/myDivide"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处置人电话："
-                    android:textSize="16sp" />
+                    style="@style/myLeftText"
+                    android:text="处置人电话：" />
 
                 <TextView
                     android:id="@+id/disposeMobile"
@@ -532,38 +478,26 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.01dp"
-                android:background="@color/lineColor" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dReportHandle"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/et_handle"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@drawable/shape_report"
-                    android:hint="@string/pleaseInput"
-                    android:padding="5dp"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                style="@style/myDivide" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/report_unpressed" />
-        </LinearLayout>
+                style="@style/myLeftText"
+                android:text="@string/dReportHandle"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"/>
 
+            <TextView
+                android:id="@+id/et_handle"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_report"
+                android:hint="@string/pleaseInput"
+                android:padding="5dp"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
