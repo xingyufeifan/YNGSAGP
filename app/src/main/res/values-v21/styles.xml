@@ -1,21 +1,11 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
-        <!--&lt;!&ndash;状态栏颜色&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="colorPrimaryDark">@color/Indigo_colorPrimaryDark</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;Toolbar颜色&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="colorPrimary">@color/Indigo_colorPrimary</item>&ndash;&gt;-->
-        <!--&lt;!&ndash;返回键样式&ndash;&gt;-->
-        <!--<item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>-->
-    <!--</style>-->
-
     <style name="AppTheme" parent="MyThemeStyle" />
     <style name="MyThemeStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <!--选中状态icon的颜色和字体颜色-->
-        <item name="colorPrimary">@color/loginBtn</item>
-        <item name="colorPrimaryDark">@color/loginBtn</item>
-        <item name="colorAccent">@color/loginBtn</item>
+        <item name="colorPrimary">@color/statusColor</item>
+        <item name="colorPrimaryDark">@color/statusColor</item>
+        <item name="colorAccent">@color/statusColor</item>
     </style>
 
     <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">

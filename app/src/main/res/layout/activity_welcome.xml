@@ -1,19 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:background="@drawable/welcomebg"
     tools:context="com.nandi.yngsagp.activity.WelcomeActivity">
 
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       android:orientation="vertical">
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:text="灾险情上报APP"
+           android:textSize="36sp"
+           android:textStyle="bold"
+           android:shadowColor="#FF000000"
+           android:shadowDx="5"
+           android:shadowDy="5"
+           android:shadowRadius="3"
+           android:textColor="@color/colorWhite"/>
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:text="云南地质"
+           android:textSize="24sp"
+           android:textStyle="bold"
+           android:shadowColor="#FF000000"
+           android:shadowDx="5"
+           android:shadowDy="5"
+           android:shadowRadius="3"
+           android:textColor="@color/colorWhite"/>
+
+   </LinearLayout>
+
+
+
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_version"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="我是引导页！"
-        android:textSize="30sp"
-        android:layout_gravity="center"
-        />
-</LinearLayout>
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:text="当前版本1.0"
+        android:textColor="#e4f0fe"
+        android:textSize="22sp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

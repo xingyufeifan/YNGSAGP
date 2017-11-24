@@ -7,28 +7,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/iv_take_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="拍照" />
+            style="@style/myButtonBlue"
+            android:layout_marginRight="10dp"
+            android:text="拍照"/>
 
         <Button
             android:id="@+id/iv_take_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="视频" />
+            style="@style/myButtonBlue"
+            android:layout_marginRight="10dp"
+            android:text="视频"/>
 
         <Button
             android:id="@+id/iv_take_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="录音" />
+            style="@style/myButtonBlue"
+            android:text="录音"/>
     </LinearLayout>
 
     <ScrollView
@@ -38,16 +35,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="图片"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:textColor="@color/header_left_text"
+                android:textSize="20sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_photo"
@@ -56,33 +54,61 @@
 
             </android.support.v7.widget.RecyclerView>
             <TextView
+                android:id="@+id/tv_photo"
+                android:textSize="18sp"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/holo_light_primary"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="视频"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:textColor="@color/header_left_text"
+                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/tv_video"
                 android:textSize="18sp"
                 android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/holo_light_primary"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="录音"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:textColor="@color/header_left_text"
+                android:textSize="20sp" />
             <TextView
                 android:id="@+id/tv_audio"
                 android:textSize="18sp"
                 android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/holo_light_primary"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

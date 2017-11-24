@@ -50,16 +50,23 @@
         <Button
             android:id="@+id/btn_save"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="保存" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/save_btn_shape"
+            android:text="保存"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"/>
 
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="上传" />
+            android:background="@drawable/report_btn_shape"
+            android:text="上传"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"/>
 
     </LinearLayout>
 </RelativeLayout>

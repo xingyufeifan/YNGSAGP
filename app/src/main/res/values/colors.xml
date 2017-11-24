@@ -15,4 +15,6 @@
     <color name="linerNColor">#dedede</color>
     <color name="linerYColor">#80b9ea</color>
     <color name="loginInput">#207bd8</color>
+    <color name="statusColor">#1858bc</color>
+    <color name="btn_report">#5ea8e5</color>
 </resources>
