@@ -55,7 +55,6 @@ import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
-import com.zhy.http.okhttp.request.RequestCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,16 +90,16 @@ public class DangerPosActivity extends AppCompatActivity {
     TextView phoneDangerShow;
     @BindView(R.id.timeDangerShow)
     TextView timeDangerShow;
+    @BindView(R.id.locationDangerShow)
+    TextView locationDangerShow;
     @BindView(R.id.addressDangerShow)
     EditText addressDangerShow;
-    @BindView(R.id.locationDangerShow)
-    EditText locationDangerShow;
     @BindView(R.id.lonDangerShow)
     TextView lonDangerShow;
     @BindView(R.id.latDangerShow)
     TextView latDangerShow;
     @BindView(R.id.xqNumShow)
-    EditText xqNumShow;
+    TextView xqNumShow;
     @BindView(R.id.typeDangerShow)
     Spinner typeDangerShow;
     @BindView(R.id.factorDangerShow)
@@ -121,6 +120,14 @@ public class DangerPosActivity extends AppCompatActivity {
     LinearLayout llDReport;
     @BindView(R.id.otherDangerShow)
     EditText otherDangerShow;
+    @BindView(R.id.et_handle)
+    EditText etHandle;
+    @BindView(R.id.disposePerson)
+    EditText disposePerson;
+    @BindView(R.id.disposeMobile)
+    EditText disposeMobile;
+    @BindView(R.id.ll_handle)
+    LinearLayout llHandle;
     @BindView(R.id.text_layout)
     LinearLayout textLayout;
     @BindView(R.id.rv_photo_uploaded)
@@ -145,20 +152,12 @@ public class DangerPosActivity extends AppCompatActivity {
     LinearLayout llAddMedia;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
-    @BindView(R.id.ll_1)
-    LinearLayout ll1;
     @BindView(R.id.btn_error)
     Button btnError;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
-    @BindView(R.id.et_handle)
-    EditText etHandle;
-    @BindView(R.id.ll_handle)
-    LinearLayout llHandle;
-    @BindView(R.id.disposePerson)
-    EditText disposePerson;
-    @BindView(R.id.disposeMobile)
-    EditText disposeMobile;
+    @BindView(R.id.ll_1)
+    LinearLayout ll1;
 
     private SuperBean dangerListBean;
     private ProgressDialog progressDialog;
@@ -210,7 +209,7 @@ public class DangerPosActivity extends AppCompatActivity {
             tvTitle.setText("未处理险情");
         }
         String personType = dangerListBean.getPersonType();
-        if ("1".equals(personType)){
+        if ("1".equals(personType)) {
             llDReport.setVisibility(View.GONE);
         }
         setRequest();
@@ -283,8 +282,8 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) dangerListBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) dangerListBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) dangerListBean.getMonitorName());
-        disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
-        disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+        disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
+        disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
         if ("1".equals(dangerListBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }

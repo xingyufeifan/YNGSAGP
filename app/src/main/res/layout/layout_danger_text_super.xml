@@ -12,11 +12,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/foreLevel"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/foreLevel"
+                style="@style/disasterStyle" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/level"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/level"
+                android:hint="暂未处理"
+                style="@style/disasterStyle" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.01dp"
+            android:background="@color/lineColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -94,7 +135,7 @@
                 android:text="@string/dReportAddress"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/addressDangerShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)" />
@@ -116,7 +157,7 @@
                 android:text="@string/dReportLocation"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/locationDangerShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)" />
@@ -189,7 +230,7 @@
                 android:text="@string/xqNum"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/xqNumShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -235,7 +276,7 @@
                 android:text="@string/dReportFactor"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/factorDangerShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -263,7 +304,7 @@
                 android:text="@string/personDanger"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/personDangerShow"
                 style="@style/disasterStyle"
                 android:inputType="number" />
@@ -285,7 +326,7 @@
                 android:text="@string/houseDanger"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/houseDangerShow"
                 style="@style/disasterStyle"
                 android:inputType="number" />
@@ -307,7 +348,7 @@
                 android:text="@string/moneyDanger"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/moneyDangerShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)"
@@ -330,7 +371,7 @@
                 android:text="@string/areaDanger"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/areaDangerShow"
                 style="@style/disasterStyle"
                 android:inputType="number" />
@@ -367,7 +408,7 @@
                     android:text="@string/dReportMobile"
                     android:textSize="16sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/dReportMobileShow"
                     style="@style/disasterStyle" />
             </LinearLayout>
@@ -388,7 +429,7 @@
                     android:text="@string/dReportName"
                     android:textSize="16sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/dReportNameShow"
                     style="@style/disasterStyle" />
             </LinearLayout>
@@ -411,7 +452,7 @@
                 android:text="@string/dReportOther"
                 android:textSize="16sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/otherDangerShow"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"

@@ -412,6 +412,7 @@
 
                 <EditText
                     android:id="@+id/mobileShow"
+                    android:inputType="phone"
                     style="@style/disasterStyle" />
             </LinearLayout>
 

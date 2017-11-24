@@ -61,31 +61,7 @@
         android:layout_below="@+id/tab_layout"
         android:visibility="invisible">
 
-        <include layout="@layout/layout_danger_media_super" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="误报" />
-
-        <Button
-            android:id="@+id/btn_upload"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="确认信息" />
+        <include layout="@layout/layout_disaster_media_super" />
 
     </LinearLayout>
 </RelativeLayout>
