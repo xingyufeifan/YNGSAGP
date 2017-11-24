@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/head_rl"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:background="@color/colorPrimaryDark"
         >
@@ -28,17 +28,35 @@
             android:layout_centerInParent="true"
             android:text="险情"
             android:textColor="@android:color/white"
-            android:textSize="40sp" />
+            android:textSize="25sp" />
     </RelativeLayout>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/head_rl"
+        app:tabBackground="@color/holo_light_primary"
+        app:tabIndicatorColor="@color/colorLine"
+        app:tabSelectedTextColor="@android:color/holo_blue_dark">
 
+    </android.support.design.widget.TabLayout>
     <LinearLayout
         android:id="@+id/text_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/head_rl"
+        android:layout_below="@+id/tab_layout"
         >
 
         <include layout="@layout/layout_danger_text_super" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/media_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head_rl"
+        android:visibility="invisible"
+        >
+        <include layout="@layout/layout_super_media" />
 
+    </LinearLayout>
 </RelativeLayout>
