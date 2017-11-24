@@ -45,6 +45,7 @@ import butterknife.Unbinder;
  */
 
 public class DangerListFragment extends Fragment {
+    public static final int DANGER_REQUEST_CODE = 202;
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -283,7 +284,7 @@ public class DangerListFragment extends Fragment {
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DangerPosActivity.class);
                 intent.putExtra(Constant.DISASTER, dangerListA.get(position));
-                startActivity(intent);
+                startActivityForResult(intent,DANGER_REQUEST_CODE);
             }
         });
         dangerUAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
@@ -291,7 +292,7 @@ public class DangerListFragment extends Fragment {
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DangerPosActivity.class);
                 intent.putExtra(Constant.DISASTER, dangerListU.get(position));
-                startActivity(intent);
+                startActivityForResult(intent,DANGER_REQUEST_CODE);
             }
         });
 
@@ -320,6 +321,7 @@ public class DangerListFragment extends Fragment {
             @Override
             public void onSuccess(String response) {
                 try {
+                    dangerListA.clear();
                     initJson(response);
                     if (isSuccess) {
                         dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
@@ -345,6 +347,7 @@ public class DangerListFragment extends Fragment {
             @Override
             public void onSuccess(String response) {
                 try {
+                    dangerListU.clear();
                    initJson(response);
                     if (isSuccess) {
                         dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
@@ -365,6 +368,14 @@ public class DangerListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==DANGER_REQUEST_CODE){
+            requestUPos();
+            requestAPos();
+        }
+    }
 
     @Override
     public void onDestroyView() {

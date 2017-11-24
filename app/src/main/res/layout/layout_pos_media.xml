@@ -47,12 +47,12 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tv_video_uploaded"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_video_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
             <TextView
                 android:layout_width="match_parent"
@@ -63,12 +63,12 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tv_audio_uploaded"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_audio_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
             <LinearLayout
                 android:id="@+id/ll_add_media"
                 android:orientation="vertical"
