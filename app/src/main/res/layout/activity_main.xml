@@ -25,7 +25,8 @@
             android:layout_gravity="center"
             android:text=""
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textStyle="bold"
+            android:textSize="40sp" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.DrawerLayout

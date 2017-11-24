@@ -47,9 +47,10 @@
                     android:shadowDy="5"
                     android:shadowRadius="3"
                     android:text="@string/app_name"
+                    android:textStyle="bold"
                     android:textColor="@color/colorWhite"
                     android:typeface="monospace"
-                    android:textSize="50sp" />
+                    android:textSize="70sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -60,8 +61,9 @@
                     android:shadowDx="5"
                     android:shadowDy="5"
                     android:shadowRadius="3"
+                    android:textStyle="bold"
                     android:textColor="@color/colorWhite"
-                    android:textSize="30sp"
+                    android:textSize="40sp"
                     android:typeface="monospace" />
             </LinearLayout>
 
@@ -96,6 +98,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="@string/inputUser"
+                        android:textStyle="bold"
                         android:inputType="phone"
                         android:maxLength="11"
                         android:singleLine="true"
@@ -136,6 +139,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="请输入密码"
+                        android:textStyle="bold"
                         android:inputType="textPassword"
                         android:maxLength="30"
                         android:singleLine="true"
@@ -169,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="记住密码"
+                        android:textStyle="bold"
                         android:textSize="20sp"/>
 
                     <Button

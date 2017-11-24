@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,14 +54,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 public class SuperDisasterActivity extends AppCompatActivity {
+
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.head_rl)
     RelativeLayout headRl;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
     @BindView(R.id.foreLevel)
     TextView foreLevel;
     @BindView(R.id.level)
@@ -115,8 +113,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView etHandle;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
-    @BindView(R.id.text_layout)
-    LinearLayout textLayout;
     @BindView(R.id.rv_photo_uploaded)
     RecyclerView rvPhotoUploaded;
     @BindView(R.id.tv_video_uploaded)
@@ -125,7 +121,9 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView tvAudioUploaded;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
-    private SuperBean disasterListBean;
+    @BindView(R.id.text_layout)
+    LinearLayout textLayout;
+    private SuperBean listBeans;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
     private MediaInfo audioInfo = new MediaInfo();
@@ -154,58 +152,55 @@ public class SuperDisasterActivity extends AppCompatActivity {
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
-        tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        userShow.setText((CharSequence) disasterListBean.getPersonel());
-        disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
-        phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
-        timeShow.setText((CharSequence) disasterListBean.getFindTime());
-        locationShow.setText((CharSequence) disasterListBean.getCurrentLocation());
-        addressShow.setText((CharSequence) disasterListBean.getAddress());
-        typeShow.setSelection(Integer.parseInt(disasterListBean.getDisasterType()));
-        factorShow.setText((CharSequence) disasterListBean.getFactor());
-        injurdShow.setText((CharSequence) disasterListBean.getInjurdNum());
-        deathShow.setText((CharSequence) disasterListBean.getDeathNum());
-        missShow.setText((CharSequence) disasterListBean.getMissingNum());
-        farmShow.setText((CharSequence) disasterListBean.getFarmland());
-        houseShow.setText((CharSequence) disasterListBean.getHouseNum());
-        moneyShow.setText((CharSequence) disasterListBean.getLossProperty());
-        lonShow.setText((CharSequence) disasterListBean.getLongitude());
-        latShow.setText((CharSequence) disasterListBean.getLatitude());
-        otherShow.setText((CharSequence) disasterListBean.getOtherThing());
-        mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
-        nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
-        disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
-        if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
+        userShow.setText((CharSequence) listBeans.getPersonel());
+        disNumShow.setText((CharSequence) listBeans.getDisasterNum());
+        phoneShow.setText((CharSequence) listBeans.getPhoneNum());
+        timeShow.setText((CharSequence) listBeans.getFindTime());
+        locationShow.setText((CharSequence) listBeans.getCurrentLocation());
+        addressShow.setText((CharSequence) listBeans.getAddress());
+        typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()));
+        factorShow.setText((CharSequence) listBeans.getFactor());
+        injurdShow.setText((CharSequence) listBeans.getInjurdNum());
+        deathShow.setText((CharSequence) listBeans.getDeathNum());
+        missShow.setText((CharSequence) listBeans.getMissingNum());
+        farmShow.setText((CharSequence) listBeans.getFarmland());
+        houseShow.setText((CharSequence) listBeans.getHouseNum());
+        moneyShow.setText((CharSequence) listBeans.getLossProperty());
+        lonShow.setText((CharSequence) listBeans.getLongitude());
+        latShow.setText((CharSequence) listBeans.getLatitude());
+        otherShow.setText((CharSequence) listBeans.getOtherThing());
+        mobileShow.setText((CharSequence) listBeans.getMonitorPhone());
+        nameShow.setText((CharSequence) listBeans.getMonitorName());
+        if ("1".equals((CharSequence) listBeans.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
-        ToastUtils.showShort(disasterListBean.getForecastLevel());
-        if ("1".equals(disasterListBean.getLevel())) {
+        ToastUtils.showShort(listBeans.getForecastLevel());
+        if ("1".equals(listBeans.getLevel())) {
             level.setText("小型");
-        } else if ("2".equals(disasterListBean.getLevel())) {
+        } else if ("2".equals(listBeans.getLevel())) {
             level.setText("中型");
-        } else if ("3".equals(disasterListBean.getLevel())) {
+        } else if ("3".equals(listBeans.getLevel())) {
             level.setText("大型");
-        } else if ("4".equals(disasterListBean.getLevel())) {
+        } else if ("4".equals(listBeans.getLevel())) {
             level.setText("特大型");
         }
-        if (disasterListBean.getForecastLevel().equals(null)) {
-            foreLevel.setText(disasterListBean.getForecastLevel());
-        } else if ("1".equals(disasterListBean.getForecastLevel())) {
+        if (listBeans.getForecastLevel().equals(null)) {
+            foreLevel.setText(listBeans.getForecastLevel());
+        } else if ("1".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("小型");
-        } else if ("2".equals(disasterListBean.getForecastLevel())) {
+        } else if ("2".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("中型");
-        } else if ("3".equals(disasterListBean.getForecastLevel())) {
+        } else if ("3".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("大型");
-        } else if ("4".equals(disasterListBean.getForecastLevel())) {
+        } else if ("4".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("特大型");
         }
-        int isDispose = disasterListBean.getIsDispose();
-        System.out.println("isDisPose = " + isDispose);
+        int isDispose = listBeans.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("已处理灾情");
-            etHandle.setText("没得数据");
+            etHandle.setText(listBeans.getOpinion());
+            disposePerson.setText(listBeans.getDisposePerson());
+            disposeMobile.setText(listBeans.getDisposeMobile());
         } else {
             tvTitle.setText("未处理灾情");
             llHandle.setVisibility(View.GONE);
@@ -217,27 +212,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
-                    textLayout.setVisibility(View.VISIBLE);
-                    mediaLayout.setVisibility(View.INVISIBLE);
-                } else {
-                    textLayout.setVisibility(View.INVISIBLE);
-                    mediaLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
         photoAdapter.setOnItemViewClickListener(new PhotoAdapter.OnItemViewClickListener() {
@@ -285,13 +259,13 @@ public class SuperDisasterActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
 
-        disasterListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        listBeans = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         setRequest();
     }
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + disasterListBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBeans.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override

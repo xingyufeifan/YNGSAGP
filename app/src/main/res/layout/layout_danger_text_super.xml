@@ -12,11 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/report_unpressed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/lineColor"
+            android:text="必要信息"
+            android:textSize="18sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp">
-
+            android:layout_marginTop="20dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,18 +122,18 @@
                 style="@style/disasterStyle" />
         </LinearLayout>
 
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
-
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="地点"
+            android:layout_height="30dp"
+            android:background="@color/lineColor"
+            android:text="地点信息"
             android:textSize="18sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,13 +218,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="原因/类型"
+            android:layout_height="30dp"
+            android:background="@color/lineColor"
+            android:text="诱因／类型"
             android:textSize="18sp" />
 
 
@@ -284,13 +295,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="险情"
+            android:layout_height="30dp"
+            android:background="@color/lineColor"
+            android:text="险情信息"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -380,7 +392,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
 
         <LinearLayout
@@ -392,8 +404,8 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_height="30dp"
+                android:background="@color/lineColor"
                 android:text="电话通知填报"
                 android:textSize="18sp" />
 
@@ -436,8 +448,8 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/report_unpressed" />
+                android:layout_height="0.01dp"
+                android:background="@color/lineColor" />
         </LinearLayout>
 
 
@@ -465,6 +477,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="5dp"
             android:background="@color/report_unpressed" />
 
         <LinearLayout
@@ -475,10 +488,10 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_height="30dp"
+                android:background="@color/lineColor"
                 android:text="处置信息"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
 
             <LinearLayout
@@ -547,8 +560,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/report_unpressed" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/media_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <include layout="@layout/layout_super_media" />
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

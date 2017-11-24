@@ -260,6 +260,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         ToNextActivity(MainActivity.class);
                     } else {
                         String message = jsonMeta.optString("message");
+                        etPassword.setText("");
                         showToast(message);
                     }
                 } catch (JSONException e) {

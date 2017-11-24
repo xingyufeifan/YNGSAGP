@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,14 +53,13 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 public class SuperDangerActivity extends AppCompatActivity {
+
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.head_rl)
     RelativeLayout headRl;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
     @BindView(R.id.foreLevel)
     TextView foreLevel;
     @BindView(R.id.level)
@@ -110,14 +108,14 @@ public class SuperDangerActivity extends AppCompatActivity {
     TextView etHandle;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
-    @BindView(R.id.text_layout)
-    LinearLayout textLayout;
     @BindView(R.id.rv_photo_uploaded)
     RecyclerView rvPhotoUploaded;
     @BindView(R.id.tv_video_uploaded)
     TextView tvVideoUploaded;
     @BindView(R.id.tv_audio_uploaded)
     TextView tvAudioUploaded;
+    @BindView(R.id.text_layout)
+    LinearLayout textLayout;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
     private SuperBean listBean;
@@ -149,8 +147,6 @@ public class SuperDangerActivity extends AppCompatActivity {
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
-        tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
         userDangerShow.setText((CharSequence) listBean.getPersonel());
         xqNumShow.setText((CharSequence) listBean.getDisasterNum());
         phoneDangerShow.setText((CharSequence) listBean.getPhoneNum());
@@ -168,9 +164,6 @@ public class SuperDangerActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        disposePerson.setText((CharSequence) listBean.getDisposePerson());
-        disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
-        etHandle.setText((CharSequence) listBean.getOpinion());
         if ("1".equals((CharSequence) listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
@@ -198,11 +191,12 @@ public class SuperDangerActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
-            tvTitle.setText("已处理灾情");
-
-            etHandle.setText("没得数据");
+            tvTitle.setText("已处理险情");
+            disposePerson.setText((CharSequence) listBean.getDisposePerson());
+            disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
+            etHandle.setText((CharSequence) listBean.getOpinion());
         } else {
-            tvTitle.setText("未处理灾情");
+            tvTitle.setText("未处理险情");
             llHandle.setVisibility(View.GONE);
         }
     }
@@ -212,27 +206,6 @@ public class SuperDangerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
-                    textLayout.setVisibility(View.VISIBLE);
-                    mediaLayout.setVisibility(View.INVISIBLE);
-                } else {
-                    textLayout.setVisibility(View.INVISIBLE);
-                    mediaLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
         photoAdapter.setOnItemViewClickListener(new PhotoAdapter.OnItemViewClickListener() {

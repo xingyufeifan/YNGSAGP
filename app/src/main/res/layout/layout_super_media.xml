@@ -13,22 +13,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/report_unpressed"
-                android:gravity="center"
-                android:text="已上传媒体"
-                android:textSize="20sp" />
-
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/report_unpressed" />
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="图片"
-                android:textColor="@color/colorPrimary"
+                android:layout_height="30dp"
+                android:background="@color/lineColor"
+                android:text="图片信息"
                 android:textSize="18sp" />
 
             <android.support.v7.widget.RecyclerView
@@ -40,11 +34,14 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="视频"
-                android:textColor="@color/colorPrimary"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/report_unpressed" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/lineColor"
+                android:text="视频信息"
                 android:textSize="18sp" />
 
             <TextView
@@ -53,14 +50,17 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textSize="18sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/report_unpressed" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="录音"
-                android:textColor="@color/colorPrimary"
+                android:layout_height="30dp"
+                android:background="@color/lineColor"
+                android:text="音频信息"
                 android:textSize="18sp" />
 
             <TextView

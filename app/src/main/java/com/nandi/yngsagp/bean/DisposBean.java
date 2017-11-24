@@ -64,11 +64,10 @@ public class DisposBean implements Serializable {
     private String type;
     private Object happenTime;
     private Object otherThing;
-    private int isDisaster;
     private String findTime;
     private int isDispose;
     private Object potentialLoss;
-    private int isDanger;
+    private String isDanger;
     private Object monitorPhone;
     private Object monitorName;
     private Object areaId;
@@ -297,13 +296,7 @@ public class DisposBean implements Serializable {
         this.otherThing = otherThing;
     }
 
-    public int getIsDisaster() {
-        return isDisaster;
-    }
 
-    public void setIsDisaster(int isDisaster) {
-        this.isDisaster = isDisaster;
-    }
 
     public String getFindTime() {
         return findTime;
@@ -329,11 +322,11 @@ public class DisposBean implements Serializable {
         this.potentialLoss = potentialLoss;
     }
 
-    public int getIsDanger() {
+    public String getIsDanger() {
         return isDanger;
     }
 
-    public void setIsDanger(int isDanger) {
+    public void setIsDanger(String isDanger) {
         this.isDanger = isDanger;
     }
 
