@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +42,11 @@ import butterknife.Unbinder;
 
 
 /**
- * @author  qingsong on 2017/11/15.
+ * @author qingsong on 2017/11/15.
  */
 
 public class DisasterListFragment extends Fragment {
+    public static final int DISASTER_REQUEST_CODE = 101;
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -279,7 +282,7 @@ public class DisasterListFragment extends Fragment {
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
                 intent.putExtra(Constant.DISASTER, disasterListA.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, DISASTER_REQUEST_CODE);
             }
         });
         disasterNAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
@@ -287,7 +290,7 @@ public class DisasterListFragment extends Fragment {
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
                 intent.putExtra(Constant.DISASTER, disasterListN.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, DISASTER_REQUEST_CODE);
             }
         });
     }
@@ -310,11 +313,12 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void requestAPos() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1" + "/" + pageA + "/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
                         disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
@@ -335,10 +339,11 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void requestUPos() {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1" + "/" + pageN + "/" + rows + "/" + role;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
+                disasterListN.clear();
                 try {
                     initJson(response);
                     if (isSuccess) {
@@ -360,6 +365,14 @@ public class DisasterListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == DISASTER_REQUEST_CODE) {
+            requestAPos();
+            requestUPos();
+        }
+    }
 
     @Override
     public void onDestroyView() {

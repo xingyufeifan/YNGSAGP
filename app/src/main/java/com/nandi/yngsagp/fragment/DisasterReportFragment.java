@@ -644,7 +644,6 @@ public class DisasterReportFragment extends Fragment {
     private void clean() {
         dReportTime.setText("");
         dReportAddress.setText("");
-        dReportLocation.setText("");
         typePos = 0;
         dReportType.setSelection(0);
         dReportFactor.setText("");
@@ -663,6 +662,10 @@ public class DisasterReportFragment extends Fragment {
         tvVideo.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
+        DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
+        if (disasterUBean!=null){
+            GreedDaoHelper.deleteDisaster();
+        }
         List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(1);
         if (photoPaths != null && photoPaths.size() > 0) {
             GreedDaoHelper.deletePhotoList(photoPaths);

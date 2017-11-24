@@ -21,6 +21,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,11 +46,12 @@ import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.adapter.MediaAdapter;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
+import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
-import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -132,10 +134,6 @@ public class DangerPosActivity extends AppCompatActivity {
     LinearLayout textLayout;
     @BindView(R.id.rv_photo_uploaded)
     RecyclerView rvPhotoUploaded;
-    @BindView(R.id.tv_video_uploaded)
-    TextView tvVideoUploaded;
-    @BindView(R.id.tv_audio_uploaded)
-    TextView tvAudioUploaded;
     @BindView(R.id.rv_photo)
     RecyclerView rvPhoto;
     @BindView(R.id.tv_video)
@@ -158,18 +156,22 @@ public class DangerPosActivity extends AppCompatActivity {
     Button btnConfirm;
     @BindView(R.id.ll_1)
     LinearLayout ll1;
+    @BindView(R.id.rv_video_updated)
+    RecyclerView rvVideoUpdated;
+    @BindView(R.id.rv_audio_updated)
+    RecyclerView rvAudioUpdated;
 
     private DisposBean dangerListBean;
     private ProgressDialog progressDialog;
-    private MediaInfo videoInfo = new MediaInfo();
-    private MediaInfo audioInfo = new MediaInfo();
     private List<MediaInfo> photoInfos = new ArrayList<>();
+    private List<MediaInfo> videoInfos = new ArrayList<>();
+    private List<MediaInfo> audioInfos = new ArrayList<>();
     private List<PhotoPath> photoPaths = new ArrayList<>();
     private Context context;
     private PhotoAdapter photoAdapter;
+    private MediaAdapter videoAdapter;
+    private MediaAdapter audioAdapter;
     private PictureAdapter pictureAdapter;
-    private File audioNetFile;
-    private File videoNetFile;
     private File pictureFile;
     private File videoFile;
     private PopupWindow popupWindow;
@@ -194,8 +196,14 @@ public class DangerPosActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
         photoAdapter = new PhotoAdapter(context, photoInfos);
+        videoAdapter = new MediaAdapter(context, videoInfos);
+        audioAdapter = new MediaAdapter(context, audioInfos);
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
+        rvVideoUpdated.setLayoutManager(new LinearLayoutManager(context));
+        rvAudioUpdated.setLayoutManager(new LinearLayoutManager(context));
         rvPhotoUploaded.setAdapter(photoAdapter);
+        rvVideoUpdated.setAdapter(videoAdapter);
+        rvAudioUpdated.setAdapter(audioAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
         rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhoto.setAdapter(pictureAdapter);
@@ -247,6 +255,18 @@ public class DangerPosActivity extends AppCompatActivity {
             @Override
             public void onPictureClick(int position) {
                 enlargePhoto(photoInfos.get(position));
+            }
+        });
+        videoAdapter.setOnItemClickListener(new MediaAdapter.OnItemViewClickListener() {
+            @Override
+            public void onMediaClick(int position) {
+                playNetVideo(videoInfos.get(position));
+            }
+        });
+        audioAdapter.setOnItemClickListener(new MediaAdapter.OnItemViewClickListener() {
+            @Override
+            public void onMediaClick(int position) {
+                playNetAudio(audioInfos.get(position));
             }
         });
         pictureAdapter.setOnItemViewClickListener(new PictureAdapter.OnItemViewClickListener() {
@@ -327,25 +347,31 @@ public class DangerPosActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray data = object.getJSONArray("data");
-
+                            photoInfos.clear();
+                            videoInfos.clear();
+                            audioInfos.clear();
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject jsonObject = data.getJSONObject(i);
                                 if ("1".equals(jsonObject.getString("type"))) {
-                                    MediaInfo mediaInfo = new MediaInfo();
-                                    mediaInfo.setFileName(jsonObject.getString("fileName"));
-                                    mediaInfo.setType(jsonObject.getString("type"));
-                                    photoInfos.add(mediaInfo);
+                                    MediaInfo photo = new MediaInfo();
+                                    photo.setFileName(jsonObject.getString("fileName"));
+                                    photo.setType(jsonObject.getString("type"));
+                                    photoInfos.add(photo);
                                 } else if ("2".equals(jsonObject.getString("type"))) {
-                                    videoInfo.setFileName(jsonObject.getString("fileName"));
-                                    videoInfo.setType(jsonObject.getString("type"));
+                                    MediaInfo video = new MediaInfo();
+                                    video.setFileName(jsonObject.getString("fileName"));
+                                    video.setType(jsonObject.getString("type"));
+                                    videoInfos.add(video);
                                 } else if ("3".equals(jsonObject.getString("type"))) {
-                                    audioInfo.setFileName(jsonObject.getString("fileName"));
-                                    audioInfo.setType(jsonObject.getString("type"));
+                                    MediaInfo audio = new MediaInfo();
+                                    audio.setFileName(jsonObject.getString("fileName"));
+                                    audio.setType(jsonObject.getString("type"));
+                                    audioInfos.add(audio);
                                 }
                             }
                             photoAdapter.notifyDataSetChanged();
-                            tvVideoUploaded.setText(videoInfo.getFileName());
-                            tvAudioUploaded.setText(audioInfo.getFileName());
+                            videoAdapter.notifyDataSetChanged();
+                            audioAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -353,7 +379,7 @@ public class DangerPosActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video_uploaded, R.id.tv_audio_uploaded, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -370,22 +396,18 @@ public class DangerPosActivity extends AppCompatActivity {
                 takeAudio();
                 break;
             case R.id.btn_error:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())){
-                }else{
+                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                    upload("0");
+                } else {
                     ToastUtils.showShort("请填写处置意见");
                 }
                 break;
             case R.id.btn_confirm:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())){
-                }else{
+                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                    showDialog();
+                } else {
                     ToastUtils.showShort("请填写处置意见");
                 }
-                break;
-            case R.id.tv_video_uploaded:
-                playNetVideo();
-                break;
-            case R.id.tv_audio_uploaded:
-                playNetAudio();
                 break;
             case R.id.tv_video:
                 if (!TextUtils.isEmpty(tvVideo.getText())) {
@@ -398,6 +420,28 @@ public class DangerPosActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void upload(String i) {
+
+    }
+
+    private void showDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("当前险情能否处理？")
+                .setPositiveButton("能处理", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload("3");
+                    }
+                })
+                .setNegativeButton("不能", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload("2");
+                    }
+                }).show();
     }
 
 
@@ -592,12 +636,14 @@ public class DangerPosActivity extends AppCompatActivity {
         }
     }
 
-    private void playNetAudio() {
-        if (audioNetFile == null) {
+    private void playNetAudio(MediaInfo mediaInfo) {
+        File fileDir = createFileDir("Audio");
+        File file = new File(fileDir, mediaInfo.getFileName());
+        if (!file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + audioInfo.getFileName() + "/" + audioInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
                     .build()
-                    .execute(new FileCallBack(Environment.getExternalStorageDirectory() + "/Audio", audioInfo.getFileName()) {
+                    .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
                         public void onError(Call call, Exception e, int id) {
                             ToastUtils.showShort("获取数据失败");
@@ -606,13 +652,12 @@ public class DangerPosActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(File response, int id) {
-                            audioNetFile = response;
                             progressDialog.dismiss();
                             playAudio(response.getAbsolutePath());
                         }
                     });
         } else {
-            playMedia(audioNetFile, "audio/mp3");
+            playAudio(file.getAbsolutePath());
         }
     }
 
@@ -664,12 +709,14 @@ public class DangerPosActivity extends AppCompatActivity {
         startActivity(it);
     }
 
-    private void playNetVideo() {
-        if (videoNetFile == null) {
+    private void playNetVideo(MediaInfo mediaInfo) {
+        File fileDir = createFileDir("Video");
+        File file = new File(fileDir, mediaInfo.getFileName());
+        if (file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + videoInfo.getFileName() + "/" + videoInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
                     .build()
-                    .execute(new FileCallBack(Environment.getExternalStorageDirectory() + "/Audio", audioInfo.getFileName()) {
+                    .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
                         public void onError(Call call, Exception e, int id) {
                             ToastUtils.showShort("获取数据失败");
@@ -679,12 +726,11 @@ public class DangerPosActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(File response, int id) {
                             progressDialog.dismiss();
-                            videoNetFile = response;
                             playMedia(response, "video/mp4");
                         }
                     });
         } else {
-            playMedia(videoNetFile, "video/mp4");
+            playMedia(file,"video/mp4");
         }
     }
 
