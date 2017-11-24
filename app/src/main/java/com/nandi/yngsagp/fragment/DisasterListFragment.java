@@ -20,8 +20,9 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
-import com.nandi.yngsagp.adapter.DisposAdapter;
-import com.nandi.yngsagp.bean.DisposBean;
+import com.nandi.yngsagp.adapter.SuperAdapter;
+import com.nandi.yngsagp.adapter.SuperAdapter;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -62,16 +63,16 @@ public class DisasterListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private DisposAdapter disasterAdapter;
-    private DisposAdapter disasterNAdapter;
+    private SuperAdapter disasterAdapter;
+    private SuperAdapter disasterNAdapter;
 
     private int isDisPose = 0;
     private int pageA = 1;
     private int pageN = 1;
     private int rows = 15;
     private String areaId;
-    private List<DisposBean> disasterListA;
-    private List<DisposBean> disasterListN;
+    private List<SuperBean> disasterListA;
+    private List<SuperBean> disasterListN;
     private String role;
     private JSONArray jsonData;
     private boolean isSuccess;
@@ -95,11 +96,12 @@ public class DisasterListFragment extends Fragment {
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
+                System.out.println(response);
                 try {
                     initJson(response);
                     if (isSuccess) {
                         disasterListA.clear();
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
@@ -130,7 +132,7 @@ public class DisasterListFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         disasterListN.clear();
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         pageN = 1;
                         refreshlayouts.finishRefresh();
@@ -172,7 +174,7 @@ public class DisasterListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
 
                         refreshlayouts.finishLoadmore();
@@ -207,7 +209,7 @@ public class DisasterListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -277,7 +279,7 @@ public class DisasterListFragment extends Fragment {
                 requestN(refreshlayout);
             }
         });
-        disasterAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
+        disasterAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
@@ -285,7 +287,7 @@ public class DisasterListFragment extends Fragment {
                 startActivityForResult(intent, DISASTER_REQUEST_CODE);
             }
         });
-        disasterNAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
+        disasterNAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DisasterPosActivity.class);
@@ -300,8 +302,8 @@ public class DisasterListFragment extends Fragment {
         disasterListN = new ArrayList<>();
         disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         disasterNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        disasterNAdapter = new DisposAdapter(getActivity(), disasterListN);
-        disasterAdapter = new DisposAdapter(getActivity(), disasterListA);
+        disasterNAdapter = new SuperAdapter(getActivity(), disasterListN);
+        disasterAdapter = new SuperAdapter(getActivity(), disasterListA);
         disasterShow.setAdapter(disasterAdapter);
         disasterNShow.setAdapter(disasterNAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 0, true);
@@ -321,7 +323,7 @@ public class DisasterListFragment extends Fragment {
                     disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
@@ -347,7 +349,7 @@ public class DisasterListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                     } else {
 

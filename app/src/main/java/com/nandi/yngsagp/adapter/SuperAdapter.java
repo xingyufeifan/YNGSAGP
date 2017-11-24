@@ -54,9 +54,9 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
         }else if("1".equals(listBeans.get(position).getIsDanger())){
             holder.error.setText("灾情确认");
         }else if("2".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("险情确认不能处理");
+            holder.error.setText("险情确认\n不能处理");
         }else if("3".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("险情确认能处理");
+            holder.error.setText("险情确认\n能处理");
         }
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {

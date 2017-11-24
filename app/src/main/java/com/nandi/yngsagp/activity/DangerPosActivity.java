@@ -30,7 +30,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,11 +56,16 @@ import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
+import com.nandi.yngsagp.bean.SuperBean;
+import com.nandi.yngsagp.fragment.DangerListFragment;
+import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +76,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -161,7 +172,7 @@ public class DangerPosActivity extends AppCompatActivity {
     @BindView(R.id.rv_audio_updated)
     RecyclerView rvAudioUpdated;
 
-    private DisposBean dangerListBean;
+    private SuperBean listBean;
     private ProgressDialog progressDialog;
     private List<MediaInfo> photoInfos = new ArrayList<>();
     private List<MediaInfo> videoInfos = new ArrayList<>();
@@ -178,6 +189,8 @@ public class DangerPosActivity extends AppCompatActivity {
     private String audioPath;
     private MediaRecorder recorder;
     private MediaPlayer player;
+    private int typePos;
+    private RequestCall build;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,14 +222,14 @@ public class DangerPosActivity extends AppCompatActivity {
         rvPhoto.setAdapter(pictureAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        int isDispose = dangerListBean.getIsDispose();
+        int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("已处理险情");
             ll1.setVisibility(View.GONE);
         } else {
             tvTitle.setText("未处理险情");
         }
-        String personType = dangerListBean.getPersonType();
+        String personType = listBean.getPersonType();
         if ("1".equals(personType)) {
             llDReport.setVisibility(View.GONE);
         }
@@ -249,6 +262,18 @@ public class DangerPosActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        typeDangerShow.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typePos = position;
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                System.out.println("parent = " + parent);
             }
         });
         photoAdapter.setOnItemViewClickListener(new PhotoAdapter.OnItemViewClickListener() {
@@ -284,27 +309,27 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        dangerListBean = (DisposBean) getIntent().getSerializableExtra(Constant.DISASTER);
-        xqNumShow.setText(dangerListBean.getDisasterNum());
-        userDangerShow.setText(dangerListBean.getPersonel());
-        phoneDangerShow.setText(dangerListBean.getPhoneNum());
-        timeDangerShow.setText((CharSequence) dangerListBean.getHappenTime());
-        locationDangerShow.setText(dangerListBean.getCurrentLocation());
-        addressDangerShow.setText(dangerListBean.getAddress());
-        typeDangerShow.setSelection(Integer.parseInt(dangerListBean.getDisasterType()));
-        factorDangerShow.setText((CharSequence) dangerListBean.getFactor());
-        personDangerShow.setText((CharSequence) dangerListBean.getPersonNum());
-        houseDangerShow.setText((CharSequence) dangerListBean.getHouseNum());
-        areaDangerShow.setText((CharSequence) dangerListBean.getArea());
-        moneyDangerShow.setText((CharSequence) dangerListBean.getPotentialLoss());
-        lonDangerShow.setText(dangerListBean.getLongitude());
-        latDangerShow.setText(dangerListBean.getLatitude());
-        otherDangerShow.setText((CharSequence) dangerListBean.getOtherThing());
-        dReportMobileShow.setText((CharSequence) dangerListBean.getMonitorPhone());
-        dReportNameShow.setText((CharSequence) dangerListBean.getMonitorName());
+        listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        xqNumShow.setText(listBean.getDisasterNum());
+        userDangerShow.setText(listBean.getPersonel());
+        phoneDangerShow.setText(listBean.getPhoneNum());
+        timeDangerShow.setText((CharSequence) listBean.getHappenTime());
+        locationDangerShow.setText(listBean.getCurrentLocation());
+        addressDangerShow.setText(listBean.getAddress());
+        typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
+        factorDangerShow.setText((CharSequence) listBean.getFactor());
+        personDangerShow.setText((CharSequence) listBean.getPersonNum());
+        houseDangerShow.setText((CharSequence) listBean.getHouseNum());
+        areaDangerShow.setText((CharSequence) listBean.getArea());
+        moneyDangerShow.setText((CharSequence) listBean.getPotentialLoss());
+        lonDangerShow.setText(listBean.getLongitude());
+        latDangerShow.setText(listBean.getLatitude());
+        otherDangerShow.setText((CharSequence) listBean.getOtherThing());
+        dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
+        dReportNameShow.setText((CharSequence) listBean.getMonitorName());
         disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
         disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
-        if ("1".equals(dangerListBean.getPersonType())) {
+        if ("1".equals(listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
 
@@ -332,7 +357,7 @@ public class DangerPosActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + dangerListBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBean.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -423,9 +448,144 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void upload(String i) {
-
+        Map<String, String> map = new HashMap<>();
+        String reportMan = userDangerShow.getText().toString().trim();
+        String phone = phoneDangerShow.getText().toString().trim();
+        String time = timeDangerShow.getText().toString().trim();
+        String address = addressDangerShow.getText().toString().trim();
+        String location = locationDangerShow.getText().toString().trim();
+        String lon = lonDangerShow.getText().toString().trim();
+        String lat = latDangerShow.getText().toString().trim();
+        String type = typePos + "";
+        String factor = factorDangerShow.getText().toString().trim();
+        String person = personDangerShow.getText().toString().trim();
+        String house = houseDangerShow.getText().toString().trim();
+        String money = moneyDangerShow.getText().toString().trim();
+        String farm = areaDangerShow.getText().toString().trim();
+        String other = otherDangerShow.getText().toString().trim();
+        String mobile = dReportMobileShow.getText().toString().trim();
+        String name = dReportNameShow.getText().toString().trim();
+        String opinion = etHandle.getText().toString().trim();
+        String areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "0");
+        String personType = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "0");
+        map.put("phoneNum", phone);
+        map.put("personel", reportMan);
+        map.put("currentLocation", location);
+        map.put("address", address);
+        map.put("disasterType", type);
+        map.put("factor", factor);
+        map.put("personNum", person);
+        map.put("houseNum", house);
+        map.put("area", farm);
+        map.put("longitude", lon);
+        map.put("latitude", lat);
+        map.put("otherThing", other);
+        map.put("happenTime", time);
+        map.put("potentialLoss", money);
+        map.put("monitorName", mobile);
+        map.put("monitorPhone", name);
+        map.put("areaId", areaId);
+        map.put("personType", personType);
+        map.put("isDanger",i);
+        map.put("opinion",opinion);
+        map.put("id", listBean.getId() + "");
+        map.put("isDispose", "0");//0 已处理
+        map.put("disposeMobile", disposeMobile.getText().toString().trim());
+        map.put("disposePerson",disposePerson.getText().toString().trim());
+        setUploadRequest(map);
     }
+    private void setUploadRequest(Map<String, String> map) {
+        progressDialog.setMessage("正在上传");
+        progressDialog.show();
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/update");
+        for (PhotoPath photoPath : photoPaths) {
+            if (photoPath != null) {
+                formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+                Log.d("cp", "音频添加");
+            }
+        }
+        if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
+            Log.d("cp", "音频添加");
+        }
+        if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
+            Log.d("cp", "音频添加");
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        }
+        formBuilder.params(map);
+        formBuilder.addParams("type", "2");
+        build = formBuilder.build();
+        build.execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("Canceled".equals(e.getMessage())) {
+                    ToastUtils.showShort("取消上传！");
+                } else {
+                    progressDialog.dismiss();
+                    ToastUtils.showShort("网络连接失败！");
+                    Log.d("cp", e.getMessage());
+                }
+            }
 
+            @Override
+            public void onResponse(String response, int id) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(response);
+                    JSONObject meta = object.getJSONObject("meta");
+                    String message = object.getString("data");
+                    boolean success = meta.getBoolean("success");
+                    if (success) {
+                        ToastUtils.showShort(message);
+                        clean();
+                    } else {
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    private void clean() {
+        for (PhotoPath photoPath : photoPaths) {
+            if (photoPath != null) {
+                FileUtils.deleteFile(new File(photoPath.getPath()));
+            }
+        }
+        if (videoFile != null) {
+            FileUtils.deleteFile(videoFile);
+        }
+        if (audioPath != null) {
+            FileUtils.deleteFile(new File(audioPath));
+        }
+        for (MediaInfo photoInfo : photoInfos) {
+            if (photoInfo != null) {
+                File file = new File(Environment.getExternalStorageDirectory() + "/Photo", photoInfo.getFileName());
+                if (file.exists()) {
+                    FileUtils.deleteFile(file);
+                }
+            }
+        }
+        for (MediaInfo videoInfo : videoInfos) {
+            if (videoInfo != null) {
+                File file = new File(Environment.getExternalStorageDirectory() + "/Video", videoInfo.getFileName());
+                if (file.exists()) {
+                    FileUtils.deleteFile(file);
+                }
+            }
+        }
+        for (MediaInfo audioInfo : audioInfos) {
+            if (audioInfo != null) {
+                File file = new File(Environment.getExternalStorageDirectory() + "/Audio", audioInfo.getFileName());
+                if (file.exists()) {
+                    FileUtils.deleteFile(file);
+                }
+            }
+        }
+        setResult(DangerListFragment.DANGER_REQUEST_CODE);
+        finish();
+    }
     private void showDialog() {
         new AlertDialog.Builder(context)
                 .setTitle("提示")
@@ -498,19 +658,25 @@ public class DangerPosActivity extends AppCompatActivity {
 
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
-        final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
-        final Button btnStop = (Button) view.findViewById(R.id.btn_stop_recode);
-        btnStop.setEnabled(false);
+        final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
+        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                String time = chronometer.getText().toString();
+            }
+        });
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(view)
                 .setCancelable(false)
+                .setView(view)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (TextUtils.isEmpty(audioPath)) {
                             return;
                         }
+                        chronometer.stop();// 停止计时
                         File file2 = new File(audioPath);
                         if (file2.isFile() && file2.exists()) {
                             file2.delete();
@@ -522,41 +688,39 @@ public class DangerPosActivity extends AppCompatActivity {
                         }
                     }
                 }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                File audio = createFileDir("Audio");
-                if (audio != null) {
-                    audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
-                } else {
-                    ToastUtils.showShort("文件夹创建失败");
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    tv.setText("正在录音...");
+                    File audio = createFileDir("Audio");
+                    if (audio != null) {
+                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                    } else {
+                        ToastUtils.showShort("文件夹创建失败");
+                    }
+                    recorder = new MediaRecorder();
+                    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                    recorder.setOutputFile(audioPath);
+                    chronometer.start();// 开始计时
+                    //设置编码格式
+                    try {
+                        recorder.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("录音机使用失败！");
+                    }
+                    recorder.start();
+                    tv.setVisibility(View.VISIBLE);
+                }else{
+                    recorder.stop();
+                    recorder.release();
+                    recorder = null;
+                    tvAudio.setText(audioPath);
+                    dialog.dismiss();
                 }
-                recorder = new MediaRecorder();
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                recorder.setOutputFile(audioPath);
-                //设置编码格式
-                try {
-                    recorder.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    ToastUtils.showShort("录音机使用失败！");
-                }
-                recorder.start();
-                tv.setVisibility(View.VISIBLE);
-                btnStop.setEnabled(true);
-                btnStart.setEnabled(false);
-            }
-        });
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recorder.stop();
-                recorder.release();
-                recorder = null;
-                tvAudio.setText(audioPath);
-                dialog.dismiss();
             }
         });
     }

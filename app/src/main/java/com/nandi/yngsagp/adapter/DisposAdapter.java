@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.bean.DisposBean;
+import com.nandi.yngsagp.bean.SuperBean;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ import java.util.List;
 public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHolder> {
     private Context mContext;
     public DisposAdapter.OnItemClickListener mOnItemClickListener;
-    private List<DisposBean> listBeans;
+    private List<SuperBean> listBeans;
 
-    public DisposAdapter(Context context, List<DisposBean> listBeans) {
+    public DisposAdapter(Context context, List<SuperBean> listBeans) {
         mContext = context;
         this.listBeans = listBeans;
     }

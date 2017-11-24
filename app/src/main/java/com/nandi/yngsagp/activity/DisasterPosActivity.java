@@ -33,6 +33,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,7 +54,7 @@ import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.MediaAdapter;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
-import com.nandi.yngsagp.bean.DisposBean;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
@@ -172,7 +175,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.rv_audio_updated)
     RecyclerView rvAudioUpdated;
 
-    private DisposBean disasterListBean;
+    private SuperBean listBean;
     private ProgressDialog progressDialog;
     private List<MediaInfo> photoInfos = new ArrayList<>();
     private List<MediaInfo> videoInfos = new ArrayList<>();
@@ -209,7 +212,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
 
-        disasterListBean = (DisposBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         setRequest();
     }
 
@@ -228,32 +231,32 @@ public class DisasterPosActivity extends AppCompatActivity {
         rvPhoto.setAdapter(pictureAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        userShow.setText((CharSequence) disasterListBean.getPersonel());
-        disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
-        phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
-        timeShow.setText((CharSequence) disasterListBean.getFindTime());
-        locationShow.setText((CharSequence) disasterListBean.getCurrentLocation());
-        addressShow.setText((CharSequence) disasterListBean.getAddress());
-        typeShow.setSelection(Integer.parseInt(disasterListBean.getDisasterType()));
-        factorShow.setText((CharSequence) disasterListBean.getFactor());
-        injurdShow.setText((CharSequence) disasterListBean.getInjurdNum());
-        deathShow.setText((CharSequence) disasterListBean.getDeathNum());
-        missShow.setText((CharSequence) disasterListBean.getMissingNum());
-        farmShow.setText((CharSequence) disasterListBean.getFarmland());
-        houseShow.setText((CharSequence) disasterListBean.getHouseNum());
-        moneyShow.setText((CharSequence) disasterListBean.getLossProperty());
-        lonShow.setText((CharSequence) disasterListBean.getLongitude());
-        latShow.setText((CharSequence) disasterListBean.getLatitude());
-        otherShow.setText((CharSequence) disasterListBean.getOtherThing());
-        mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
-        nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        etHandle.setText(disasterListBean.getOpinion());
+        userShow.setText((CharSequence) listBean.getPersonel());
+        disNumShow.setText((CharSequence) listBean.getDisasterNum());
+        phoneShow.setText((CharSequence) listBean.getPhoneNum());
+        timeShow.setText((CharSequence) listBean.getFindTime());
+        locationShow.setText((CharSequence) listBean.getCurrentLocation());
+        addressShow.setText((CharSequence) listBean.getAddress());
+        typeShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
+        factorShow.setText((CharSequence) listBean.getFactor());
+        injurdShow.setText((CharSequence) listBean.getInjurdNum());
+        deathShow.setText((CharSequence) listBean.getDeathNum());
+        missShow.setText((CharSequence) listBean.getMissingNum());
+        farmShow.setText((CharSequence) listBean.getFarmland());
+        houseShow.setText((CharSequence) listBean.getHouseNum());
+        moneyShow.setText((CharSequence) listBean.getLossProperty());
+        lonShow.setText((CharSequence) listBean.getLongitude());
+        latShow.setText((CharSequence) listBean.getLatitude());
+        otherShow.setText((CharSequence) listBean.getOtherThing());
+        mobileShow.setText((CharSequence) listBean.getMonitorPhone());
+        nameShow.setText((CharSequence) listBean.getMonitorName());
+        etHandle.setText(listBean.getOpinion());
         disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
         disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
-        if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
+        if ("1".equals((CharSequence) listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
-        int isDispose = disasterListBean.getIsDispose();
+        int isDispose = listBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
             tvTitle.setText("已处理灾情");
@@ -363,7 +366,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + disasterListBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBean.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -499,7 +502,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         map.put("opinion", handle);
         map.put("disposeMobile", disMobile);
         map.put("disposePerson", disPerson);
-        map.put("id", disasterListBean.getId() + "");
+        map.put("id", listBean.getId() + "");
         map.put("isDispose", "0");//0 已处理
         map.put("isDanger", i);//0误报 1确认灾情
         setUploadRequest(map);
@@ -653,19 +656,25 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
-        final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
-        final Button btnStop = (Button) view.findViewById(R.id.btn_stop_recode);
-        btnStop.setEnabled(false);
+        final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
+        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                String time = chronometer.getText().toString();
+            }
+        });
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(view)
                 .setCancelable(false)
+                .setView(view)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (TextUtils.isEmpty(audioPath)) {
                             return;
                         }
+                        chronometer.stop();// 停止计时
                         File file2 = new File(audioPath);
                         if (file2.isFile() && file2.exists()) {
                             file2.delete();
@@ -677,41 +686,39 @@ public class DisasterPosActivity extends AppCompatActivity {
                         }
                     }
                 }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                File audio = createFileDir("Audio");
-                if (audio != null) {
-                    audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
-                } else {
-                    ToastUtils.showShort("文件夹创建失败");
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    tv.setText("正在录音...");
+                    File audio = createFileDir("Audio");
+                    if (audio != null) {
+                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                    } else {
+                        ToastUtils.showShort("文件夹创建失败");
+                    }
+                    recorder = new MediaRecorder();
+                    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                    recorder.setOutputFile(audioPath);
+                    chronometer.start();// 开始计时
+                    //设置编码格式
+                    try {
+                        recorder.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("录音机使用失败！");
+                    }
+                    recorder.start();
+                    tv.setVisibility(View.VISIBLE);
+                }else{
+                    recorder.stop();
+                    recorder.release();
+                    recorder = null;
+                    tvAudio.setText(audioPath);
+                    dialog.dismiss();
                 }
-                recorder = new MediaRecorder();
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                recorder.setOutputFile(audioPath);
-                //设置编码格式
-                try {
-                    recorder.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    ToastUtils.showShort("录音机使用失败！");
-                }
-                recorder.start();
-                tv.setVisibility(View.VISIBLE);
-                btnStop.setEnabled(true);
-                btnStart.setEnabled(false);
-            }
-        });
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recorder.stop();
-                recorder.release();
-                recorder = null;
-                tvAudio.setText(audioPath);
-                dialog.dismiss();
             }
         });
     }
