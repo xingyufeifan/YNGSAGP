@@ -51,7 +51,6 @@
         <meta-data
             android:name="com.alibaba.app.appsecret"
             android:value="98c048c2ed6ab28dd97197a0a50c1d71" />
-
         <activity
             android:name=".activity.WelcomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation">
@@ -60,7 +59,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.LoginActivity"
@@ -74,17 +72,45 @@
         <activity
             android:name=".activity.DisasterPosActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
-        <activity android:name=".activity.DangerPosActivity"
+        <activity
+            android:name=".activity.DangerPosActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
-        <activity android:name=".activity.SuperDangerActivity"
+        <activity
+            android:name=".activity.SuperDangerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
-        <activity android:name=".activity.SuperDisasterActivity"
+        <activity
+            android:name=".activity.SuperDisasterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity
+            android:name=".activity.ProgressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity
+            android:name=".activity.ReceiveVideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity
+            android:name=".activity.VideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <activity
+            android:name=".activity.VideoConfig"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+        <receiver
+            android:name=".receiver.MyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_REMOVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.sdk.android.push.RECEIVE" />
+            </intent-filter>
+        </receiver>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-
+        <service android:name=".service.MyService"/>
 
     </application>
 

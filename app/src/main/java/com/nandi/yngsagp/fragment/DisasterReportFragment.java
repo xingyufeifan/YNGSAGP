@@ -34,7 +34,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -724,9 +728,14 @@ public class DisasterReportFragment extends Fragment {
 
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
-        final Button btnStart = (Button) view.findViewById(R.id.btn_start_recode);
-        final Button btnStop = (Button) view.findViewById(R.id.btn_stop_recode);
-        btnStop.setEnabled(false);
+        final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
+        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                String time = chronometer.getText().toString();
+            }
+        });
         final TextView tv = (TextView) view.findViewById(R.id.tv_time);
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setCancelable(false)
@@ -737,6 +746,7 @@ public class DisasterReportFragment extends Fragment {
                         if (TextUtils.isEmpty(audioPath)) {
                             return;
                         }
+                        chronometer.stop();// 停止计时
                         File file2 = new File(audioPath);
                         if (file2.isFile() && file2.exists()) {
                             file2.delete();
@@ -748,45 +758,41 @@ public class DisasterReportFragment extends Fragment {
                         }
                     }
                 }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                File audio = createFileDir("Audio");
-                if (audio != null) {
-                    audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
-                }else {
-                    ToastUtils.showShort("文件夹创建失败");
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    tv.setText("正在录音...");
+                    File audio = createFileDir("Audio");
+                    if (audio != null) {
+                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                    } else {
+                        ToastUtils.showShort("文件夹创建失败");
+                    }
+                    recorder = new MediaRecorder();
+                    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                    recorder.setOutputFile(audioPath);
+                    chronometer.start();// 开始计时
+                    //设置编码格式
+                    try {
+                        recorder.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("录音机使用失败！");
+                    }
+                    recorder.start();
+                }else{
+                    recorder.stop();
+                    recorder.release();
+                    recorder = null;
+                    tvAudio.setText(audioPath);
+                    dialog.dismiss();
                 }
-                recorder = new MediaRecorder();
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                recorder.setOutputFile(audioPath);
-                //设置编码格式
-                try {
-                    recorder.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    ToastUtils.showShort("录音机使用失败！");
-                }
-                recorder.start();
-                tv.setVisibility(View.VISIBLE);
-                btnStop.setEnabled(true);
-                btnStart.setEnabled(false);
-            }
-        });
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recorder.stop();
-                recorder.release();
-                recorder = null;
-                tvAudio.setText(audioPath);
-                dialog.dismiss();
             }
         });
     }
-
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");

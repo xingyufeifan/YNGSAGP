@@ -5,26 +5,29 @@
     android:orientation="vertical"
     android:gravity="center"
     >
-    <Button
-        android:id="@+id/btn_start_recode"
-        android:layout_width="wrap_content"
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="开始"
-        />
-
-    <Button
-        android:id="@+id/btn_stop_recode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="停止" />
+        android:gravity="center"
+        android:format="%s"
+        android:textColor="#ff0000"
+        android:textSize="50dp" />
     <TextView
         android:id="@+id/tv_time"
-        android:textSize="18sp"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="正在录音..."
-        android:visibility="invisible"
-        android:layout_height="wrap_content" />
+        android:textSize="30sp"
+        android:text="开始录音"/>
+    <CheckBox
+        android:id="@+id/btn_start_recode"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:button="@null"
+        android:background="@drawable/take_audios"
+        />
+
 </LinearLayout>
