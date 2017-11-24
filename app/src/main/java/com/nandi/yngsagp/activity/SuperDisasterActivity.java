@@ -123,7 +123,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
     LinearLayout mediaLayout;
     @BindView(R.id.text_layout)
     LinearLayout textLayout;
-    private SuperBean disasterListBean;
+    private SuperBean listBeans;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
     private MediaInfo audioInfo = new MediaInfo();
@@ -152,57 +152,55 @@ public class SuperDisasterActivity extends AppCompatActivity {
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhotoUploaded.setAdapter(photoAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
-
-        userShow.setText((CharSequence) disasterListBean.getPersonel());
-        disNumShow.setText((CharSequence) disasterListBean.getDisasterNum());
-        phoneShow.setText((CharSequence) disasterListBean.getPhoneNum());
-        timeShow.setText((CharSequence) disasterListBean.getFindTime());
-        locationShow.setText((CharSequence) disasterListBean.getCurrentLocation());
-        addressShow.setText((CharSequence) disasterListBean.getAddress());
-        typeShow.setSelection(Integer.parseInt(disasterListBean.getDisasterType()));
-        factorShow.setText((CharSequence) disasterListBean.getFactor());
-        injurdShow.setText((CharSequence) disasterListBean.getInjurdNum());
-        deathShow.setText((CharSequence) disasterListBean.getDeathNum());
-        missShow.setText((CharSequence) disasterListBean.getMissingNum());
-        farmShow.setText((CharSequence) disasterListBean.getFarmland());
-        houseShow.setText((CharSequence) disasterListBean.getHouseNum());
-        moneyShow.setText((CharSequence) disasterListBean.getLossProperty());
-        lonShow.setText((CharSequence) disasterListBean.getLongitude());
-        latShow.setText((CharSequence) disasterListBean.getLatitude());
-        otherShow.setText((CharSequence) disasterListBean.getOtherThing());
-        mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
-        nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
-        disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
-        if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
+        userShow.setText((CharSequence) listBeans.getPersonel());
+        disNumShow.setText((CharSequence) listBeans.getDisasterNum());
+        phoneShow.setText((CharSequence) listBeans.getPhoneNum());
+        timeShow.setText((CharSequence) listBeans.getFindTime());
+        locationShow.setText((CharSequence) listBeans.getCurrentLocation());
+        addressShow.setText((CharSequence) listBeans.getAddress());
+        typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()));
+        factorShow.setText((CharSequence) listBeans.getFactor());
+        injurdShow.setText((CharSequence) listBeans.getInjurdNum());
+        deathShow.setText((CharSequence) listBeans.getDeathNum());
+        missShow.setText((CharSequence) listBeans.getMissingNum());
+        farmShow.setText((CharSequence) listBeans.getFarmland());
+        houseShow.setText((CharSequence) listBeans.getHouseNum());
+        moneyShow.setText((CharSequence) listBeans.getLossProperty());
+        lonShow.setText((CharSequence) listBeans.getLongitude());
+        latShow.setText((CharSequence) listBeans.getLatitude());
+        otherShow.setText((CharSequence) listBeans.getOtherThing());
+        mobileShow.setText((CharSequence) listBeans.getMonitorPhone());
+        nameShow.setText((CharSequence) listBeans.getMonitorName());
+        if ("1".equals((CharSequence) listBeans.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
-        ToastUtils.showShort(disasterListBean.getForecastLevel());
-        if ("1".equals(disasterListBean.getLevel())) {
+        ToastUtils.showShort(listBeans.getForecastLevel());
+        if ("1".equals(listBeans.getLevel())) {
             level.setText("小型");
-        } else if ("2".equals(disasterListBean.getLevel())) {
+        } else if ("2".equals(listBeans.getLevel())) {
             level.setText("中型");
-        } else if ("3".equals(disasterListBean.getLevel())) {
+        } else if ("3".equals(listBeans.getLevel())) {
             level.setText("大型");
-        } else if ("4".equals(disasterListBean.getLevel())) {
+        } else if ("4".equals(listBeans.getLevel())) {
             level.setText("特大型");
         }
-        if (disasterListBean.getForecastLevel().equals(null)) {
-            foreLevel.setText(disasterListBean.getForecastLevel());
-        } else if ("1".equals(disasterListBean.getForecastLevel())) {
+        if (listBeans.getForecastLevel().equals(null)) {
+            foreLevel.setText(listBeans.getForecastLevel());
+        } else if ("1".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("小型");
-        } else if ("2".equals(disasterListBean.getForecastLevel())) {
+        } else if ("2".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("中型");
-        } else if ("3".equals(disasterListBean.getForecastLevel())) {
+        } else if ("3".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("大型");
-        } else if ("4".equals(disasterListBean.getForecastLevel())) {
+        } else if ("4".equals(listBeans.getForecastLevel())) {
             foreLevel.setText("特大型");
         }
-        int isDispose = disasterListBean.getIsDispose();
-        System.out.println("isDisPose = " + isDispose);
+        int isDispose = listBeans.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("已处理灾情");
-            etHandle.setText("没得数据");
+            etHandle.setText(listBeans.getOpinion());
+            disposePerson.setText(listBeans.getDisposePerson());
+            disposeMobile.setText(listBeans.getDisposeMobile());
         } else {
             tvTitle.setText("未处理灾情");
             llHandle.setVisibility(View.GONE);
@@ -261,13 +259,13 @@ public class SuperDisasterActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
 
-        disasterListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        listBeans = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         setRequest();
     }
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + disasterListBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBeans.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override

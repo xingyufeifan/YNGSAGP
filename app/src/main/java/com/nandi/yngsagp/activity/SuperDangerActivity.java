@@ -164,9 +164,6 @@ public class SuperDangerActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        disposePerson.setText((CharSequence) listBean.getDisposePerson());
-        disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
-        etHandle.setText((CharSequence) listBean.getOpinion());
         if ("1".equals((CharSequence) listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
@@ -195,8 +192,9 @@ public class SuperDangerActivity extends AppCompatActivity {
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
             tvTitle.setText("已处理险情");
-
-            etHandle.setText("没得数据");
+            disposePerson.setText((CharSequence) listBean.getDisposePerson());
+            disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
+            etHandle.setText((CharSequence) listBean.getOpinion());
         } else {
             tvTitle.setText("未处理险情");
             llHandle.setVisibility(View.GONE);

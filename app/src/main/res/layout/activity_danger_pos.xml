@@ -37,7 +37,6 @@
         android:layout_below="@+id/head_rl"
         app:tabBackground="@color/holo_light_primary"
         app:tabIndicatorColor="@color/colorLine"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabSelectedTextColor="@android:color/holo_blue_dark">
 
     </android.support.design.widget.TabLayout>

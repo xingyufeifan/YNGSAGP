@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.bean.SuperBean;
 
@@ -48,12 +49,14 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
         holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
         holder.textAddress.setText(listBeans.get(position).getPersonel());
         holder.textToTime.setText(listBeans.get(position).getAddress());
-        if (0==listBeans.get(position).getIsDanger()){
+        if ("0".equals(listBeans.get(position).getIsDanger())){
             holder.error.setText("误报");
-        }else if(1==listBeans.get(position).getIsDanger()){
-            holder.error.setText("无法处理");
-        }else if(2==listBeans.get(position).getIsDanger()){
-            holder.error.setText("能处理");
+        }else if("1".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("灾情确认");
+        }else if("2".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("险情确认不能处理");
+        }else if("3".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("险情确认能处理");
         }
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {
