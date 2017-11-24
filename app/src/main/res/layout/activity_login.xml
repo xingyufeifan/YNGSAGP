@@ -50,7 +50,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorWhite"
                     android:typeface="monospace"
-                    android:textSize="70sp" />
+                    android:textSize="50sp" />
 
                 <TextView
                     android:layout_width="match_parent"
