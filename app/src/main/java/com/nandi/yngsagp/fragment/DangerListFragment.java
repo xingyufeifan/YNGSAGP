@@ -19,8 +19,8 @@ import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DangerPosActivity;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
-import com.nandi.yngsagp.adapter.SuperAdapter;
-import com.nandi.yngsagp.bean.SuperBean;
+import com.nandi.yngsagp.adapter.DisposAdapter;
+import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -60,8 +60,8 @@ public class DangerListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    private SuperAdapter dangerAdapter;
-    private SuperAdapter dangerUAdapter;
+    private DisposAdapter dangerAdapter;
+    private DisposAdapter dangerUAdapter;
     
     private int isDisaster = 2;
     private int isDisPose = 0;
@@ -69,8 +69,8 @@ public class DangerListFragment extends Fragment {
     private int pageU = 1;
     private int rows = 15;
     private String areaId;
-    private List<SuperBean> dangerListA;
-    private List<SuperBean> dangerListU;
+    private List<DisposBean> dangerListA;
+    private List<DisposBean> dangerListU;
     private String role;
     private JSONObject jsonObject;
     private JSONObject jsonMeta;
@@ -100,7 +100,7 @@ public class DangerListFragment extends Fragment {
                   initJson(response);
                     if (isSuccess) {
                         dangerListA.clear();
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
@@ -131,7 +131,7 @@ public class DangerListFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         dangerListU.clear();
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                         pageU = 1;
                         refreshlayouts.finishRefresh();
@@ -175,7 +175,7 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -208,7 +208,7 @@ public class DangerListFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
@@ -278,7 +278,7 @@ public class DangerListFragment extends Fragment {
                 requestU(refreshlayout);
             }
         });
-        dangerAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+        dangerAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DangerPosActivity.class);
@@ -286,7 +286,7 @@ public class DangerListFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        dangerUAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+        dangerUAdapter.setOnItemClickListener(new DisposAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DangerPosActivity.class);
@@ -302,8 +302,8 @@ public class DangerListFragment extends Fragment {
         dangerListU = new ArrayList<>();
         dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dangerAdapter = new SuperAdapter(getActivity(), dangerListA);
-        dangerUAdapter = new SuperAdapter(getActivity(), dangerListU);
+        dangerAdapter = new DisposAdapter(getActivity(), dangerListA);
+        dangerUAdapter = new DisposAdapter(getActivity(), dangerListU);
         dangerShow.setAdapter(dangerAdapter);
         dangerNShow.setAdapter(dangerUAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 0, true);
@@ -322,7 +322,7 @@ public class DangerListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
@@ -347,7 +347,7 @@ public class DangerListFragment extends Fragment {
                 try {
                    initJson(response);
                     if (isSuccess) {
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), DisposBean.class));
                         dangerUAdapter.notifyDataSetChanged();
                     } else {
 

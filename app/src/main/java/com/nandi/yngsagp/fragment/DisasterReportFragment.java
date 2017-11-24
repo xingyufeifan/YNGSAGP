@@ -259,7 +259,7 @@ public class DisasterReportFragment extends Fragment {
         progressDialog.setMessage("正在上传...");
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        if ("1".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
+        if ("2".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));

@@ -49,7 +49,7 @@ import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
-import com.nandi.yngsagp.bean.SuperBean;
+import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -159,7 +159,7 @@ public class DangerPosActivity extends AppCompatActivity {
     @BindView(R.id.ll_1)
     LinearLayout ll1;
 
-    private SuperBean dangerListBean;
+    private DisposBean dangerListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
     private MediaInfo audioInfo = new MediaInfo();
@@ -264,7 +264,7 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        dangerListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        dangerListBean = (DisposBean) getIntent().getSerializableExtra(Constant.DISASTER);
         xqNumShow.setText(dangerListBean.getDisasterNum());
         userDangerShow.setText(dangerListBean.getPersonel());
         phoneDangerShow.setText(dangerListBean.getPhoneNum());

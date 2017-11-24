@@ -173,7 +173,6 @@ public class DangerReportFragment extends Fragment {
         initViews();
         setAdapter();
         setListener();
-        System.out.println(3);
         return view;
     }
 
@@ -327,7 +326,7 @@ public class DangerReportFragment extends Fragment {
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在上传...");
-        if ("1".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
+        if ("2".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
         }
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);

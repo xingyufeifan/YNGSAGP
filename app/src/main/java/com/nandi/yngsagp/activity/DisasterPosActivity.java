@@ -48,6 +48,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
+import com.nandi.yngsagp.bean.DisposBean;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
@@ -168,7 +169,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.ll_1)
     LinearLayout ll1;
 
-    private SuperBean disasterListBean;
+    private DisposBean disasterListBean;
     private ProgressDialog progressDialog;
     private MediaInfo videoInfo = new MediaInfo();
     private MediaInfo audioInfo = new MediaInfo();
@@ -205,7 +206,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
 
-        disasterListBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        disasterListBean = (DisposBean) getIntent().getSerializableExtra(Constant.DISASTER);
         setRequest();
     }
 
