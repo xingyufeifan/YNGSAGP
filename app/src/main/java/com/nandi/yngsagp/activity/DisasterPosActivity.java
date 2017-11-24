@@ -54,6 +54,7 @@ import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 import com.zhy.http.okhttp.request.RequestCall;
@@ -236,8 +237,8 @@ public class DisasterPosActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) disasterListBean.getOtherThing());
         mobileShow.setText((CharSequence) disasterListBean.getMonitorPhone());
         nameShow.setText((CharSequence) disasterListBean.getMonitorName());
-        disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
-        disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+        disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
+        disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
         if ("1".equals((CharSequence) disasterListBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
@@ -307,6 +308,12 @@ public class DisasterPosActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 System.out.println("parent = " + parent);
+            }
+        });
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                build.cancel();
             }
         });
     }
@@ -394,7 +401,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
                 break;
             case R.id.btn_confirm:
-
+                upload();
                 break;
             case R.id.tv_video_uploaded:
                 playNetVideo();
@@ -419,7 +426,6 @@ public class DisasterPosActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         String reportMan = userShow.getText().toString().trim();
         String phone = phoneShow.getText().toString().trim();
-        String time = timeShow.getText().toString().trim();
         String address = addressShow.getText().toString().trim();
         String location = locationShow.getText().toString().trim();
         String type = typePos + "";
@@ -435,14 +441,13 @@ public class DisasterPosActivity extends AppCompatActivity {
         String other = otherShow.getText().toString().trim();
         String reportName = nameShow.getText().toString().trim();
         String reportMobile = mobileShow.getText().toString().trim();
-        etHandle.getText().toString().trim();
-        disposeMobile.getText().toString().trim();
-        disposePerson.getText().toString().trim();
+        String handle = etHandle.getText().toString().trim();
+        String disMobile = disposeMobile.getText().toString().trim();
+        String disPerson = disposePerson.getText().toString().trim();
         String areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "0");
         String personType = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "0");
         map.put("phoneNum", phone);
         map.put("personel", reportMan);
-        map.put("findTime", time);
         map.put("currentLocation", location);
         map.put("address", address);
         map.put("disasterType", type);
@@ -460,6 +465,70 @@ public class DisasterPosActivity extends AppCompatActivity {
         map.put("monitorPhone", reportMobile);
         map.put("areaId", areaId);
         map.put("personType", personType);
+        map.put("opinion", handle);
+        map.put("disposeMobile", disMobile);
+        map.put("disposePerson", disPerson);
+        map.put("id",disasterListBean.getId()+"");
+        map.put("isDispose","0");
+        setUploadRequest(map);
+    }
+
+    private void setUploadRequest(Map<String, String> map) {
+        progressDialog.setMessage("正在上传");
+        progressDialog.show();
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/update");// TODO: 2017/11/24
+        for (PhotoPath photoPath : photoPaths) {
+            if (photoPath != null) {
+                formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
+                Log.d("cp", "音频添加");
+            }
+        }
+        if (!TextUtils.isEmpty(tvVideo.getText().toString())) {
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4", new File(videoFile.getAbsolutePath()));
+            Log.d("cp", "音频添加");
+        }
+        if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
+            Log.d("cp", "音频添加");
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+        }
+        formBuilder.params(map);
+        formBuilder.addParams("type", "1");
+        build = formBuilder.build();
+        build.execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                if ("Canceled".equals(e.getMessage())) {
+                    ToastUtils.showShort("取消上传！");
+                } else {
+                    progressDialog.dismiss();
+                    ToastUtils.showShort("网络连接失败！");
+                    Log.d("cp", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(response);
+                    JSONObject meta = object.getJSONObject("meta");
+                    String message = object.getString("data");
+                    boolean success = meta.getBoolean("success");
+                    if (success) {
+                        ToastUtils.showShort(message);
+                        clean();
+                    } else {
+                        ToastUtils.showShort(message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void clean() {
+        // TODO: 2017/11/24
     }
 
 
