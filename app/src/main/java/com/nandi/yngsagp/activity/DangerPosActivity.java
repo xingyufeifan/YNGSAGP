@@ -370,10 +370,16 @@ public class DangerPosActivity extends AppCompatActivity {
                 takeAudio();
                 break;
             case R.id.btn_error:
-
+                if (!TextUtils.isEmpty(etHandle.getText().toString())){
+                }else{
+                    ToastUtils.showShort("请填写处置意见");
+                }
                 break;
             case R.id.btn_confirm:
-
+                if (!TextUtils.isEmpty(etHandle.getText().toString())){
+                }else{
+                    ToastUtils.showShort("请填写处置意见");
+                }
                 break;
             case R.id.tv_video_uploaded:
                 playNetVideo();

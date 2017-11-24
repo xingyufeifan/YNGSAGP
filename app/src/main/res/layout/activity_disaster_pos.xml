@@ -61,7 +61,7 @@
         android:layout_below="@+id/tab_layout"
         android:visibility="invisible">
 
-        <include layout="@layout/layout_disaster_media_pos" />
+        <include layout="@layout/layout_pos_media" />
 
     </LinearLayout>
 

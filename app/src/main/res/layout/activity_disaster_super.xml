@@ -59,7 +59,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tab_layout"
         android:visibility="invisible">
-        <include layout="@layout/layout_disaster_media_super" />
+        <include layout="@layout/layout_super_media" />
 
     </LinearLayout>
 
