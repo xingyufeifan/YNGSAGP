@@ -770,19 +770,19 @@ public class DangerReportFragment extends Fragment {
                 int duration = player.getDuration();
                 //设置进度条的最大值为音乐的总时长
                 seekBar.setMax(duration);
-             Thread thread =   new Thread(new Runnable() {
-                 @Override
-                 public void run() {
-                     while (seekBar.getProgress()<=seekBar.getMax()){
-                         //获取当前音乐播放的位置
-                         int currentPosition = player.getCurrentPosition();
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (seekBar.getProgress() <= seekBar.getMax()) {
+                            //获取当前音乐播放的位置
+                            int currentPosition = player.getCurrentPosition();
 
-                         //让进度条动起来
-                         seekBar.setProgress(currentPosition);
-                     }
-                 }
-             });
-             thread.start();
+                            //让进度条动起来
+                            seekBar.setProgress(currentPosition);
+                        }
+                    }
+                });
+                thread.start();
             }
         });
         btnPause.setOnClickListener(new View.OnClickListener() {
