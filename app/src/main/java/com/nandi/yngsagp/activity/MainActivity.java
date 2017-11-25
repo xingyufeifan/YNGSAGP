@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
@@ -278,12 +281,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ToNextActivity(ModifyActivity.class);
                 break;
             case R.id.nav_clear:
+                clear();
                 break;
             case R.id.nav_login_out:
                 loginOut();
                 break;
         }
         return true;
+    }
+
+    private void clear() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确定要清除所有的缓存数据吗？")
+                .setPositiveButton("清除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Photo");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Video");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Audio");
+                        ToastUtils.showShort("清除成功");
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
     }
 
     private void addFragment(Fragment fragment) {
