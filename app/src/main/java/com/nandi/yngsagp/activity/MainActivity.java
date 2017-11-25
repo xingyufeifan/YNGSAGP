@@ -33,6 +33,7 @@ import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.fragment.DisasterReportFragment;
 import com.nandi.yngsagp.fragment.SuperDangerFragment;
 import com.nandi.yngsagp.fragment.SuperDisasterFragment;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.DownloadUtils;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -336,9 +337,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: 2017/11/16 清空数据
-                        SharedUtils.removeShare(context, Constant.IS_LOGIN);
-                        SharedUtils.removeShare(context, Constant.PASSWORD);
+                        clean();
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
                     }
@@ -349,6 +348,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         dialogInterface.dismiss();
                     }
                 }).show();
+    }
+
+    private void clean() {
+        SharedUtils.removeShare(context, Constant.IS_LOGIN);
+        SharedUtils.removeShare(context, Constant.PASSWORD);
+        GreedDaoHelper.deleteAll();
     }
 
     @Override

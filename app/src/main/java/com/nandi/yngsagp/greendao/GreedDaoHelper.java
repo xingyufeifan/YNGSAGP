@@ -40,9 +40,6 @@ public class GreedDaoHelper {
 
     }
 
-    public static void updatePhoto(PhotoPath photoPath) {
-        daoSession.getPhotoPathDao().update(photoPath);
-    }
 
     public static List<PhotoPath> queryPhoto(int type) {
         return daoSession.getPhotoPathDao().queryBuilder().where(PhotoPathDao.Properties.Type.eq(type)).list();
@@ -59,9 +56,6 @@ public class GreedDaoHelper {
         daoSession.getVideoPathDao().insertOrReplace(videoPath);
     }
 
-    public static void updateVideo(VideoPath videoPath) {
-        daoSession.getVideoPathDao().update(videoPath);
-    }
 
     public static VideoPath queryVideo(int type) {
         return daoSession.getVideoPathDao().queryBuilder().where(VideoPathDao.Properties.Type.eq(type)).unique();
@@ -75,9 +69,6 @@ public class GreedDaoHelper {
         daoSession.getAudioPathDao().insertOrReplace(audioPath);
     }
 
-    public static void updateAudio(AudioPath audioPath) {
-        daoSession.getAudioPathDao().update(audioPath);
-    }
 
     public static AudioPath queryAudio(int type) {
         return daoSession.getAudioPathDao().queryBuilder().where(AudioPathDao.Properties.Type.eq(type)).unique();
@@ -91,9 +82,6 @@ public class GreedDaoHelper {
         daoSession.getDisasterUBeanDao().insertOrReplace(disasterUBean);
     }
 
-    public static void updateDisaster(DisasterUBean disasterUBean) {
-        daoSession.getDisasterUBeanDao().update(disasterUBean);
-    }
 
     public static DisasterUBean queryDisaster() {
         return daoSession.getDisasterUBeanDao().queryBuilder().unique();
@@ -106,15 +94,15 @@ public class GreedDaoHelper {
         daoSession.getDangerUBeanDao().insertOrReplace(dangerUBean);
     }
 
-    public static void updateDanger(DangerUBean dangerUBean) {
-        daoSession.getDangerUBeanDao().update(dangerUBean);
-    }
 
     public static DangerUBean queryDanger() {
         return daoSession.getDangerUBeanDao().queryBuilder().unique();
     }
-
-    public static void deleteDanger() {
+    public static void deleteAll(){
+        daoSession.getPhotoPathDao().deleteAll();
         daoSession.getDangerUBeanDao().deleteAll();
+        daoSession.getDisasterUBeanDao().deleteAll();
+        daoSession.getAudioPathDao().deleteAll();
+        daoSession.getVideoPathDao().deleteAll();
     }
 }
