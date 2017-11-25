@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
@@ -30,6 +33,7 @@ import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.fragment.DisasterReportFragment;
 import com.nandi.yngsagp.fragment.SuperDangerFragment;
 import com.nandi.yngsagp.fragment.SuperDisasterFragment;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.DownloadUtils;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -278,12 +282,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ToNextActivity(ModifyActivity.class);
                 break;
             case R.id.nav_clear:
+                clear();
                 break;
             case R.id.nav_login_out:
                 loginOut();
                 break;
         }
         return true;
+    }
+
+    private void clear() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确定要清除所有的缓存数据吗？")
+                .setPositiveButton("清除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Photo");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Video");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Audio");
+                        ToastUtils.showShort("清除成功");
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
     }
 
     private void addFragment(Fragment fragment) {
@@ -311,9 +337,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: 2017/11/16 清空数据
-                        SharedUtils.removeShare(context, Constant.IS_LOGIN);
-                        SharedUtils.removeShare(context, Constant.PASSWORD);
+                        clean();
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
                     }
@@ -324,6 +348,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         dialogInterface.dismiss();
                     }
                 }).show();
+    }
+
+    private void clean() {
+        SharedUtils.removeShare(context, Constant.IS_LOGIN);
+        SharedUtils.removeShare(context, Constant.PASSWORD);
+        GreedDaoHelper.deleteAll();
     }
 
     @Override

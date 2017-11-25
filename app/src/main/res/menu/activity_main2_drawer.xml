@@ -9,27 +9,27 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_disaster_edit"
-            android:icon="@mipmap/ic_update"
+            android:icon="@mipmap/ic_disaster_up"
             android:title="灾情直报" />
         <item
             android:id="@+id/nav_danger_edit"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@mipmap/ic_danger_up"
             android:title="险情速报" />
         <item
             android:id="@+id/nav_disaster_handle"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@mipmap/ic_disaster_pos"
             android:title="灾情处置" />
         <item
             android:id="@+id/nav_danger_handle"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@mipmap/ic_danger_pos"
             android:title="险情处理" />
         <item
             android:id="@+id/nav_disaster_data"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@mipmap/ic_disaster_data"
             android:title="灾情数据" />
         <item
             android:id="@+id/nav_danger_data"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@mipmap/ic_danger_data"
             android:title="险情数据" />
     </group>
 
@@ -37,7 +37,7 @@
         <menu>
             <item
                 android:id="@+id/nav_modify_password"
-                android:icon="@mipmap/ic_setting"
+                android:icon="@mipmap/ic_update_password"
                 android:title="修改密码" />
             <item
                 android:id="@+id/nav_clear"

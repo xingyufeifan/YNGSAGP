@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
@@ -25,8 +24,8 @@
             android:layout_gravity="center"
             android:text=""
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.DrawerLayout
