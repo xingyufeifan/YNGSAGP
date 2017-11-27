@@ -48,9 +48,6 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">40sp</item>
     </style>
-    <style name="navigation_text_size">
-        <item name="android:textSize">20sp</item>
-    </style>
 
     <style name="myButtonBlue">
         <item name="android:layout_width">0dp</item>
@@ -108,5 +105,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/statusColor</item>
     </style>
-    
+    <style name="navigation_text_size">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

@@ -40,6 +40,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -736,9 +737,26 @@ public class DangerReportFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
+        final View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
+        final SeekBar seekBar = view.findViewById(R.id.seekBar);
         Button btnStart = view.findViewById(R.id.btn_dialog_play);
-        Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        final Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
@@ -752,6 +770,23 @@ public class DangerReportFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 player.start();
+                //获取音乐的总时长
+                int duration = player.getDuration();
+                //设置进度条的最大值为音乐的总时长
+                seekBar.setMax(duration);
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (seekBar.getProgress() <= seekBar.getMax()) {
+                            //获取当前音乐播放的位置
+                            int currentPosition = player.getCurrentPosition();
+
+                            //让进度条动起来
+                            seekBar.setProgress(currentPosition);
+                        }
+                    }
+                });
+                thread.start();
             }
         });
         btnPause.setOnClickListener(new View.OnClickListener() {
@@ -762,6 +797,7 @@ public class DangerReportFragment extends Fragment {
                 }
             }
         });
+
     }
 
     private void takeVideo() {
