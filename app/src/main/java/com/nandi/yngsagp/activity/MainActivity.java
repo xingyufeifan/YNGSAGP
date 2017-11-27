@@ -269,6 +269,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     tvTitle.setText("灾情直报");
                     showFragment(disasterReportFragment);
                     hideFragment(dangerReportFragment);
+                    hideFragment(disasterListFragment);
+                    hideFragment(dangerListFragment);
                 }
                 break;
             case R.id.nav_danger_edit:
@@ -276,6 +278,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     tvTitle.setText("险情速报");
                     hideFragment(disasterReportFragment);
                     showFragment(dangerReportFragment);
+                    hideFragment(disasterListFragment);
+                    hideFragment(dangerListFragment);
                 }
                 break;
             case R.id.nav_disaster_handle:
