@@ -18,6 +18,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -369,32 +371,38 @@ public class SuperDisasterActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
-        Button btnStart = view.findViewById(R.id.btn_dialog_play);
-        Button btnPause = view.findViewById(R.id.btn_dialog_pause);
+        final View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
+        final CheckBox btnStart = view.findViewById(R.id.btn_dialog_play);
+        final TextView tvPlayer = view.findViewById(R.id.tv_player);
         new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
                 .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        player.stop();
+                        if (player != null) {
+                            if (player.isPlaying()) {
+                                player.stop();
+                            }
+                            player.release();
+                        }
                     }
                 }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                player.start();
-            }
-        });
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (player.isPlaying()) {
-                    player.pause();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    player.start();
+                    tvPlayer.setText("正在播放");
+                }else{
+                    if (player.isPlaying()){
+                        player.pause();
+                        tvPlayer.setText("已经暂停");
+                    }
                 }
             }
         });
+
     }
 
     private void playMedia(File response, String type) {

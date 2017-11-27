@@ -833,62 +833,33 @@ public class DisasterPosActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         final View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
-        final SeekBar seekBar = view.findViewById(R.id.seekBar);
-        Button btnStart = view.findViewById(R.id.btn_dialog_play);
-        final Button btnPause = view.findViewById(R.id.btn_dialog_pause);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        final CheckBox btnStart = view.findViewById(R.id.btn_dialog_play);
+        final TextView tvPlayer = view.findViewById(R.id.tv_player);
         new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
                 .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        player.stop();
-                    }
-                }).show();
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                player.start();
-                //获取音乐的总时长
-                int duration = player.getDuration();
-                //设置进度条的最大值为音乐的总时长
-                seekBar.setMax(duration);
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        while (seekBar.getProgress() <= seekBar.getMax()) {
-                            //获取当前音乐播放的位置
-                            int currentPosition = player.getCurrentPosition();
-
-                            //让进度条动起来
-                            seekBar.setProgress(currentPosition);
+                        if (player != null) {
+                            if (player.isPlaying()) {
+                                player.stop();
+                            }
+                            player.release();
                         }
                     }
-                });
-                thread.start();
-            }
-        });
-        btnPause.setOnClickListener(new View.OnClickListener() {
+                }).show();
+        btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                if (player.isPlaying()) {
-                    player.pause();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    player.start();
+                    tvPlayer.setText("正在播放");
+                }else{
+                    if (player.isPlaying()){
+                        player.pause();
+                        tvPlayer.setText("已经暂停");
+                    }
                 }
             }
         });
