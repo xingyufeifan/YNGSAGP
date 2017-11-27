@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,7 @@ import butterknife.OnClick;
  * Created by qingsong on 2017/11/16.
  */
 
-public class ModifyActivity extends BaseActivity {
+public class ModifyActivity extends AppCompatActivity {
 
 
     @BindView(R.id.modify_user)

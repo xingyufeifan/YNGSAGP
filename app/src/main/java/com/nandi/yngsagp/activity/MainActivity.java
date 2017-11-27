@@ -315,7 +315,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 break;
             case R.id.nav_modify_password:
-                ToNextActivity(ModifyActivity.class);
+                startActivity(new Intent(context,ModifyActivity.class));
                 break;
             case R.id.nav_clear:
                 clear();
