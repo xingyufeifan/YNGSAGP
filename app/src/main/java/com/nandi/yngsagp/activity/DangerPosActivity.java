@@ -490,7 +490,7 @@ public class DangerPosActivity extends AppCompatActivity {
         map.put("isDanger",i);
         map.put("opinion",opinion);
         map.put("id", listBean.getId() + "");
-        map.put("isDispose", "0");//0 已处理
+        map.put("isDispose", "2");
         map.put("disposeMobile", disposeMobile.getText().toString().trim());
         map.put("disposePerson",disposePerson.getText().toString().trim());
         setUploadRequest(map);

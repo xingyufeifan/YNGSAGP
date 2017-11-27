@@ -39,24 +39,31 @@ public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHold
     @Override
     public DisposAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //此处动态加载ViewHolder的布局文件并返回holder
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_dispose_list, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_super_list, null);
         DisposAdapter.MyViewHolder holderA = new DisposAdapter.MyViewHolder(view);
         return holderA;
     }
 
     @Override
     public void onBindViewHolder(DisposAdapter.MyViewHolder holder, final int position) {
-        holder.textDisNum.setText(listBeans.get(position).getPersonel());
-        holder.textAddress.setText(listBeans.get(position).getAddress());
-        holder.textToTime.setText((CharSequence) listBeans.get(position).getHappenTime());
-        if ("0".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("误报");
-        }else if("1".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("灾情确认");
-        }else if("2".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("险情确认\n不能处理");
-        }else if("3".equals(listBeans.get(position).getIsDanger())){
-            holder.error.setText("险情确认\n能处理");
+        holder.tvTime.setText((String) listBeans.get(position).getHappenTime());
+        holder.tvAddress.setText(listBeans.get(position).getAddress());
+        switch (listBeans.get(position).getIsDispose()){
+            case 0:
+                holder.tvType.setText("已完成");
+                break;
+            case 1:
+                holder.tvType.setText("未处理");
+                break;
+            case 2:
+                holder.tvType.setText("已上报");
+                break;
+            case 3:
+                holder.tvType.setText("处置中");
+                break;
+            case 4:
+                holder.tvType.setText("调查中");
+                break;
         }
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {
@@ -76,20 +83,18 @@ public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHold
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textDisNum;
-        public TextView textAddress;
-        public TextView textToTime;
-        public TextView toNext;
-        public TextView error;
+         TextView tvTime;
+         TextView tvAddress;
+         TextView tvType;
+         TextView toNext;
 
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
-            textDisNum = itemView.findViewById(R.id.disNum);
-            textAddress = itemView.findViewById(R.id.address);
-            textToTime = itemView.findViewById(R.id.toTime);
+            tvTime = itemView.findViewById(R.id.tv_time);
+            tvAddress = itemView.findViewById(R.id.tv_address);
+            tvType = itemView.findViewById(R.id.tv_type);
             toNext = itemView.findViewById(R.id.toNext);
-            error  = itemView.findViewById(R.id.error);
         }
     }
 }

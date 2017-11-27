@@ -504,7 +504,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         map.put("disposeMobile", disMobile);
         map.put("disposePerson", disPerson);
         map.put("id", listBean.getId() + "");
-        map.put("isDispose", "0");//0 已处理
+        map.put("isDispose", "2");//0 已处理
         map.put("isDanger", i);//0误报 1确认灾情
         setUploadRequest(map);
     }
