@@ -751,7 +751,7 @@ public class DisasterReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer = view.findViewById(R.id.chronometer);
+        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -783,7 +783,7 @@ public class DisasterReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if (isChecked){
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -805,7 +805,7 @@ public class DisasterReportFragment extends Fragment {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                } else {
+                }else{
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -815,7 +815,6 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
-
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");

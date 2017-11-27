@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String address;
     private String type;
     private String name;
+    private String areaId;
     private DisasterReportFragment disasterReportFragment;
     private DangerReportFragment dangerReportFragment;
     private DisasterListFragment disasterListFragment;
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.d("cp", "开启推送通道失败");
             }
         });
-        pushService.bindAccount(mobile, new CommonCallback() {
+        pushService.bindAccount(areaId, new CommonCallback() {
             @Override
             public void onSuccess(String s) {
                 Log.d("cp", "绑定账号成功");
@@ -119,6 +120,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         address = (String) SharedUtils.getShare(context, Constant.ADDRESS, "");
         type = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "");
         name = (String) SharedUtils.getShare(context, Constant.NAME, "");
+        areaId= (String) SharedUtils.getShare(context,Constant.AREA_ID,"");
     }
 
     private void checkUpdate() {
@@ -192,7 +194,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvName.setText(name);
         tvAccount.setText(mobile);
         tvAddress.setText(address);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
@@ -206,23 +207,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         superDangerFragment = new SuperDangerFragment();
         if ("1".equals(type)) {
             tvTitle.setText("灾情直报");
-            navView.getMenu().getItem(0).setChecked(true);
-            navView.getMenu().getItem(2).setVisible(false);
-            navView.getMenu().getItem(3).setVisible(false);
+            navView.getMenu().getItem(2).setChecked(true);
+            navView.getMenu().getItem(0).setVisible(false);
+            navView.getMenu().getItem(1).setVisible(false);
             navView.getMenu().getItem(4).setVisible(false);
             navView.getMenu().getItem(5).setVisible(false);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
             tvDuty.setText("监测员");
         } else if ("2".equals(type)) {
-            tvTitle.setText("灾情直报");
+            tvTitle.setText("灾情处置");
             navView.getMenu().getItem(0).setChecked(true);
             navView.getMenu().getItem(4).setVisible(false);
             navView.getMenu().getItem(5).setVisible(false);
-            addFragment(disasterReportFragment);
-            addFragment(dangerReportFragment);
             addFragment(disasterListFragment);
             addFragment(dangerListFragment);
+            addFragment(disasterReportFragment);
+            addFragment(dangerReportFragment);
             tvDuty.setText("审核员");
         } else if ("3".equals(type)) {
             tvTitle.setText("灾情数据");
@@ -264,21 +265,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.closeDrawer(GravityCompat.START);
         switch (id) {
             case R.id.nav_disaster_edit:
-                if (!navView.getMenu().getItem(0).isChecked()) {
+                if (!navView.getMenu().getItem(2).isChecked()) {
                     tvTitle.setText("灾情直报");
                     showFragment(disasterReportFragment);
                     hideFragment(dangerReportFragment);
                 }
                 break;
             case R.id.nav_danger_edit:
-                if (!navView.getMenu().getItem(1).isChecked()) {
+                if (!navView.getMenu().getItem(3).isChecked()) {
                     tvTitle.setText("险情速报");
                     hideFragment(disasterReportFragment);
                     showFragment(dangerReportFragment);
                 }
                 break;
             case R.id.nav_disaster_handle:
-                if (!navView.getMenu().getItem(2).isChecked()) {
+                if (!navView.getMenu().getItem(0).isChecked()) {
                     tvTitle.setText("灾情处置");
                     hideFragment(disasterReportFragment);
                     hideFragment(dangerReportFragment);
@@ -287,7 +288,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 break;
             case R.id.nav_danger_handle:
-                if (!navView.getMenu().getItem(3).isChecked()) {
+                if (!navView.getMenu().getItem(1).isChecked()) {
                     tvTitle.setText("险情处置");
                     hideFragment(disasterReportFragment);
                     hideFragment(dangerReportFragment);

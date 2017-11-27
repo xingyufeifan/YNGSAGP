@@ -238,11 +238,11 @@ public class DisasterListFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (0 == position) {
-                    disasterAlready.setVisibility(View.VISIBLE);
-                    disasterNo.setVisibility(View.INVISIBLE);
-                } else {
                     disasterAlready.setVisibility(View.INVISIBLE);
                     disasterNo.setVisibility(View.VISIBLE);
+                } else {
+                    disasterAlready.setVisibility(View.VISIBLE);
+                    disasterNo.setVisibility(View.INVISIBLE);
                 }
                 isDisPose = position;
             }
@@ -306,8 +306,8 @@ public class DisasterListFragment extends Fragment {
         disasterAdapter = new SuperAdapter(getActivity(), disasterListA);
         disasterShow.setAdapter(disasterAdapter);
         disasterNShow.setAdapter(disasterNAdapter);
-        tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 1);
+        tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 0,true);
+        tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 1);
         role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "2");
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
         requestAPos();

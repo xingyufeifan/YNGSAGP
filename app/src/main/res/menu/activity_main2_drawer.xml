@@ -8,6 +8,14 @@
         android:layout_height="wrap_content"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_disaster_handle"
+            android:icon="@mipmap/ic_disaster_pos"
+            android:title="灾情处置" />
+        <item
+            android:id="@+id/nav_danger_handle"
+            android:icon="@mipmap/ic_danger_pos"
+            android:title="险情处置" />
+        <item
             android:id="@+id/nav_disaster_edit"
             android:icon="@mipmap/ic_disaster_up"
             android:title="灾情直报" />
@@ -15,14 +23,7 @@
             android:id="@+id/nav_danger_edit"
             android:icon="@mipmap/ic_danger_up"
             android:title="险情速报" />
-        <item
-            android:id="@+id/nav_disaster_handle"
-            android:icon="@mipmap/ic_disaster_pos"
-            android:title="灾情处置" />
-        <item
-            android:id="@+id/nav_danger_handle"
-            android:icon="@mipmap/ic_danger_pos"
-            android:title="险情处理" />
+
         <item
             android:id="@+id/nav_disaster_data"
             android:icon="@mipmap/ic_disaster_data"

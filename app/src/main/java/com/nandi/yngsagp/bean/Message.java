@@ -9,15 +9,17 @@ import java.io.Serializable;
 public class Message implements Serializable {
     private int userId;
     private int roomId;
+    private String type;
     private String inviteMan;
     private String message;
 
     public Message() {
     }
 
-    public Message(int userId, int roomId, String inviteMan, String message) {
+    public Message(int userId, int roomId, String type, String inviteMan, String message) {
         this.userId = userId;
         this.roomId = roomId;
+        this.type = type;
         this.inviteMan = inviteMan;
         this.message = message;
     }
@@ -36,6 +38,14 @@ public class Message implements Serializable {
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getInviteMan() {

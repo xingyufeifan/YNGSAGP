@@ -12,12 +12,31 @@
         app:tabBackground="@color/holo_light_primary"
         app:tabIndicatorColor="@color/colorLine"
         app:tabSelectedTextColor="@android:color/holo_blue_dark" />
+    <LinearLayout
+        android:id="@+id/disasterNo"
+        android:layout_below="@id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshNLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/disasterN_show"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/disasterAlready"
         android:layout_below="@id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:orientation="vertical">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -33,23 +52,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/disasterNo"
-        android:layout_below="@id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="invisible">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshNLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/disasterN_show"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-    </LinearLayout>
 </RelativeLayout>
