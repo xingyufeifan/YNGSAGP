@@ -449,7 +449,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.tv_audio:
-                if (!TextUtils.isEmpty(tvVideo.getText())) {
+                if (!TextUtils.isEmpty(tvAudio.getText())) {
                     clickText(2);
                 }
                 break;

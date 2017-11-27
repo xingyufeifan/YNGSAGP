@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
@@ -72,6 +75,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DangerListFragment dangerListFragment;
     private SuperDisasterFragment superDisasterFragment;
     private SuperDangerFragment superDangerFragment;
+    private CloudPushService pushService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,33 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initData();
         initViews();
         checkUpdate();
+        bindAccount();
+    }
+
+    private void bindAccount() {
+        pushService = PushServiceFactory.getCloudPushService();
+        pushService.turnOnPushChannel(new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("cp", "开启推送通道成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+                Log.d("cp", "开启推送通道失败");
+            }
+        });
+        pushService.bindAccount(mobile, new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("cp", "绑定账号成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+                Log.d("cp", "绑定账号失败");
+            }
+        });
     }
 
     private void initData() {
@@ -183,7 +214,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
             tvDuty.setText("监测员");
-        }else if("2".equals(type)){
+        } else if ("2".equals(type)) {
             tvTitle.setText("灾情直报");
             navView.getMenu().getItem(0).setChecked(true);
             navView.getMenu().getItem(4).setVisible(false);
@@ -193,7 +224,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(disasterListFragment);
             addFragment(dangerListFragment);
             tvDuty.setText("审核员");
-        }else if ("3".equals(type)){
+        } else if ("3".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
             navView.getMenu().getItem(0).setVisible(false);
@@ -203,7 +234,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(superDisasterFragment);
             addFragment(superDangerFragment);
             tvDuty.setText("县级");
-        }else if ("4".equals(type)){
+        } else if ("4".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
             navView.getMenu().getItem(0).setVisible(false);
@@ -213,7 +244,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(superDisasterFragment);
             addFragment(superDangerFragment);
             tvDuty.setText("市级");
-        }else if ("5".equals(type)){
+        } else if ("5".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
             navView.getMenu().getItem(0).setVisible(false);
@@ -264,7 +295,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     showFragment(dangerListFragment);
                 }
                 break;
-                case R.id.nav_disaster_data:
+            case R.id.nav_disaster_data:
                 if (!navView.getMenu().getItem(4).isChecked()) {
                     tvTitle.setText("灾情数据");
                     hideFragment(superDangerFragment);
@@ -298,9 +329,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setPositiveButton("清除", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Photo");
-                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Video");
-                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory()+"/Audio");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory() + "/Photo");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory() + "/Video");
+                        FileUtils.deleteFilesInDir(Environment.getExternalStorageDirectory() + "/Audio");
                         ToastUtils.showShort("清除成功");
                     }
                 })
@@ -354,6 +385,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         SharedUtils.removeShare(context, Constant.IS_LOGIN);
         SharedUtils.removeShare(context, Constant.PASSWORD);
         GreedDaoHelper.deleteAll();
+        pushService.unbindAccount(new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("cp", "解绑账号成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+                Log.d("cp", "解绑账号失败");
+            }
+        });
+        pushService.turnOffPushChannel(new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("cp", "关闭推送通道成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+                Log.d("cp", "关闭推送通道失败");
+            }
+        });
     }
 
     @Override

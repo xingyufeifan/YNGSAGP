@@ -29,7 +29,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,7 +37,6 @@ import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -62,7 +60,6 @@ import com.nandi.yngsagp.bean.DangerUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
-import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -154,6 +151,8 @@ public class DangerReportFragment extends Fragment {
     EditText dReportName;
     @BindView(R.id.ll_dReport)
     LinearLayout llDReport;
+    @BindView(R.id.iv_get_location)
+    ImageView ivGetLocation;
     private int typePos = 0;
     private Context context;
     private PopupWindow popupWindow;
@@ -204,19 +203,6 @@ public class DangerReportFragment extends Fragment {
             otherDanger.setText(queryDanger.getOther());
             dReportMobile.setText(queryDanger.getMobile());
             dReportName.setText(queryDanger.getName());
-        } else {
-            locationClient = new LocationClient(getActivity().getApplicationContext());
-            LocationClientOption option = new LocationClientOption();
-            option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-            option.setCoorType("gcj02");
-            //可选，默认gcj02，设置返回的定位结果坐标系
-            option.setScanSpan(1000 * 2);
-            //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-            option.setOpenGps(true);
-            //可选，默认false,设置是否使用gps
-            locationClient.setLocOption(option);
-            locationClient.registerLocationListener(new LocationListener());
-            locationClient.start();
         }
         if (queryPhoto != null && queryPhoto.size() > 0) {
             photoPaths.clear();
@@ -231,6 +217,21 @@ public class DangerReportFragment extends Fragment {
             audioPath = queryAudio.getPath();
             tvAudio.setText(audioPath);
         }
+    }
+
+    private void startLocation() {
+        locationClient = new LocationClient(getActivity().getApplicationContext());
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("gcj02");
+        //可选，默认gcj02，设置返回的定位结果坐标系
+        option.setScanSpan(1000 * 2);
+        //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setOpenGps(true);
+        //可选，默认false,设置是否使用gps
+        locationClient.setLocOption(option);
+        locationClient.registerLocationListener(new LocationListener());
+        locationClient.start();
     }
 
     private class LocationListener extends BDAbstractLocationListener {
@@ -352,7 +353,7 @@ public class DangerReportFragment extends Fragment {
         return format.format(date);
     }
 
-    @OnClick({R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_get_location,R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.timeDanger:
@@ -398,6 +399,9 @@ public class DangerReportFragment extends Fragment {
                 if (!TextUtils.isEmpty(tvAudio.getText())) {
                     clickText(2);
                 }
+                break;
+            case R.id.iv_get_location:
+                startLocation();
                 break;
         }
     }
@@ -604,7 +608,7 @@ public class DangerReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -636,7 +640,7 @@ public class DangerReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -659,12 +663,12 @@ public class DangerReportFragment extends Fragment {
                     }
                     recorder.start();
                     tv.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     recorder.stop();
-                recorder.release();
-                recorder = null;
-                tvAudio.setText(audioPath);
-                dialog.dismiss();
+                    recorder.release();
+                    recorder = null;
+                    tvAudio.setText(audioPath);
+                    dialog.dismiss();
                 }
             }
         });
@@ -725,14 +729,14 @@ public class DangerReportFragment extends Fragment {
     }
 
     private void playAudio(String s) {
-        player=new MediaPlayer();
+        player = new MediaPlayer();
         try {
             player.setDataSource(s);
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
         Button btnStart = view.findViewById(R.id.btn_dialog_play);
         Button btnPause = view.findViewById(R.id.btn_dialog_pause);
         new AlertDialog.Builder(context)
@@ -887,6 +891,9 @@ public class DangerReportFragment extends Fragment {
             return false;
         } else if (0 == typePos) {
             ToastUtils.showShort("请选择灾种类型");
+            return false;
+        } else if (TextUtils.isEmpty(lonDanger.getText())) {
+            ToastUtils.showShort("请获取坐标信息");
             return false;
         }
         return true;

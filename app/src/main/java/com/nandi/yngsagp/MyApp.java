@@ -31,7 +31,7 @@ public class MyApp extends Application {
         super.onCreate();
         Utils.init(this);
         GreedDaoHelper.initDatabase(this);
-//        initCloudChannel(getApplicationContext());
+        initCloudChannel(getApplicationContext());
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new LoggerInterceptor("网络请求"))

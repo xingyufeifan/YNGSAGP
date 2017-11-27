@@ -56,7 +56,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
-import com.nandi.yngsagp.activity.BaseActivity;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.AudioPath;
 import com.nandi.yngsagp.bean.DisasterUBean;
@@ -90,7 +89,7 @@ import okhttp3.Call;
 
 
 /**
- * @author  qingsong on 2017/11/15.
+ * @author qingsong on 2017/11/15.
  */
 
 public class DisasterReportFragment extends Fragment {
@@ -121,6 +120,8 @@ public class DisasterReportFragment extends Fragment {
     TextView tvAudio;
     @BindView(R.id.dReportUser)
     TextView dReportUser;
+    @BindView(R.id.iv_get_location)
+    ImageView ivGetLocation;
     private Context context;
     private File pictureFile;
     private PopupWindow popupWindow;
@@ -296,19 +297,6 @@ public class DisasterReportFragment extends Fragment {
             dReportOther.setText(disasterUBean.getOther());
             dReportMobile.setText(disasterUBean.getReportMobile());
             dReportName.setText(disasterUBean.getReportName());
-        } else {
-            locationClient = new LocationClient(getActivity().getApplicationContext());
-            LocationClientOption option = new LocationClientOption();
-            option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-            option.setCoorType("gcj02");
-            //可选，默认gcj02，设置返回的定位结果坐标系
-            option.setScanSpan(1000 * 2);
-            //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-            option.setOpenGps(true);
-            //可选，默认false,设置是否使用gps
-            locationClient.setLocOption(option);
-            locationClient.registerLocationListener(new LocationListener());
-            locationClient.start();
         }
         if (queryPhoto != null && queryPhoto.size() > 0) {
             photoPaths.clear();
@@ -323,6 +311,27 @@ public class DisasterReportFragment extends Fragment {
             tvAudio.setText(audioPath);
         }
 
+    }
+
+    private void startLocation() {
+        locationClient = new LocationClient(getActivity().getApplicationContext());
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("gcj02");
+        //可选，默认gcj02，设置返回的定位结果坐标系
+        option.setScanSpan(1000 * 2);
+        //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setOpenGps(true);
+        //可选，默认false,设置是否使用gps
+        locationClient.setLocOption(option);
+        locationClient.registerLocationListener(new LocationListener());
+        locationClient.start();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private class LocationListener extends BDAbstractLocationListener {
@@ -350,7 +359,7 @@ public class DisasterReportFragment extends Fragment {
         }
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio,R.id.iv_get_location})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -373,7 +382,6 @@ public class DisasterReportFragment extends Fragment {
                 if (messageIsTrue()) {
                     upload();
                 }
-
                 break;
             case R.id.dReportTime:
                 //时间选择器
@@ -398,6 +406,9 @@ public class DisasterReportFragment extends Fragment {
                     clickText(2);
                 }
                 break;
+            case R.id.iv_get_location:
+                startLocation();
+                break;
         }
     }
 
@@ -419,6 +430,9 @@ public class DisasterReportFragment extends Fragment {
             return false;
         } else if (0 == typePos) {
             ToastUtils.showShort("请选择灾种类型");
+            return false;
+        } else if (TextUtils.isEmpty(dReportLon.getText())) {
+            ToastUtils.showShort("请获取坐标信息");
             return false;
         }
         return true;
@@ -667,7 +681,7 @@ public class DisasterReportFragment extends Fragment {
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
         DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
-        if (disasterUBean!=null){
+        if (disasterUBean != null) {
             GreedDaoHelper.deleteDisaster();
         }
         List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(1);
@@ -690,14 +704,14 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void playAudio(String s) {
-        player=new MediaPlayer();
+        player = new MediaPlayer();
         try {
             player.setDataSource(s);
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        View view=LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
         Button btnStart = view.findViewById(R.id.btn_dialog_play);
         Button btnPause = view.findViewById(R.id.btn_dialog_pause);
         new AlertDialog.Builder(context)
@@ -729,7 +743,7 @@ public class DisasterReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -761,7 +775,7 @@ public class DisasterReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -783,7 +797,7 @@ public class DisasterReportFragment extends Fragment {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -793,6 +807,7 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
+
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");

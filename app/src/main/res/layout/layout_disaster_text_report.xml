@@ -6,8 +6,8 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp">
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,14 +30,13 @@
                 style="@style/disasterStyle" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -49,8 +48,7 @@
                 style="@style/disasterStyle" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,17 +69,34 @@
 
         <TextView
             style="@style/myDivide"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp" />
 
-        <TextView
-            style="@style/myTextTitle"
-            android:text="位置" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/dividerColor"
+            android:layout_height="40dp">
+
+            <TextView
+                style="@style/myTextTitle"
+                android:layout_centerVertical="true"
+                android:text="位置" />
+
+            <ImageView
+                android:id="@+id/iv_get_location"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/location_selector"
+                android:layout_marginEnd="10dp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -94,8 +109,7 @@
                 android:hint="请输入..." />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,27 +128,25 @@
                 android:hint="请输入...(必填)" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
                 style="@style/myLeftText"
                 android:text="@string/dReportLon" />
 
-            <EditText
+            <TextView
                 android:id="@+id/dReportLon"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -147,14 +159,14 @@
                 style="@style/myLeftText"
                 android:text="@string/dReportLat" />
 
-            <EditText
+            <TextView
                 android:id="@+id/dReportLat"
                 style="@style/disasterStyle" />
         </LinearLayout>
 
         <TextView
             style="@style/myDivide"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp" />
 
         <TextView
             style="@style/myTextTitle"
@@ -163,8 +175,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -179,8 +191,7 @@
                 android:entries="@array/dangerType" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -200,7 +211,7 @@
 
         <TextView
             style="@style/myDivide"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp" />
 
         <TextView
             style="@style/myTextTitle"
@@ -209,8 +220,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -223,8 +234,7 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -243,14 +253,13 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -263,8 +272,7 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -283,14 +291,13 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -303,8 +310,7 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            style="@style/myDivide" />
+        <TextView style="@style/myDivide" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -326,7 +332,7 @@
 
         <TextView
             style="@style/myDivide"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp" />
 
         <LinearLayout
             android:id="@+id/ll_dReport"
@@ -342,8 +348,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
@@ -355,8 +361,7 @@
                     style="@style/disasterStyle" />
             </LinearLayout>
 
-            <TextView
-                style="@style/myDivide" />
+            <TextView style="@style/myDivide" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -376,7 +381,7 @@
 
             <TextView
                 style="@style/myDivide"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
         </LinearLayout>
 
 
@@ -388,8 +393,8 @@
             android:id="@+id/dReportOther"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/shape_report"
             android:hint="@string/pleaseInput"
