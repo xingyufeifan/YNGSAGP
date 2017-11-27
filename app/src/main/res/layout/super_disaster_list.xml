@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -12,11 +13,12 @@
         app:tabIndicatorColor="@color/colorLine"
         app:tabSelectedTextColor="@android:color/holo_blue_dark" />
 
+
     <LinearLayout
         android:id="@+id/disasterAlready"
+        android:layout_below="@id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_layout"
         android:orientation="vertical"
         android:visibility="invisible">
         <ImageView
@@ -32,7 +34,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/danger_show"
+                android:id="@+id/disaster_show"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
@@ -41,9 +43,9 @@
 
     <LinearLayout
         android:id="@+id/disasterNo"
+        android:layout_below="@id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_layout"
         android:orientation="vertical"
         >
         <ImageView
@@ -59,7 +61,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/dangerN_show"
+                android:id="@+id/disasterN_show"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>

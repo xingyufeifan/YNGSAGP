@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
@@ -51,22 +50,23 @@ public class SuperDangerFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
-    @BindView(R.id.disasterAlready)
-    LinearLayout disasterAlready;
-    @BindView(R.id.danger_show)
-    RecyclerView dangerShow;
+    @BindView(R.id.tv_ay_error)
+    ImageView tvAyError;
+    @BindView(R.id.disaster_show)
+    RecyclerView disasterShow;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.dangerN_show)
-    RecyclerView dangerNShow;
+    @BindView(R.id.disasterAlready)
+    LinearLayout disasterAlready;
+    @BindView(R.id.tv_no_error)
+    ImageView tvNoError;
+    @BindView(R.id.disasterN_show)
+    RecyclerView disasterNShow;
     @BindView(R.id.refreshNLayout)
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
-    @BindView(R.id.tv_ay_error)
-    ImageView tvAyError;
-    @BindView(R.id.tv_no_error)
-    ImageView tvNoError;
+
     private DisposAdapter superAdapter;
     private DisposAdapter superUAdapter;
     private int isDisPose = 1;
@@ -313,12 +313,12 @@ public class SuperDangerFragment extends Fragment {
         progressDialog.setMessage("正在加载...");
         superListA = new ArrayList<>();
         superListU = new ArrayList<>();
-        dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         superAdapter = new DisposAdapter(getActivity(), superListA);
         superUAdapter = new DisposAdapter(getActivity(), superListU);
-        dangerShow.setAdapter(superAdapter);
-        dangerNShow.setAdapter(superUAdapter);
+        disasterShow.setAdapter(superAdapter);
+        disasterNShow.setAdapter(superUAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("未处理险情"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 1);
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
@@ -339,7 +339,7 @@ public class SuperDangerFragment extends Fragment {
                     if (isSuccess) {
                         superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         superAdapter.notifyDataSetChanged();
-                        tvNoError.setVisibility(View.GONE);
+                        tvAyError.setVisibility(View.GONE);
                     } else {
                         ToastUtils.showShort(message);
                     }
@@ -351,7 +351,7 @@ public class SuperDangerFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-                tvNoError.setVisibility(View.VISIBLE);
+                tvAyError.setVisibility(View.VISIBLE);
                 progressDialog.dismiss();
             }
         });

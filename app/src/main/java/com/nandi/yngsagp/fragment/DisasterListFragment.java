@@ -87,7 +87,7 @@ public class DisasterListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_disaster_list, container, false);
+        View view = inflater.inflate(R.layout.super_disaster_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         initViews();
         setListener();

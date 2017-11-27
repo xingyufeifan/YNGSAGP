@@ -20,6 +20,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.activity.SuperDisasterActivity;
 import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
@@ -53,12 +54,12 @@ public class SuperDisasterFragment extends Fragment {
     TabLayout tabLayout;
     @BindView(R.id.disasterAlready)
     LinearLayout disasterAlready;
-    @BindView(R.id.danger_show)
-    RecyclerView dangerShow;
+    @BindView(R.id.disaster_show)
+    RecyclerView disasterShow;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.dangerN_show)
-    RecyclerView dangerNShow;
+    @BindView(R.id.disasterN_show)
+    RecyclerView disasterNShow;
     @BindView(R.id.refreshNLayout)
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
@@ -67,15 +68,16 @@ public class SuperDisasterFragment extends Fragment {
     ImageView tvAyError;
     @BindView(R.id.tv_no_error)
     ImageView tvNoError;
-    private SuperAdapter superAdapter;
-    private SuperAdapter superUAdapter;
+    private SuperAdapter disasterAdapter;
+    private SuperAdapter disasterNAdapter;
+
     private int isDisPose = 1;
     private int pageA = 1;
-    private int pageU = 1;
+    private int pageN = 1;
     private int rows = 15;
     private String areaId;
-    private List<SuperBean> superListA;
-    private List<SuperBean> superListU;
+    private List<SuperBean> disasterListA;
+    private List<SuperBean> disasterListN;
     private String role;
     private JSONArray jsonData;
     private boolean isSuccess;
@@ -93,24 +95,24 @@ public class SuperDisasterFragment extends Fragment {
         return view;
     }
 
-
     private void requestA(final RefreshLayout refreshlayouts) {
+
         String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                System.out.println("response = " + response);
+                System.out.println(response);
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        superListA.clear();
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
+                        disasterListA.clear();
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterAdapter.notifyDataSetChanged();
                         pageA = 1;
                         refreshlayouts.finishRefresh();
                     } else {
-                        ToastUtils.showShort(message);
                         refreshlayouts.finishRefresh();
+                        ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -119,14 +121,15 @@ public class SuperDisasterFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
+                ToastUtils.showShort("数据刷新失败...");
                 refreshlayouts.finishRefresh();
-                ToastUtils.showShort("刷新失败,请重试");
             }
         });
 
     }
 
-    private void requestU(final RefreshLayout refreshlayouts) {
+    private void requestN(final RefreshLayout refreshlayouts) {
+
         String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
@@ -134,14 +137,14 @@ public class SuperDisasterFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        superListU.clear();
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
-                        pageU = 1;
+                        disasterListN.clear();
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterNAdapter.notifyDataSetChanged();
+                        pageN = 1;
                         refreshlayouts.finishRefresh();
                     } else {
-                        ToastUtils.showShort(message);
                         refreshlayouts.finishRefresh();
+                        ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -151,7 +154,7 @@ public class SuperDisasterFragment extends Fragment {
             @Override
             public void onError(Exception error) {
                 refreshlayouts.finishRefresh();
-                ToastUtils.showShort("刷新失败,请重试");
+                ToastUtils.showShort("数据刷新失败...");
             }
         });
 
@@ -172,18 +175,18 @@ public class SuperDisasterFragment extends Fragment {
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                System.out.println("response = " + response);
                 try {
                     initJson(response);
                     if (isSuccess) {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterAdapter.notifyDataSetChanged();
+
                         refreshlayouts.finishLoadmore();
                     } else {
-                        refreshLayout.finishLoadmore();
+                        refreshlayouts.finishLoadmore();
                         ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
@@ -195,16 +198,17 @@ public class SuperDisasterFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-                ToastUtils.showShort("加载失败,请重试");
+
                 refreshlayouts.finishLoadmore();
+                ToastUtils.showShort("加载失败，请重试");
             }
         });
 
     }
 
-    private void loadMoreU(final RefreshLayout refreshlayouts) {
-        pageU += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageU + "/" + rows + "/" + role;
+    private void loadMoreN(final RefreshLayout refreshlayouts) {
+        pageN += 1;
+        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -214,11 +218,11 @@ public class SuperDisasterFragment extends Fragment {
                         if ("[]".equals(jsonData.toString())) {
                             ToastUtils.showShort("没有更多数据了");
                         }
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterNAdapter.notifyDataSetChanged();
                         refreshlayouts.finishLoadmore();
                     } else {
-                        refreshLayout.finishLoadmore();
+                        refreshlayouts.finishLoadmore();
                         ToastUtils.showShort(message);
                     }
                 } catch (JSONException e) {
@@ -230,12 +234,13 @@ public class SuperDisasterFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-                ToastUtils.showShort("加载失败,请重试");
                 refreshlayouts.finishLoadmore();
+                ToastUtils.showShort("加载失败，请重试");
             }
         });
 
     }
+
 
 
     private void setListener() {
@@ -245,14 +250,13 @@ public class SuperDisasterFragment extends Fragment {
                 int position = tab.getPosition();
                 if (0 == position) {
                     isDisPose = 1;
-                    disasterAlready.setVisibility(View.GONE);
+                    disasterAlready.setVisibility(View.INVISIBLE);
                     disasterNo.setVisibility(View.VISIBLE);
                 } else {
-                    isDisPose =0;
+                    isDisPose = 0;
                     disasterAlready.setVisibility(View.VISIBLE);
-                    disasterNo.setVisibility(View.GONE);
+                    disasterNo.setVisibility(View.INVISIBLE);
                 }
-
             }
 
             @Override
@@ -261,6 +265,18 @@ public class SuperDisasterFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        tvAyError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestAPos();
+            }
+        });
+        tvNoError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestUPos();
             }
         });
         refreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
@@ -279,50 +295,49 @@ public class SuperDisasterFragment extends Fragment {
         refreshNLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                loadMoreU(refreshlayout);
+                loadMoreN(refreshlayout);
             }
 
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                requestU(refreshlayout);
+                requestN(refreshlayout);
             }
         });
-        superAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+        disasterAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), SuperDisasterActivity.class);
-                intent.putExtra(Constant.DISASTER, superListA.get(position));
+                intent.putExtra(Constant.DISASTER, disasterListA.get(position));
                 startActivity(intent);
             }
         });
-        superUAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+        disasterNAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), SuperDisasterActivity.class);
-                intent.putExtra(Constant.DISASTER, superListU.get(position));
+                intent.putExtra(Constant.DISASTER, disasterListN.get(position));
                 startActivity(intent);
             }
         });
 
     }
-
     private void initViews() {
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("正在加载...");
-        superListA = new ArrayList<>();
-        superListU = new ArrayList<>();
-        dangerShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dangerNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        superAdapter = new SuperAdapter(getActivity(), superListA);
-        superUAdapter = new SuperAdapter(getActivity(), superListU);
-        dangerShow.setAdapter(superAdapter);
-        dangerNShow.setAdapter(superUAdapter);
-        tabLayout.addTab(tabLayout.newTab().setText("未处理险情"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("已处理险情"), 1);
-        areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
+        progressDialog.setMessage("正在加载数据...");
+        disasterListA = new ArrayList<>();
+        disasterListN = new ArrayList<>();
+        disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterNShow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        disasterNAdapter = new SuperAdapter(getActivity(), disasterListN);
+        disasterAdapter = new SuperAdapter(getActivity(), disasterListA);
+        disasterShow.setAdapter(disasterAdapter);
+        disasterNShow.setAdapter(disasterNAdapter);
+        tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 0,true);
+        tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 1);
         role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "2");
+        areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
         requestAPos();
         requestUPos();
     }
@@ -333,13 +348,13 @@ public class SuperDisasterFragment extends Fragment {
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                System.out.println(response);
                 try {
+                    disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
                         tvAyError.setVisibility(View.GONE);
+                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
                     }
@@ -363,14 +378,14 @@ public class SuperDisasterFragment extends Fragment {
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
+                disasterListN.clear();
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
+                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                        disasterNAdapter.notifyDataSetChanged();
                         tvNoError.setVisibility(View.GONE);
                     } else {
-
                         ToastUtils.showShort(message);
                     }
                     progressDialog.dismiss();
@@ -381,28 +396,14 @@ public class SuperDisasterFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-                tvNoError.setVisibility(View.GONE);
+                tvNoError.setVisibility(View.VISIBLE);
                 progressDialog.dismiss();
             }
         });
     }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @OnClick({R.id.tv_ay_error, R.id.tv_no_error})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_ay_error:
-                requestAPos();
-                break;
-            case R.id.tv_no_error:
-                requestUPos();
-                break;
-        }
     }
 }
