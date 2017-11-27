@@ -46,9 +46,18 @@ public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(DisposAdapter.MyViewHolder holder, final int position) {
-        holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
-        holder.textAddress.setText(listBeans.get(position).getPersonel());
-        holder.textToTime.setText(listBeans.get(position).getAddress());
+        holder.textDisNum.setText(listBeans.get(position).getPersonel());
+        holder.textAddress.setText(listBeans.get(position).getAddress());
+        holder.textToTime.setText((CharSequence) listBeans.get(position).getHappenTime());
+        if ("0".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("误报");
+        }else if("1".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("灾情确认");
+        }else if("2".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("险情确认\n不能处理");
+        }else if("3".equals(listBeans.get(position).getIsDanger())){
+            holder.error.setText("险情确认\n能处理");
+        }
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,6 +80,7 @@ public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHold
         public TextView textAddress;
         public TextView textToTime;
         public TextView toNext;
+        public TextView error;
 
 
         public MyViewHolder(View itemView) {
@@ -79,6 +89,7 @@ public class DisposAdapter extends RecyclerView.Adapter<DisposAdapter.MyViewHold
             textAddress = itemView.findViewById(R.id.address);
             textToTime = itemView.findViewById(R.id.toTime);
             toNext = itemView.findViewById(R.id.toNext);
+            error  = itemView.findViewById(R.id.error);
         }
     }
 }

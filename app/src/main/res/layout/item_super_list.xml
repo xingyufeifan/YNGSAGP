@@ -47,18 +47,7 @@
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:background="@color/lineColor"/>
-        <TextView
-            android:id="@+id/error"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="处理中"
-            android:textSize="16sp"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="@color/lineColor"/>
+
 
         <TextView
             android:id="@+id/toTime"
@@ -67,6 +56,18 @@
             android:layout_weight="3"
             android:gravity="center"
             android:text="@string/dReportTime"
+            android:textSize="16sp"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="@color/lineColor"/>
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="处理中"
             android:textSize="16sp"/>
         <View
             android:layout_width="1dp"

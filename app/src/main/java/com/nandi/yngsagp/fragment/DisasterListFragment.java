@@ -1,26 +1,26 @@
 package com.nandi.yngsagp.fragment;
 
 
-import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.DisasterPosActivity;
-import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.JsonFormat;
@@ -63,10 +63,14 @@ public class DisasterListFragment extends Fragment {
     SmartRefreshLayout refreshNLayout;
     @BindView(R.id.disasterNo)
     LinearLayout disasterNo;
+    @BindView(R.id.tv_ay_error)
+    ImageView tvAyError;
+    @BindView(R.id.tv_no_error)
+    ImageView tvNoError;
     private SuperAdapter disasterAdapter;
     private SuperAdapter disasterNAdapter;
 
-    private int isDisPose = 0;
+    private int isDisPose = 1;
     private int pageA = 1;
     private int pageN = 1;
     private int rows = 15;
@@ -77,6 +81,7 @@ public class DisasterListFragment extends Fragment {
     private JSONArray jsonData;
     private boolean isSuccess;
     private String message;
+    private ProgressDialog progressDialog;
 
 
     @Nullable
@@ -116,6 +121,7 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
+                ToastUtils.showShort("数据刷新失败...");
                 refreshlayouts.finishRefresh();
             }
         });
@@ -148,6 +154,7 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onError(Exception error) {
                 refreshlayouts.finishRefresh();
+                ToastUtils.showShort("数据刷新失败...");
             }
         });
 
@@ -191,7 +198,9 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
+
                 refreshlayouts.finishLoadmore();
+                ToastUtils.showShort("加载失败，请重试");
             }
         });
 
@@ -226,6 +235,7 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onError(Exception error) {
                 refreshlayouts.finishLoadmore();
+                ToastUtils.showShort("加载失败，请重试");
             }
         });
 
@@ -238,13 +248,14 @@ public class DisasterListFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (0 == position) {
+                    isDisPose = 1;
                     disasterAlready.setVisibility(View.INVISIBLE);
                     disasterNo.setVisibility(View.VISIBLE);
                 } else {
+                    isDisPose = 0;
                     disasterAlready.setVisibility(View.VISIBLE);
                     disasterNo.setVisibility(View.INVISIBLE);
                 }
-                isDisPose = position;
             }
 
             @Override
@@ -253,6 +264,18 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        tvAyError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestAPos();
+            }
+        });
+        tvNoError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestUPos();
             }
         });
         refreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
@@ -295,9 +318,14 @@ public class DisasterListFragment extends Fragment {
                 startActivityForResult(intent, DISASTER_REQUEST_CODE);
             }
         });
+
     }
 
     private void initViews() {
+        progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("正在加载数据...");
         disasterListA = new ArrayList<>();
         disasterListN = new ArrayList<>();
         disasterShow.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -315,6 +343,7 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void requestAPos() {
+        progressDialog.show();
         String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
@@ -323,11 +352,13 @@ public class DisasterListFragment extends Fragment {
                     disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
+                        tvAyError.setVisibility(View.GONE);
                         disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showShort(message);
                     }
+                    progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -335,12 +366,14 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-
+                tvAyError.setVisibility(View.VISIBLE);
+                progressDialog.dismiss();
             }
         });
     }
 
     private void requestUPos() {
+        progressDialog.show();
         String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1/1/" + rows + "/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
@@ -351,10 +384,11 @@ public class DisasterListFragment extends Fragment {
                     if (isSuccess) {
                         disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
+                        tvNoError.setVisibility(View.GONE);
                     } else {
-
                         ToastUtils.showShort(message);
                     }
+                    progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -362,7 +396,8 @@ public class DisasterListFragment extends Fragment {
 
             @Override
             public void onError(Exception error) {
-
+                tvNoError.setVisibility(View.VISIBLE);
+                progressDialog.dismiss();
             }
         });
     }

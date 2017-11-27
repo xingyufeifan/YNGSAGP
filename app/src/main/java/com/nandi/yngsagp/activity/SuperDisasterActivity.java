@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -54,13 +53,14 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class SuperDisasterActivity extends AppCompatActivity {
-
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.head_rl)
     RelativeLayout headRl;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
     @BindView(R.id.foreLevel)
     TextView foreLevel;
     @BindView(R.id.level)
@@ -113,18 +113,16 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView etHandle;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
-    @BindView(R.id.rv_photo_uploaded)
-    RecyclerView rvPhotoUploaded;
-    @BindView(R.id.media_layout)
-    LinearLayout mediaLayout;
     @BindView(R.id.text_layout)
     LinearLayout textLayout;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
+    @BindView(R.id.rv_photo_uploaded)
+    RecyclerView rvPhotoUploaded;
     @BindView(R.id.rv_video_updated)
     RecyclerView rvVideoUpdated;
     @BindView(R.id.rv_audio_updated)
     RecyclerView rvAudioUpdated;
+    @BindView(R.id.media_layout)
+    LinearLayout mediaLayout;
     private SuperBean listBeans;
     private ProgressDialog progressDialog;
     private List<MediaInfo> photoInfos = new ArrayList<>();
@@ -394,8 +392,8 @@ public class SuperDisasterActivity extends AppCompatActivity {
                 if (isChecked) {
                     player.start();
                     tvPlayer.setText("正在播放");
-                }else{
-                    if (player.isPlaying()){
+                } else {
+                    if (player.isPlaying()) {
                         player.pause();
                         tvPlayer.setText("已经暂停");
                     }

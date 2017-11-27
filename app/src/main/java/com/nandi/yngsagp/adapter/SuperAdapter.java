@@ -46,9 +46,9 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(SuperAdapter.MyViewHolder holder, final int position) {
-        holder.textDisNum.setText(listBeans.get(position).getDisasterNum());
-        holder.textAddress.setText(listBeans.get(position).getPersonel());
-        holder.textToTime.setText(listBeans.get(position).getAddress());
+        holder.textDisNum.setText(listBeans.get(position).getPersonel());
+        holder.textAddress.setText(listBeans.get(position).getAddress());
+        holder.textToTime.setText(listBeans.get(position).getFindTime());
         if ("0".equals(listBeans.get(position).getIsDanger())){
             holder.error.setText("误报");
         }else if("1".equals(listBeans.get(position).getIsDanger())){
