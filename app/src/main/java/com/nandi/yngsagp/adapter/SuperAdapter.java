@@ -45,24 +45,31 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(SuperAdapter.MyViewHolder holder, final int position) {
-        holder.tvTime.setText(listBeans.get(position).getFindTime());
+        String findTime = listBeans.get(position).getFindTime();
+        String[] split = findTime.split("\\.");
+        holder.tvTime.setText(split[0]);
         holder.tvAddress.setText(listBeans.get(position).getAddress());
-        switch (listBeans.get(position).getIsDispose()){
-            case 0:
-                holder.tvType.setText("已完成");
-                break;
-            case 1:
-                holder.tvType.setText("未处理");
-                break;
-            case 2:
-                holder.tvType.setText("已上报");
-                break;
-            case 3:
-                holder.tvType.setText("处置中");
-                break;
-            case 4:
-                holder.tvType.setText("调查中");
-                break;
+        String isDanger = listBeans.get(position).getIsDanger();
+        if ("0".equals(isDanger)) {
+            holder.tvType.setText("误报");
+        } else {
+            switch (listBeans.get(position).getIsDispose()) {
+                case 0:
+                    holder.tvType.setText("未处理");
+                    break;
+                case 1:
+                    holder.tvType.setText("已完成");
+                    break;
+                case 2:
+                    holder.tvType.setText("已上报");
+                    break;
+                case 3:
+                    holder.tvType.setText("处置中");
+                    break;
+                case 4:
+                    holder.tvType.setText("调查中");
+                    break;
+            }
         }
         if (mOnItemClickListener != null) {
             holder.toNext.setOnClickListener(new View.OnClickListener() {
