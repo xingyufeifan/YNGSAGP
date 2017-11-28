@@ -23,7 +23,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_photo_uploaded"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -34,7 +35,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_video_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -45,7 +47,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_audio_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>

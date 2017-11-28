@@ -23,7 +23,7 @@
 
             <TextView
                 style="@style/myLeftText"
-                android:text="@string/foreLevel" />
+                android:text="预报险情等级：" />
 
             <TextView
                 android:id="@+id/foreLevel"
