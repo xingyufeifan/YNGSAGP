@@ -245,15 +245,13 @@ public class SuperDangerFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (0 == position) {
-                    isDisPose = 1;
                     disasterAlready.setVisibility(View.GONE);
                     disasterNo.setVisibility(View.VISIBLE);
                 } else {
-                    isDisPose = 0;
                     disasterAlready.setVisibility(View.VISIBLE);
                     disasterNo.setVisibility(View.GONE);
                 }
-
+                isDisPose = position;
             }
 
             @Override
@@ -367,7 +365,7 @@ public class SuperDangerFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superListU.get(0).getFindTime();
+//                        superListU.get(0).getFindTime();
                         superUAdapter.notifyDataSetChanged();
                         tvNoError.setVisibility(View.GONE);
                     } else {

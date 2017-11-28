@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
+    android:layout_marginTop="16dp"
     android:orientation="vertical">
 
 
@@ -13,17 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/report_unpressed" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/lineColor"
-                android:text="图片信息"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="图片信息" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_photo_uploaded"
@@ -33,34 +28,19 @@
             </android.support.v7.widget.RecyclerView>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/report_unpressed" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/lineColor"
-                android:text="视频信息"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="视频信息" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_video_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/report_unpressed" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/lineColor"
-                android:text="音频信息"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="音频信息" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_audio_updated"

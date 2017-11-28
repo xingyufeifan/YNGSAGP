@@ -7,7 +7,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,21 +16,8 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/report_unpressed"
-                android:gravity="center"
-                android:text="已上传媒体"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="图片"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="图片信息" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_photo_uploaded"
@@ -40,34 +28,28 @@
             </android.support.v7.widget.RecyclerView>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="视频"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="视频信息"
+                />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_video_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/media_title_bg"
-                android:gravity="center"
-                android:text="录音"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                style="@style/myTextTitle"
+                android:text="音频信息"
+                />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_audio_updated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -77,89 +59,110 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/report_unpressed"
-                    android:gravity="center"
-                    android:text="新增媒体"
-                    android:textSize="20sp" />
+                    android:background="@color/dividerColor"
+                    android:layout_height="40dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/media_title_bg"
-                    android:gravity="center"
-                    android:text="图片"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    <TextView
+                        style="@style/myTextTitle"
+                        android:layout_centerVertical="true"
+                        android:text="新增图片" />
+
+                    <ImageView
+                        android:id="@+id/iv_take_photo"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/add_image"
+                        android:layout_marginEnd="10dp" />
+                </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_photo"
-                    android:layout_marginBottom="40dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp">
 
                 </android.support.v7.widget.RecyclerView>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/media_title_bg"
-                    android:gravity="center"
-                    android:text="视频"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/lineColor"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/dividerColor"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        style="@style/myTextTitle"
+                        android:layout_centerVertical="true"
+                        android:text="新增视频" />
+
+                    <ImageView
+                        android:id="@+id/iv_take_video"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/add_video"
+                        android:layout_marginEnd="10dp" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_video"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="请添加视频文件"
                     android:padding="10dp"
                     android:textSize="18sp" />
-
-                <TextView
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/media_title_bg"
-                    android:gravity="center"
-                    android:text="录音"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/lineColor"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/dividerColor"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        style="@style/myTextTitle"
+                        android:layout_centerVertical="true"
+                        android:text="新增音频" />
+
+                    <ImageView
+                        android:id="@+id/iv_take_audio"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/add_audio"
+                        android:layout_marginEnd="10dp" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_audio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="请添加录音文件"
                     android:padding="10dp"
                     android:textSize="18sp" />
-
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/iv_take_photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="拍照" />
-
-                    <Button
-                        android:id="@+id/iv_take_video"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="视频" />
-
-                    <Button
-                        android:id="@+id/iv_take_audio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="录音" />
-                </LinearLayout>
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/lineColor"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

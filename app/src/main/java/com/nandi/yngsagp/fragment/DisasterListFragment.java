@@ -248,14 +248,13 @@ public class DisasterListFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (0 == position) {
-                    isDisPose = 1;
                     disasterAlready.setVisibility(View.INVISIBLE);
                     disasterNo.setVisibility(View.VISIBLE);
                 } else {
-                    isDisPose = 0;
                     disasterAlready.setVisibility(View.VISIBLE);
                     disasterNo.setVisibility(View.INVISIBLE);
                 }
+                isDisPose = position;
             }
 
             @Override

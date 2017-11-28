@@ -156,11 +156,11 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.tv_audio)
     TextView tvAudio;
     @BindView(R.id.iv_take_photo)
-    Button ivTakePhoto;
+    ImageView ivTakePhoto;
     @BindView(R.id.iv_take_video)
-    Button ivTakeVideo;
+    ImageView ivTakeVideo;
     @BindView(R.id.iv_take_audio)
-    Button ivTakeAudio;
+    ImageView ivTakeAudio;
     @BindView(R.id.ll_add_media)
     LinearLayout llAddMedia;
     @BindView(R.id.media_layout)
