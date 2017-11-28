@@ -69,12 +69,9 @@ public class DangerListFragment extends Fragment {
     ImageView tvNoError;
     private DisposAdapter dangerAdapter;
     private DisposAdapter dangerUAdapter;
-
-    private int isDisaster = 2;
-    private int isDisPose = 1;
-    private int pageA = 1;
-    private int pageU = 1;
-    private int rows = 15;
+    private int isDisPose = 0;//是否处理 0：未处理
+    private int pageA = 1; //已处理页数
+    private int pageU = 1;  //未处理页数
     private String areaId;
     private List<SuperBean> dangerListA;
     private List<SuperBean> dangerListU;
@@ -99,7 +96,7 @@ public class DangerListFragment extends Fragment {
 
 
     private void requestA(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url =getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -131,7 +128,7 @@ public class DangerListFragment extends Fragment {
     }
 
     private void requestU(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -172,7 +169,7 @@ public class DangerListFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -208,8 +205,8 @@ public class DangerListFragment extends Fragment {
 
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/2/" + isDisaster + "/" + pageU + "/" + rows + "/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
+        String loadUrl = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + isDisPose + "/2/"+ pageU + "/15/"+role;
+        OkHttpHelper.sendHttpGet(getActivity(), loadUrl, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
@@ -345,7 +342,7 @@ public class DangerListFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/1/2/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -376,7 +373,7 @@ public class DangerListFragment extends Fragment {
 
     private void requestUPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/0/2/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {

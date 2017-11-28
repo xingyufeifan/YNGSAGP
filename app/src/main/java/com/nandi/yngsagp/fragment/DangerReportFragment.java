@@ -513,7 +513,7 @@ public class DangerReportFragment extends Fragment {
 
     private void clean() {
         timeDanger.setText("");
-        locationDanger.setText("");
+        addressDanger.setText("");
         lonDanger.setText("");
         latDanger.setText("");
         typePos = 0;
@@ -530,6 +530,10 @@ public class DangerReportFragment extends Fragment {
         tvVideo.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
+        DangerUBean dangerUBean = GreedDaoHelper.queryDanger();
+        if (dangerUBean != null) {
+            GreedDaoHelper.deleteDanger();
+        }
         List<PhotoPath> photoPaths = GreedDaoHelper.queryPhoto(2);
         if (photoPaths != null && photoPaths.size() > 0) {
             GreedDaoHelper.deletePhotoList(photoPaths);
@@ -604,6 +608,7 @@ public class DangerReportFragment extends Fragment {
         audio.setType(2);
         audio.setPath(tvAudio.getText().toString());
         GreedDaoHelper.insertAudio(audio);
+        ToastUtils.showShort("保存成功");
     }
 
     private void takeAudio() {

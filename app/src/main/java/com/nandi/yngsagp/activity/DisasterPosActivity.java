@@ -260,11 +260,11 @@ public class DisasterPosActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
+            tvTitle.setText("未处理灾情");
+        } else {
             tvTitle.setText("已处理灾情");
             ll1.setVisibility(View.GONE);
             llAddMedia.setVisibility(View.GONE);
-        } else {
-            tvTitle.setText("未处理灾情");
         }
     }
 

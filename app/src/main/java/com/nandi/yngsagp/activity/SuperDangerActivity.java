@@ -203,13 +203,13 @@ public class SuperDangerActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         System.out.println("isDisPose = " + isDispose);
         if (0 == isDispose) {
+            tvTitle.setText("未处理险情");
+            llHandle.setVisibility(View.GONE);
+        } else {
             tvTitle.setText("已处理险情");
             disposePerson.setText((CharSequence) listBean.getDisposePerson());
             disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
             etHandle.setText((CharSequence) listBean.getOpinion());
-        } else {
-            tvTitle.setText("未处理险情");
-            llHandle.setVisibility(View.GONE);
         }
     }
 

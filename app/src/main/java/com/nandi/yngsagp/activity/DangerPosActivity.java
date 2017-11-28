@@ -225,10 +225,11 @@ public class DangerPosActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
         int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
+            tvTitle.setText("未处理险情");
+        } else {
+
             tvTitle.setText("已处理险情");
             ll1.setVisibility(View.GONE);
-        } else {
-            tvTitle.setText("未处理险情");
         }
         String personType = listBean.getPersonType();
         if ("1".equals(personType)) {

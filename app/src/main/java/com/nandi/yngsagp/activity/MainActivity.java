@@ -77,6 +77,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private SuperDisasterFragment superDisasterFragment;
     private SuperDangerFragment superDangerFragment;
     private CloudPushService pushService;
+    private String account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.d("cp", "开启推送通道失败");
             }
         });
-        pushService.bindAccount(areaId, new CommonCallback() {
+        if ("1".equals(type)){
+            account = mobile;
+        }else{
+            account = areaId;
+        }
+        pushService.bindAccount(account, new CommonCallback() {
             @Override
             public void onSuccess(String s) {
                 Log.d("cp", "绑定账号成功");

@@ -202,13 +202,13 @@ public class SuperDisasterActivity extends AppCompatActivity {
         }
         int isDispose = listBeans.getIsDispose();
         if (0 == isDispose) {
+            tvTitle.setText("未处理灾情");
+            llHandle.setVisibility(View.GONE);
+        } else {
             tvTitle.setText("已处理灾情");
             etHandle.setText(listBeans.getOpinion());
             disposePerson.setText(listBeans.getDisposePerson());
             disposeMobile.setText(listBeans.getDisposeMobile());
-        } else {
-            tvTitle.setText("未处理灾情");
-            llHandle.setVisibility(View.GONE);
         }
     }
 

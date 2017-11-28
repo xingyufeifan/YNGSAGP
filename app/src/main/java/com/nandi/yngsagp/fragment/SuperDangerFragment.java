@@ -69,10 +69,9 @@ public class SuperDangerFragment extends Fragment {
 
     private DisposAdapter superAdapter;
     private DisposAdapter superUAdapter;
-    private int isDisPose = 1;
+    private int isDisPose = 0;
     private int pageA = 1;
     private int pageU = 1;
-    private int rows = 15;
     private String areaId;
     private List<SuperBean> superListA;
     private List<SuperBean> superListU;
@@ -95,7 +94,8 @@ public class SuperDangerFragment extends Fragment {
 
 
     private void requestA(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/"+role;
+        System.out.println("requestA = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -127,7 +127,8 @@ public class SuperDangerFragment extends Fragment {
     }
 
     private void requestU(final RefreshLayout refreshlayouts) {
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/"+role;
+        System.out.println("requestU = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -169,7 +170,8 @@ public class SuperDangerFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/"+role;
+        System.out.println("loadMoreA = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -205,7 +207,8 @@ public class SuperDangerFragment extends Fragment {
 
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/15/"+role;
+        System.out.println("loadMoreU = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -327,7 +330,8 @@ public class SuperDangerFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/1/2/1/15/"+role;
+        System.out.println("requestAPos = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -357,7 +361,8 @@ public class SuperDangerFragment extends Fragment {
 
     private void requestUPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/2/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/0/2/1/15/" + role;
+        System.out.println("requestUPos = " + url);
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -365,7 +370,6 @@ public class SuperDangerFragment extends Fragment {
                     initJson(response);
                     if (isSuccess) {
                         superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-//                        superListU.get(0).getFindTime();
                         superUAdapter.notifyDataSetChanged();
                         tvNoError.setVisibility(View.GONE);
                     } else {

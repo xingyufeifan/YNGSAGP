@@ -90,6 +90,9 @@ public class GreedDaoHelper {
     public static void deleteDisaster() {
         daoSession.getDisasterUBeanDao().deleteAll();
     }
+    public static void deleteDanger() {
+        daoSession.getDangerUBeanDao().deleteAll();
+    }
     public static void insertDanger(DangerUBean dangerUBean) {
         daoSession.getDangerUBeanDao().insertOrReplace(dangerUBean);
     }

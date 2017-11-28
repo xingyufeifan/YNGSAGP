@@ -71,7 +71,7 @@ public class SuperDisasterFragment extends Fragment {
     private SuperAdapter disasterAdapter;
     private SuperAdapter disasterNAdapter;
 
-    private int isDisPose = 1;
+    private int isDisPose = 0;
     private int pageA = 1;
     private int pageN = 1;
     private int rows = 15;
@@ -97,7 +97,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestA(final RefreshLayout refreshlayouts) {
 
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -130,7 +130,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestN(final RefreshLayout refreshlayouts) {
 
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -171,7 +171,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/15/"+role ;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -208,7 +208,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void loadMoreN(final RefreshLayout refreshlayouts) {
         pageN += 1;
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/15/"+role ;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -336,7 +336,7 @@ public class SuperDisasterFragment extends Fragment {
         disasterNShow.setAdapter(disasterNAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 0,true);
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 1);
-        role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "2");
+        role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "0");
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
         requestAPos();
         requestUPos();
@@ -344,7 +344,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/0/1/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/1/1/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -374,7 +374,7 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestUPos() {
         progressDialog.show();
-        String url = "http://192.168.10.195:8080/yncmd/dangerous/findDangers/" + areaId + "/1/1/1/" + rows + "/" + role;
+        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/0/1/1/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
