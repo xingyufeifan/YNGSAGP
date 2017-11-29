@@ -109,9 +109,9 @@ public class DisasterPosActivity extends AppCompatActivity {
     @BindView(R.id.addressShow)
     EditText addressShow;
     @BindView(R.id.lonShow)
-    EditText lonShow;
+    TextView lonShow;
     @BindView(R.id.latShow)
-    EditText latShow;
+    TextView latShow;
     @BindView(R.id.disNumShow)
     TextView disNumShow;
     @BindView(R.id.typeShow)
@@ -258,8 +258,8 @@ public class DisasterPosActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("未处理灾情");
-            disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
-            disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+            disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
+            disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
         } else {
             tvTitle.setText("已处理灾情");
             etHandle.setText(listBean.getOpinion());
@@ -480,14 +480,14 @@ public class DisasterPosActivity extends AppCompatActivity {
                 takeAudio();
                 break;
             case R.id.btn_error:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                if (messageIsTrue()) {
                     upload("0");
                 } else {
                     ToastUtils.showShort("请填写处置意见");
                 }
                 break;
             case R.id.btn_confirm:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                if (messageIsTrue()) {
                     upload("1");
                 } else {
                     ToastUtils.showShort("请填写处置意见");
@@ -514,12 +514,12 @@ public class DisasterPosActivity extends AppCompatActivity {
         String location = locationShow.getText().toString().trim();
         String type = typePos + "";
         String factor = factorShow.getText().toString().trim();
-        String injured = injurdShow.getText().toString().trim();
-        String death = deathShow.getText().toString().trim();
-        String miss = missShow.getText().toString().trim();
-        String farm = farmShow.getText().toString().trim();
-        String house = houseShow.getText().toString().trim();
-        String money = moneyShow.getText().toString().trim();
+        String injured = TextUtils.isEmpty(injurdShow.getText().toString().trim()) ? "0" : injurdShow.getText().toString().trim();
+        String death = TextUtils.isEmpty(deathShow.getText().toString().trim()) ? "0" : deathShow.getText().toString().trim();
+        String miss = TextUtils.isEmpty(missShow.getText().toString().trim()) ? "0" : missShow.getText().toString().trim();
+        String farm = TextUtils.isEmpty(farmShow.getText().toString().trim()) ? "0" : farmShow.getText().toString().trim();
+        String house = TextUtils.isEmpty(houseShow.getText().toString().trim()) ? "0" : houseShow.getText().toString().trim();
+        String money = TextUtils.isEmpty(moneyShow.getText().toString().trim()) ? "0" : moneyShow.getText().toString().trim();
         String lon = lonShow.getText().toString().trim();
         String lat = latShow.getText().toString().trim();
         String other = otherShow.getText().toString().trim();
@@ -997,5 +997,22 @@ public class DisasterPosActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    private boolean messageIsTrue() {
+        if (TextUtils.isEmpty(addressShow.getText().toString().trim())) {
+            addressShow.setError("请填写详细地址");
+            ToastUtils.showShort("请填写详细地址");
+            return false;
+        }else if (TextUtils.isEmpty(moneyShow.getText().toString().trim())) {
+            moneyShow.setError("请填写财产损失");
+            ToastUtils.showShort("请填写财产损失");
+            return false;
+        } else if (TextUtils.isEmpty(etHandle.getText().toString().trim())) {
+            etHandle.setError("请填写处置意见");
+            ToastUtils.showShort("请填写处置意见");
+            return false;
+        }
+        return true;
     }
 }
