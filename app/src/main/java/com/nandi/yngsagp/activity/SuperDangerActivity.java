@@ -16,10 +16,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -260,7 +262,6 @@ public class SuperDangerActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void enlargePhoto(MediaInfo mediaInfo) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);

@@ -1,5 +1,6 @@
 package com.nandi.yngsagp.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -137,9 +139,9 @@ public class DangerPosActivity extends AppCompatActivity {
     @BindView(R.id.et_handle)
     EditText etHandle;
     @BindView(R.id.disposePerson)
-    EditText disposePerson;
+    TextView disposePerson;
     @BindView(R.id.disposeMobile)
-    EditText disposeMobile;
+    TextView disposeMobile;
     @BindView(R.id.ll_handle)
     LinearLayout llHandle;
     @BindView(R.id.text_layout)
@@ -243,6 +245,7 @@ public class DangerPosActivity extends AppCompatActivity {
         setRequest();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,8 +316,55 @@ public class DangerPosActivity extends AppCompatActivity {
                 pictureAdapter.notifyDataSetChanged();
             }
         });
+        etHandle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //触摸的是EditText并且当前EditText可以滚动则将事件交给EditText处理；否则将事件交由其父类处理
+                if ((v.getId() == R.id.et_handle && canVerticalScroll(etHandle))) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                    }
+                }
+                return false;
+            }
+        });
+        otherDangerShow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //触摸的是EditText并且当前EditText可以滚动则将事件交给EditText处理；否则将事件交由其父类处理
+                if ((v.getId() == R.id.otherDangerShow && canVerticalScroll(otherDangerShow))) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
+    /**
+     * EditText竖直方向是否可以滚动
+     * @param editText 需要判断的EditText
+     * @return true：可以滚动  false：不可以滚动
+     */
+    private boolean canVerticalScroll(EditText editText) {
+        //滚动的距离
+        int scrollY = editText.getScrollY();
+        //控件内容的总高度
+        int scrollRange = editText.getLayout().getHeight();
+        //控件实际显示的高度
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        //控件内容总高度与实际显示高度的差值
+        int scrollDifference = scrollRange - scrollExtent;
+
+        if(scrollDifference == 0) {
+            return false;
+        }
+
+        return (scrollY > 0) || (scrollY < scrollDifference - 1);
+    }
     private void initData() {
         listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         xqNumShow.setText(listBean.getDisasterNum());
@@ -426,17 +476,14 @@ public class DangerPosActivity extends AppCompatActivity {
                 takeAudio();
                 break;
             case R.id.btn_error:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                if (textInputNull()){
                     upload("0");
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
                 }
+
                 break;
             case R.id.btn_confirm:
-                if (!TextUtils.isEmpty(etHandle.getText().toString())) {
+                if (textInputNull()){
                     showDialog();
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
                 }
                 break;
             case R.id.tv_video:
@@ -450,6 +497,20 @@ public class DangerPosActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private boolean textInputNull() {
+        if (TextUtils.isEmpty(etHandle.getText().toString())) {
+            ToastUtils.showShort("请填写处置意见");
+            return false;
+        } else if (TextUtils.isEmpty(moneyDangerShow.getText().toString().trim())){
+            moneyDangerShow.setError("经济损失不能为空");
+            return  false;
+        }else if (TextUtils.isEmpty(locationDangerShow.getText().toString().trim())){
+            moneyDangerShow.setError("详细地址不能为空");
+            return  false;
+        }
+        return true;
     }
 
     private void upload(String i) {

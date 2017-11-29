@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -259,6 +260,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void enlargePhoto(MediaInfo mediaInfo) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);

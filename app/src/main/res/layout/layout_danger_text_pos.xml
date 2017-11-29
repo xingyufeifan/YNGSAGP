@@ -283,7 +283,7 @@
                 android:id="@+id/moneyDangerShow"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <TextView
@@ -415,7 +415,7 @@
                     style="@style/myLeftText"
                     android:text="处置人：" />
 
-                <EditText
+                <TextView
                     android:id="@+id/disposePerson"
                     style="@style/disasterStyle" />
             </LinearLayout>
@@ -435,7 +435,7 @@
                     android:text="处置人电话："
                     android:textSize="16sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/disposeMobile"
                     style="@style/disasterStyle" />
             </LinearLayout>
