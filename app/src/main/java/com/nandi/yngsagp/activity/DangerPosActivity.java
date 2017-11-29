@@ -227,7 +227,7 @@ public class DangerPosActivity extends AppCompatActivity {
         if (0 == isDispose) {
             tvTitle.setText("未处理险情");
         } else {
-
+            llAddMedia.setVisibility(View.GONE);
             tvTitle.setText("已处理险情");
             ll1.setVisibility(View.GONE);
         }
@@ -329,9 +329,10 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
-        disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
-        if ("1".equals(listBean.getPersonType())) {
+        disposeMobile.setText(listBean.getDisposeMobile());
+        disposePerson.setText(listBean.getDisposePerson());
+        etHandle.setText(listBean.getOpinion());
+        if ("2".equals(listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
 

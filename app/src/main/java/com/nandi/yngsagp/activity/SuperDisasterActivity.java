@@ -176,7 +176,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) listBeans.getOtherThing());
         mobileShow.setText((CharSequence) listBeans.getMonitorPhone());
         nameShow.setText((CharSequence) listBeans.getMonitorName());
-        if ("1".equals((CharSequence) listBeans.getPersonType())) {
+        if ("2".equals((CharSequence) listBeans.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         ToastUtils.showShort(listBeans.getForecastLevel());

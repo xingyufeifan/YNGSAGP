@@ -176,7 +176,7 @@ public class SuperDangerActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        if ("1".equals((CharSequence) listBean.getPersonType())) {
+        if ("2".equals((CharSequence) listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         ToastUtils.showShort(listBean.getForecastLevel());

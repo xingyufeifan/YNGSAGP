@@ -76,7 +76,7 @@ public class ModifyActivity extends AppCompatActivity {
                 modifyNpsw.setText("");
                 break;
             case R.id.modify_sure:
-                String url = "http://192.168.10.195:8080/yncmd/appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim() + "/" + SharedUtils.getShare(mContext, Constant.PERSON_TYPE, "");
+                String url = getString(R.string.local_base_url)+"appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim() + "/" + SharedUtils.getShare(mContext, Constant.PERSON_TYPE, "");
                 if (textInput()) {
                     OkHttpHelper.sendHttpGet(this, url, new OkHttpCallback() {
                         @Override
@@ -120,10 +120,11 @@ public class ModifyActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(modifyAnpsw.getText())) {
             modifyAnpsw.setError("新密码不能为空");
             return false;
-        } else if (modifyAnpsw.getText().equals(modifyNpsw.getText())) {
+        } else if (!modifyAnpsw.getText().toString().trim().equals(modifyNpsw.getText().toString().trim())) {
             ToastUtils.showShort("两次密码输入不一致");
             return false;
+        }else{
+            return true;
         }
-        return true;
     }
 }

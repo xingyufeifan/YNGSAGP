@@ -9,9 +9,9 @@
    >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/statusColor"
         >
         <ImageView
             android:id="@+id/back"
@@ -109,16 +109,12 @@
        android:layout_height="wrap_content">
        <Button
            android:id="@+id/modify_clear"
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:layout_height="wrap_content"
+           style="@style/myButtonBlue"
            android:layout_marginRight="5dp"
            android:text="@string/modify_clear"/>
        <Button
            android:id="@+id/modify_sure"
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:layout_height="wrap_content"
+           style="@style/myButtonSave"
            android:layout_marginLeft="5dp"
            android:text="@string/modify_sure"/>
    </LinearLayout>
