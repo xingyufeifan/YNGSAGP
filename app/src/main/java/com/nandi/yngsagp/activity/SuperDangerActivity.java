@@ -1,5 +1,6 @@
 package com.nandi.yngsagp.activity;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -374,33 +377,60 @@ public class SuperDangerActivity extends AppCompatActivity {
         }
         final View view = LayoutInflater.from(context).inflate(R.layout.diaolog_play_audio, null);
         final CheckBox btnStart = view.findViewById(R.id.btn_dialog_play);
+        final RelativeLayout roat = view.findViewById(R.id.roat);
         final TextView tvPlayer = view.findViewById(R.id.tv_player);
-        new AlertDialog.Builder(context)
+        final ImageView close = view.findViewById(R.id.dialog_close);
+        final ObjectAnimator mCircleAnimator = ObjectAnimator.ofFloat(roat, "rotation", 0.0f, 360.0f);
+        mCircleAnimator.setDuration(3000);
+        mCircleAnimator.setInterpolator(new LinearInterpolator());
+        mCircleAnimator.setRepeatCount(-1);
+        mCircleAnimator.setRepeatMode(ObjectAnimator.RESTART);
+        final AlertDialog show = new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
-                .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (player != null) {
-                            if (player.isPlaying()) {
-                                player.stop();
-                            }
-                            player.release();
-                        }
+                .show();
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player != null) {
+                    if (player.isPlaying()) {
+                        mCircleAnimator.end();
+                        player.stop();
                     }
-                }).show();
+                    player.release();
+                }
+                show.dismiss();
+            }
+        });
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    player.start();
                     tvPlayer.setText("正在播放");
-                }else{
-                    if (player.isPlaying()){
+                    if (mCircleAnimator.isRunning()) {
+                        mCircleAnimator.resume();
+                        player.start();
+                    } else {
+                        mCircleAnimator.start();
+                        player.start();
+                    }
+                } else {
+                    if (player.isPlaying()) {
+                        mCircleAnimator.pause();
                         player.pause();
                         tvPlayer.setText("已经暂停");
                     }
                 }
+            }
+        });
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                tvPlayer.setText("开始播放");
+                btnStart.setChecked(false);
+                mCircleAnimator.end();
             }
         });
 

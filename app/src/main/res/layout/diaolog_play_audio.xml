@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#131313"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="10dp">
+  >
 
+    <ImageView
+        android:id="@+id/dialog_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:src="@mipmap/ic_close"/>
+    <RelativeLayout
+        android:id="@+id/audio_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/carcl">
+        <RelativeLayout
+            android:id="@+id/roat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roat">
+        </RelativeLayout>
+        <CheckBox
+            android:id="@+id/btn_dialog_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:background="@drawable/play_audios" />
+    </RelativeLayout>
     <TextView
+        android:layout_below="@id/audio_rl"
         android:layout_marginTop="20dp"
         android:id="@+id/tv_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="30sp"
+        android:textColor="#f5dd17"
         android:text="开始播放"/>
-
-    <CheckBox
-        android:id="@+id/btn_dialog_play"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:button="@null"
-        android:background="@drawable/play_audios"
-        />
-</LinearLayout>
+</RelativeLayout>
