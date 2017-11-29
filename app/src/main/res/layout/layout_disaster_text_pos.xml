@@ -129,7 +129,7 @@
                 style="@style/myLeftText"
                 android:text="@string/dReportLon" />
 
-            <EditText
+            <TextView
                 android:id="@+id/lonShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
@@ -148,7 +148,7 @@
                 style="@style/myLeftText"
                 android:text="@string/dReportLat" />
 
-            <EditText
+            <TextView
                 android:id="@+id/latShow"
                 style="@style/disasterStyle" />
         </LinearLayout>
