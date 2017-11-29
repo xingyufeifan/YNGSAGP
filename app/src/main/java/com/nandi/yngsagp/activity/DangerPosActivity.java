@@ -228,8 +228,8 @@ public class DangerPosActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("未处理险情");
-            disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
-            disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
+            disposePerson.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
+            disposeMobile.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
         } else {
             llAddMedia.setVisibility(View.GONE);
             tvTitle.setText("已处理险情");
@@ -346,6 +346,7 @@ public class DangerPosActivity extends AppCompatActivity {
 
     /**
      * EditText竖直方向是否可以滚动
+     *
      * @param editText 需要判断的EditText
      * @return true：可以滚动  false：不可以滚动
      */
@@ -355,16 +356,17 @@ public class DangerPosActivity extends AppCompatActivity {
         //控件内容的总高度
         int scrollRange = editText.getLayout().getHeight();
         //控件实际显示的高度
-        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() - editText.getCompoundPaddingBottom();
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if(scrollDifference == 0) {
+        if (scrollDifference == 0) {
             return false;
         }
 
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
+
     private void initData() {
         listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         xqNumShow.setText(listBean.getDisasterNum());
@@ -476,13 +478,12 @@ public class DangerPosActivity extends AppCompatActivity {
                 takeAudio();
                 break;
             case R.id.btn_error:
-                if (textInputNull()){
+                if (textInputNull()) {
                     upload("0");
                 }
-
                 break;
             case R.id.btn_confirm:
-                if (textInputNull()){
+                if (textInputNull()) {
                     showDialog();
                 }
                 break;
@@ -500,15 +501,18 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private boolean textInputNull() {
-        if (TextUtils.isEmpty(etHandle.getText().toString())) {
+        if (TextUtils.isEmpty(addressDangerShow.getText().toString().trim())) {
+            addressDangerShow.setError("详细地址不能为空");
+            ToastUtils.showShort("详细地址不能为空");
+            return false;
+        } else if (TextUtils.isEmpty(moneyDangerShow.getText().toString().trim())) {
+            moneyDangerShow.setError("经济损失不能为空,可以填0");
+            ToastUtils.showShort("经济损失不能为空,可以填0");
+            return false;
+        } else if (TextUtils.isEmpty(etHandle.getText().toString().trim())) {
+            etHandle.setError("请填写处置意见");
             ToastUtils.showShort("请填写处置意见");
             return false;
-        } else if (TextUtils.isEmpty(moneyDangerShow.getText().toString().trim())){
-            moneyDangerShow.setError("经济损失不能为空");
-            return  false;
-        }else if (TextUtils.isEmpty(locationDangerShow.getText().toString().trim())){
-            moneyDangerShow.setError("详细地址不能为空");
-            return  false;
         }
         return true;
     }
@@ -524,10 +528,30 @@ public class DangerPosActivity extends AppCompatActivity {
         String lat = latDangerShow.getText().toString().trim();
         String type = typePos + "";
         String factor = factorDangerShow.getText().toString().trim();
-        String person = personDangerShow.getText().toString().trim();
-        String house = houseDangerShow.getText().toString().trim();
-        String money = moneyDangerShow.getText().toString().trim();
-        String farm = areaDangerShow.getText().toString().trim();
+        String person;
+        String house;
+        String farm;
+        String money;
+        if (personDangerShow.getText().toString().trim().equals(null)) {
+            person = "0";
+        } else {
+            person = personDangerShow.getText().toString().trim();
+        }
+        if (houseDangerShow.getText().toString().trim().equals(null)) {
+            house = "0";
+        } else {
+            house = houseDangerShow.getText().toString().trim();
+        }
+        if (areaDangerShow.getText().toString().trim().equals(null)) {
+            farm = "0";
+        } else {
+            farm = areaDangerShow.getText().toString().trim();
+        }
+        if (moneyDangerShow.getText().toString().trim().equals(null)) {
+            money = "0";
+        } else {
+            money = moneyDangerShow.getText().toString().trim();
+        }
         String other = otherDangerShow.getText().toString().trim();
         String mobile = dReportMobileShow.getText().toString().trim();
         String name = dReportNameShow.getText().toString().trim();
