@@ -143,7 +143,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         if ("200".equals(data)) {
                             showNoticeDialog();
                         } else if ("300".equals(data)) {
-                            showToast("没得新版本");
                         }
 
                     } else {
