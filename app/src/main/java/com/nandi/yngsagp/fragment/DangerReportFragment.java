@@ -909,6 +909,9 @@ public class DangerReportFragment extends Fragment {
         } else if (TextUtils.isEmpty(lonDanger.getText())) {
             ToastUtils.showShort("请获取坐标信息");
             return false;
+        }else if (TextUtils.isEmpty(factorDanger.getText())) {
+            ToastUtils.showShort("请填写诱发因素");
+            return false;
         }
         return true;
     }
