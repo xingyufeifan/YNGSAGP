@@ -745,6 +745,13 @@ public class DisasterReportFragment extends Fragment {
             }
         });
 
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                tvPlayer.setText("开始播放");
+                btnStart.setChecked(false);
+            }
+        });
     }
 
 

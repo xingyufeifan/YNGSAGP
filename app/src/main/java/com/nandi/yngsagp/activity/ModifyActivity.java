@@ -76,7 +76,7 @@ public class ModifyActivity extends AppCompatActivity {
                 modifyNpsw.setText("");
                 break;
             case R.id.modify_sure:
-                String url = getString(R.string.local_base_url)+"appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim() + "/" + SharedUtils.getShare(mContext, Constant.PERSON_TYPE, "");
+                String url = getString(R.string.local_base_url)+"appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim();
                 if (textInput()) {
                     OkHttpHelper.sendHttpGet(this, url, new OkHttpCallback() {
                         @Override

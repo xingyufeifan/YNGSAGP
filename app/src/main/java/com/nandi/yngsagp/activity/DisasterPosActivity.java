@@ -251,17 +251,19 @@ public class DisasterPosActivity extends AppCompatActivity {
         otherShow.setText((CharSequence) listBean.getOtherThing());
         mobileShow.setText((CharSequence) listBean.getMonitorPhone());
         nameShow.setText((CharSequence) listBean.getMonitorName());
-        etHandle.setText(listBean.getOpinion());
-        disposePerson.setText(listBean.getDisposePerson());
-        disposeMobile.setText(listBean.getDisposeMobile());
-        if ("2".equals((CharSequence) listBean.getPersonType())) {
+        if ("1".equals((CharSequence) listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("未处理灾情");
+            disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+            disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
         } else {
             tvTitle.setText("已处理灾情");
+            etHandle.setText(listBean.getOpinion());
+            disposePerson.setText(listBean.getDisposePerson());
+            disposeMobile.setText(listBean.getDisposeMobile());
             ll1.setVisibility(View.GONE);
             llAddMedia.setVisibility(View.GONE);
         }

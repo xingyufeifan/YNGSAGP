@@ -226,9 +226,14 @@ public class DangerPosActivity extends AppCompatActivity {
         int isDispose = listBean.getIsDispose();
         if (0 == isDispose) {
             tvTitle.setText("未处理险情");
+            disposePerson.setText((CharSequence) SharedUtils.getShare(context,Constant.NAME,""));
+            disposeMobile.setText((CharSequence) SharedUtils.getShare(context,Constant.MOBILE,""));
         } else {
             llAddMedia.setVisibility(View.GONE);
             tvTitle.setText("已处理险情");
+            disposeMobile.setText(listBean.getDisposeMobile());
+            disposePerson.setText(listBean.getDisposePerson());
+            etHandle.setText(listBean.getOpinion());
             ll1.setVisibility(View.GONE);
         }
         String personType = listBean.getPersonType();
@@ -329,9 +334,6 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        disposeMobile.setText(listBean.getDisposeMobile());
-        disposePerson.setText(listBean.getDisposePerson());
-        etHandle.setText(listBean.getOpinion());
         if ("2".equals(listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
@@ -489,18 +491,19 @@ public class DangerPosActivity extends AppCompatActivity {
         map.put("monitorPhone", name);
         map.put("areaId", areaId);
         map.put("personType", personType);
-        map.put("isDanger",i);
-        map.put("opinion",opinion);
+        map.put("isDanger", i);
+        map.put("opinion", opinion);
         map.put("id", listBean.getId() + "");
-        if ("0".equals(i)||"3".equals(i)) {
+        if ("0".equals(i) || "3".equals(i)) {
             map.put("isDispose", "1");
         } else {
             map.put("isDispose", "2");
         }
         map.put("disposeMobile", disposeMobile.getText().toString().trim());
-        map.put("disposePerson",disposePerson.getText().toString().trim());
+        map.put("disposePerson", disposePerson.getText().toString().trim());
         setUploadRequest(map);
     }
+
     private void setUploadRequest(Map<String, String> map) {
         progressDialog.setMessage("正在上传");
         progressDialog.show();
@@ -554,6 +557,7 @@ public class DangerPosActivity extends AppCompatActivity {
             }
         });
     }
+
     private void clean() {
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
@@ -593,6 +597,7 @@ public class DangerPosActivity extends AppCompatActivity {
         setResult(DangerListFragment.DANGER_REQUEST_CODE);
         finish();
     }
+
     private void showDialog() {
         new AlertDialog.Builder(context)
                 .setTitle("提示")
@@ -666,7 +671,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -698,7 +703,7 @@ public class DangerPosActivity extends AppCompatActivity {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -721,7 +726,7 @@ public class DangerPosActivity extends AppCompatActivity {
                     }
                     recorder.start();
                     tv.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -863,8 +868,8 @@ public class DangerPosActivity extends AppCompatActivity {
                 if (isChecked) {
                     player.start();
                     tvPlayer.setText("正在播放");
-                }else{
-                    if (player.isPlaying()){
+                } else {
+                    if (player.isPlaying()) {
                         player.pause();
                         tvPlayer.setText("已经暂停");
                     }
@@ -873,6 +878,7 @@ public class DangerPosActivity extends AppCompatActivity {
         });
 
     }
+
     private void playMedia(File response, String type) {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
@@ -906,7 +912,7 @@ public class DangerPosActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            playMedia(file,"video/mp4");
+            playMedia(file, "video/mp4");
         }
     }
 

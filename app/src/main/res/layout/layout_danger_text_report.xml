@@ -280,7 +280,7 @@
                 android:id="@+id/moneyDanger"
                 style="@style/disasterStyle"
                 android:hint="请输入...(必填)"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <TextView

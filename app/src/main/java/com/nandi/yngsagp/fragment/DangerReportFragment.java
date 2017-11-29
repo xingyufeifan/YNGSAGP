@@ -429,9 +429,11 @@ public class DangerReportFragment extends Fragment {
         String type = typePos + "";
         String factor = factorDanger.getText().toString().trim();
         String person = personDanger.getText().toString().trim();
+        System.out.println("person = " + person);
         String house = houseDanger.getText().toString().trim();
         String money = moneyDanger.getText().toString().trim();
         String farm = areaDanger.getText().toString().trim();
+        System.out.println("farm = " + farm);
         String other = otherDanger.getText().toString().trim();
         String mobile = dReportMobile.getText().toString().trim();
         String name = dReportName.getText().toString().trim();

@@ -7,12 +7,14 @@
     android:padding="10dp">
 
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/tv_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="30sp"
         android:text="开始播放"/>
+
     <CheckBox
         android:id="@+id/btn_dialog_play"
         android:layout_marginTop="5dp"
@@ -20,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:button="@null"
-        android:background="@drawable/take_audios"
+        android:background="@drawable/play_audios"
         />
 </LinearLayout>
