@@ -888,7 +888,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void playNetVideo(MediaInfo mediaInfo) {
         File fileDir = createFileDir("Video");
         File file = new File(fileDir, mediaInfo.getFileName());
-        if (file.exists()) {
+        if (!file.exists()) {
             progressDialog.show();
             OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
                     .build()
