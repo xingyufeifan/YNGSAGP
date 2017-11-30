@@ -360,7 +360,7 @@ public class DisasterReportFragment extends Fragment {
         locationClient = new LocationClient(getActivity().getApplicationContext());
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("gcj02");
+        option.setCoorType("WGS84");
         //可选，默认gcj02，设置返回的定位结果坐标系
         option.setScanSpan(1000 * 2);
         //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
@@ -379,13 +379,14 @@ public class DisasterReportFragment extends Fragment {
 
     private class LocationListener extends BDAbstractLocationListener {
 
-        @SuppressLint("SetTextI18n")
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
+            Log.d("cp", "locType:" + locType);
             if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
                 double lon = bdLocation.getLongitude();
                 double lat = bdLocation.getLatitude();
+                Log.d("cp", "lon:" + lon + "/lat:" + lat);
                 dReportLon.setText(lon + "");
                 dReportLat.setText(lat + "");
                 locationClient.stop();
