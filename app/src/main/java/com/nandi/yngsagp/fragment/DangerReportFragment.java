@@ -537,10 +537,11 @@ public class DangerReportFragment extends Fragment {
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
-                    String message = object.getString("data");
+                    String data = object.getString("data");
                     boolean success = meta.getBoolean("success");
+                    String message = meta.optString("message");
                     if (success) {
-                        ToastUtils.showShort(message);
+                        ToastUtils.showShort(data);
                         clean();
                     } else {
                         ToastUtils.showShort(message);

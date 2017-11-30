@@ -681,13 +681,15 @@ public class DisasterReportFragment extends Fragment {
             @Override
             public void onResponse(String response, int id) {
                 progressDialog.dismiss();
+                System.out.println("response = " + response);
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
-                    String message = object.getString("data");
+                    String data = object.getString("data");
                     boolean success = meta.getBoolean("success");
+                    String message= meta.optString("message");
                     if (success) {
-                        ToastUtils.showShort(message);
+                        ToastUtils.showShort(data);
                         clean();
                     } else {
                         ToastUtils.showShort(message);
