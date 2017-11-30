@@ -250,6 +250,7 @@
             <EditText
                 android:id="@+id/dReportDeath"
                 style="@style/disasterStyle"
+                android:hint="请输入...(必填)"
                 android:inputType="number" />
         </LinearLayout>
 

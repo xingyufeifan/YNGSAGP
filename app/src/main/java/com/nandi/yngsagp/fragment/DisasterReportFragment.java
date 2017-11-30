@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -269,6 +270,7 @@ public class DisasterReportFragment extends Fragment {
 
     /**
      * EditText竖直方向是否可以滚动
+     *
      * @param editText 需要判断的EditText
      * @return true：可以滚动  false：不可以滚动
      */
@@ -278,16 +280,17 @@ public class DisasterReportFragment extends Fragment {
         //控件内容的总高度
         int scrollRange = editText.getLayout().getHeight();
         //控件实际显示的高度
-        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() - editText.getCompoundPaddingBottom();
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if(scrollDifference == 0) {
+        if (scrollDifference == 0) {
             return false;
         }
 
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
+
     private void enlargePhoto(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
         PhotoView photoView = view.findViewById(R.id.photo_view);
@@ -420,7 +423,7 @@ public class DisasterReportFragment extends Fragment {
                 break;
             case R.id.btn_upload:
                 if (messageIsTrue()) {
-                    upload();
+                    showDialog();
                 }
                 break;
             case R.id.dReportTime:
@@ -451,7 +454,24 @@ public class DisasterReportFragment extends Fragment {
                 break;
         }
     }
-
+    private void showDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确认上传当前填写信息？")
+                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload();
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
     private boolean messageIsTrue() {
         if (TextUtils.isEmpty(dReportTime.getText())) {
             ToastUtils.showShort("请选择时间");
@@ -464,7 +484,11 @@ public class DisasterReportFragment extends Fragment {
             dReportLocation.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        } else if (TextUtils.isEmpty(dReportMoney.getText())) {
+        }else if(TextUtils.isEmpty(dReportDeath.getText().toString().trim())){
+            dReportDeath.setError("请填写死亡人数");
+            ToastUtils.showShort("请填写死亡人数");
+            return false;
+        }else if (TextUtils.isEmpty(dReportMoney.getText())) {
             dReportMoney.setError("请填写损失财产");
             ToastUtils.showShort("请填写损失财产");
             return false;
@@ -610,11 +634,29 @@ public class DisasterReportFragment extends Fragment {
         String type = typePos + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
+        if (injured.equals(null)){
+            injured = "0";
+        }
         String death = dReportDeath.getText().toString().trim();
+        if (death.equals(null)){
+            death = "0";
+        }
         String miss = dReportMiss.getText().toString().trim();
+        if (miss.equals(null)){
+            miss = "0";
+        }
         String farm = dReportFram.getText().toString().trim();
+        if (farm.equals(null)){
+            farm = "0";
+        }
         String house = dReportHouse.getText().toString().trim();
+        if (house.equals(null)){
+            house = "0";
+        }
         String money = dReportMoney.getText().toString().trim();
+        if (money.equals(null)||money.equals(".")){
+            money = "0";
+        }
         String lon = dReportLon.getText().toString().trim();
         String lat = dReportLat.getText().toString().trim();
         String other = dReportOther.getText().toString().trim();
@@ -687,7 +729,7 @@ public class DisasterReportFragment extends Fragment {
                     JSONObject meta = object.getJSONObject("meta");
                     String data = object.getString("data");
                     boolean success = meta.getBoolean("success");
-                    String message= meta.optString("message");
+                    String message = meta.optString("message");
                     if (success) {
                         ToastUtils.showShort(data);
                         clean();
@@ -744,6 +786,7 @@ public class DisasterReportFragment extends Fragment {
             FileUtils.deleteFile(new File(audioPath.getPath()));
         }
     }
+
     private void playAudio(String s) {
         player = new MediaPlayer();
         try {
@@ -816,7 +859,7 @@ public class DisasterReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -853,7 +896,7 @@ public class DisasterReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -875,7 +918,7 @@ public class DisasterReportFragment extends Fragment {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -885,6 +928,7 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
+
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");

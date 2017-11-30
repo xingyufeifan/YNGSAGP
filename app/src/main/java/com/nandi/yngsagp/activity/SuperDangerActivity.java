@@ -171,6 +171,7 @@ public class SuperDangerActivity extends AppCompatActivity {
         locationDangerShow.setText((CharSequence) listBean.getCurrentLocation());
         addressDangerShow.setText((CharSequence) listBean.getAddress());
         typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
+        typeDangerShow.setEnabled(false);
         factorDangerShow.setText((CharSequence) listBean.getFactor());
         personDangerShow.setText((CharSequence) listBean.getPersonNum());
         areaDangerShow.setText((CharSequence) listBean.getFarmland());

@@ -168,6 +168,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
         locationShow.setText((CharSequence) listBeans.getCurrentLocation());
         addressShow.setText((CharSequence) listBeans.getAddress());
         typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()));
+        typeShow.setEnabled(false);
         factorShow.setText((CharSequence) listBeans.getFactor());
         injurdShow.setText((CharSequence) listBeans.getInjurdNum());
         deathShow.setText((CharSequence) listBeans.getDeathNum());

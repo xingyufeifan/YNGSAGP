@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
@@ -66,13 +65,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     ImageView icPassword;
     @BindView(R.id.checkbox)
     CheckBox checkbox;
+    @BindView(R.id.ll_input_mobile)
+    LinearLayout llInputMobile;
+    @BindView(R.id.ll_input_psd)
+    LinearLayout llInputPsd;
     private int screenHeight = 0;//屏幕高度
     private int keyHeight = 0; //软件盘弹起后所占高度
     private String pwd;
     private String mobile;
     private ProgressDialog progressDialog;
     private Context mContext;
-    private boolean isCheck=false;
+    private boolean isCheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkPremission();
         intiView();
         initListener();
-
     }
 
 
@@ -124,7 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    isCheck = isChecked;
+                isCheck = isChecked;
             }
         });
         etMobile.addTextChangedListener(new TextWatcher() {
@@ -271,7 +273,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onError(Exception error) {
-                showToast("网络连接失败"+error.getMessage());
+                showToast("网络连接失败" + error.getMessage());
                 progressDialog.dismiss();
             }
         });
@@ -288,11 +290,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String personType = jsonData.optString("role");
         SharedUtils.putShare(mContext, Constant.PERSON_TYPE, personType);
         SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
-        if (isCheck){
+        if (isCheck) {
             SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
             SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
         }
     }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -304,6 +307,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         return super.dispatchTouchEvent(ev);
     }
+
     //权限申请
     private void checkPremission() {
         List<PermissionItem> permissionItems = new ArrayList<PermissionItem>();

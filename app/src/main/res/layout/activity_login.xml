@@ -97,6 +97,7 @@
                     android:background="@drawable/text_shape"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+
                     android:paddingLeft="13dp">
 
                     <ImageView

@@ -3,7 +3,6 @@ package com.nandi.yngsagp.activity;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,10 +57,11 @@ import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.MediaAdapter;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
-import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
+import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
+import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -179,6 +178,8 @@ public class DisasterPosActivity extends AppCompatActivity {
     RecyclerView rvVideoUpdated;
     @BindView(R.id.rv_audio_updated)
     RecyclerView rvAudioUpdated;
+    @BindView(R.id.pos_all_layout)
+    LinearLayout posAllLayout;
 
     private SuperBean listBean;
     private ProgressDialog progressDialog;
@@ -270,9 +271,33 @@ public class DisasterPosActivity extends AppCompatActivity {
             disposeMobile.setText(listBean.getDisposeMobile());
             ll1.setVisibility(View.GONE);
             llAddMedia.setVisibility(View.GONE);
+            addressShow.setEnabled(false);
+            typeShow.setEnabled(false);
+            factorShow.setEnabled(false);
+            injurdShow.setEnabled(false);
+            deathShow.setEnabled(false);
+            missShow.setEnabled(false);
+            farmShow.setEnabled(false);
+            houseShow.setEnabled(false);
+            moneyShow.setEnabled(false);
+            otherShow.setEnabled(false);
+            etHandle.setEnabled(false);
+            mobileShow.setEnabled(false);
+            nameShow.setEnabled(false);
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            // 获得当前得到焦点的View，一般情况下就是EditText（特殊情况就是轨迹求或者实体案件会移动焦点）
+            View v = getCurrentFocus();
+            if (InputUtil.isShouldHideInput(v, ev)) {
+                InputUtil.hideSoftInput(v.getWindowToken(), context);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     private void setListener() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -348,6 +373,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 build.cancel();
             }
         });
+        posAllLayout.setOnClickListener(null);
         etHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -365,7 +391,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //触摸的是EditText并且当前EditText可以滚动则将事件交给EditText处理；否则将事件交由其父类处理
-                if ((v.getId() == R.id.otherShow&& canVerticalScroll(otherShow))) {
+                if ((v.getId() == R.id.otherShow && canVerticalScroll(otherShow))) {
                     v.getParent().requestDisallowInterceptTouchEvent(true);
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         v.getParent().requestDisallowInterceptTouchEvent(false);
@@ -378,6 +404,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     /**
      * EditText竖直方向是否可以滚动
+     *
      * @param editText 需要判断的EditText
      * @return true：可以滚动  false：不可以滚动
      */
@@ -387,16 +414,17 @@ public class DisasterPosActivity extends AppCompatActivity {
         //控件内容的总高度
         int scrollRange = editText.getLayout().getHeight();
         //控件实际显示的高度
-        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() - editText.getCompoundPaddingBottom();
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if(scrollDifference == 0) {
+        if (scrollDifference == 0) {
             return false;
         }
 
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
+
     private void enlargePicture(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
         PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
@@ -484,16 +512,12 @@ public class DisasterPosActivity extends AppCompatActivity {
                 break;
             case R.id.btn_error:
                 if (messageIsTrue()) {
-                    upload("0");
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
+                    showDialog("0");
                 }
                 break;
             case R.id.btn_confirm:
                 if (messageIsTrue()) {
-                    upload("1");
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
+                    showDialog("1");
                 }
                 break;
             case R.id.tv_video:
@@ -509,6 +533,25 @@ public class DisasterPosActivity extends AppCompatActivity {
         }
     }
 
+    private void showDialog(final String s) {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确认上传当前填写信息？")
+                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload(s);
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
     private void upload(String i) {
         Map<String, String> map = new HashMap<>();
         String reportMan = userShow.getText().toString().trim();
@@ -522,7 +565,10 @@ public class DisasterPosActivity extends AppCompatActivity {
         String miss = TextUtils.isEmpty(missShow.getText().toString().trim()) ? "0" : missShow.getText().toString().trim();
         String farm = TextUtils.isEmpty(farmShow.getText().toString().trim()) ? "0" : farmShow.getText().toString().trim();
         String house = TextUtils.isEmpty(houseShow.getText().toString().trim()) ? "0" : houseShow.getText().toString().trim();
-        String money = TextUtils.isEmpty(moneyShow.getText().toString().trim()) ? "0" : moneyShow.getText().toString().trim();
+        String money = moneyShow.getText().toString().trim();
+        if (money.equals(null) || money.equals(".")) {
+            money = "0";
+        }
         String lon = lonShow.getText().toString().trim();
         String lat = latShow.getText().toString().trim();
         String other = otherShow.getText().toString().trim();
@@ -714,7 +760,7 @@ public class DisasterPosActivity extends AppCompatActivity {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -751,7 +797,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -773,7 +819,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -883,6 +929,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             playAudio(file.getAbsolutePath());
         }
     }
+
     private void playAudio(String s) {
         player = new MediaPlayer();
         try {
@@ -1037,7 +1084,11 @@ public class DisasterPosActivity extends AppCompatActivity {
             addressShow.setError("请填写详细地址");
             ToastUtils.showShort("请填写详细地址");
             return false;
-        }else if (TextUtils.isEmpty(moneyShow.getText().toString().trim())) {
+        }else if(TextUtils.isEmpty(deathShow.getText().toString().trim())) {
+            deathShow.setError("请填写死亡人数");
+            ToastUtils.showShort("请填写死亡人数");
+        }
+        else if (TextUtils.isEmpty(moneyShow.getText().toString().trim())) {
             moneyShow.setError("请填写财产损失");
             ToastUtils.showShort("请填写财产损失");
             return false;

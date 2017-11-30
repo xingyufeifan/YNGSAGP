@@ -339,6 +339,7 @@ public class DangerReportFragment extends Fragment {
 
     /**
      * EditText竖直方向是否可以滚动
+     *
      * @param editText 需要判断的EditText
      * @return true：可以滚动  false：不可以滚动
      */
@@ -348,16 +349,17 @@ public class DangerReportFragment extends Fragment {
         //控件内容的总高度
         int scrollRange = editText.getLayout().getHeight();
         //控件实际显示的高度
-        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() - editText.getCompoundPaddingBottom();
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if(scrollDifference == 0) {
+        if (scrollDifference == 0) {
             return false;
         }
 
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
+
     private void enlargePhoto(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
         PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
@@ -393,7 +395,7 @@ public class DangerReportFragment extends Fragment {
         return format.format(date);
     }
 
-    @OnClick({R.id.iv_get_location,R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.iv_get_location, R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.timeDanger:
@@ -414,7 +416,7 @@ public class DangerReportFragment extends Fragment {
                 break;
             case R.id.btn_upload:
                 if (messageIsTrue()) {
-                    upload();
+                    showDialog();
                 }
                 break;
             case R.id.iv_take_photo:
@@ -446,6 +448,25 @@ public class DangerReportFragment extends Fragment {
         }
     }
 
+    private void showDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("确认上传当前填写信息？")
+                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload();
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
     private File createFileDir(String dir) {
         String path = Environment.getExternalStorageDirectory() + "/" + dir;
         boolean orExistsDir = FileUtils.createOrExistsDir(path);
@@ -468,11 +489,21 @@ public class DangerReportFragment extends Fragment {
         String type = typePos + "";
         String factor = factorDanger.getText().toString().trim();
         String person = personDanger.getText().toString().trim();
-        System.out.println("person = " + person);
+        if (person.equals(null)) {
+            person = "0";
+        }
         String house = houseDanger.getText().toString().trim();
+        if (house.equals(null)) {
+            house = "0";
+        }
         String money = moneyDanger.getText().toString().trim();
+        if (money.equals(null)||money.equals(".")) {
+            money = "0";
+        }
         String farm = areaDanger.getText().toString().trim();
-        System.out.println("farm = " + farm);
+        if (farm.equals(null)){
+            money ="0";
+        }
         String other = otherDanger.getText().toString().trim();
         String mobile = dReportMobile.getText().toString().trim();
         String name = dReportName.getText().toString().trim();
@@ -656,7 +687,7 @@ public class DangerReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -693,7 +724,7 @@ public class DangerReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -715,7 +746,7 @@ public class DangerReportFragment extends Fragment {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -970,7 +1001,7 @@ public class DangerReportFragment extends Fragment {
             locationDanger.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        } else if (TextUtils.isEmpty(moneyDanger.getText())) {
+        }else if (TextUtils.isEmpty(moneyDanger.getText())) {
             moneyDanger.setError("请填写经济损失");
             ToastUtils.showShort("请填写经济损失");
             return false;
@@ -980,7 +1011,7 @@ public class DangerReportFragment extends Fragment {
         } else if (TextUtils.isEmpty(lonDanger.getText())) {
             ToastUtils.showShort("请获取坐标信息");
             return false;
-        }else if (TextUtils.isEmpty(factorDanger.getText())) {
+        } else if (TextUtils.isEmpty(factorDanger.getText())) {
             ToastUtils.showShort("请填写诱发因素");
             return false;
         }

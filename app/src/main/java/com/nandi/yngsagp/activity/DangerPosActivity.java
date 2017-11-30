@@ -65,6 +65,7 @@ import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.fragment.DangerListFragment;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
+import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -240,6 +241,15 @@ public class DangerPosActivity extends AppCompatActivity {
             disposePerson.setText(listBean.getDisposePerson());
             etHandle.setText(listBean.getOpinion());
             ll1.setVisibility(View.GONE);
+            addressDangerShow.setEnabled(false);
+            typeDangerShow.setEnabled(false);
+            factorDangerShow.setEnabled(false);
+            personDangerShow.setEnabled(false);
+            houseDangerShow.setEnabled(false);
+            moneyDangerShow.setEnabled(false);
+            otherDangerShow.setEnabled(false);
+            areaDangerShow.setEnabled(false);
+            etHandle.setEnabled(false);
         }
         String personType = listBean.getPersonType();
         if ("1".equals(personType)) {
@@ -248,6 +258,17 @@ public class DangerPosActivity extends AppCompatActivity {
         setRequest();
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            // 获得当前得到焦点的View，一般情况下就是EditText（特殊情况就是轨迹求或者实体案件会移动焦点）
+            View v = getCurrentFocus();
+            if (InputUtil.isShouldHideInput(v, ev)) {
+                InputUtil.hideSoftInput(v.getWindowToken(), context);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
         back.setOnClickListener(new View.OnClickListener() {
@@ -482,7 +503,7 @@ public class DangerPosActivity extends AppCompatActivity {
                 break;
             case R.id.btn_error:
                 if (textInputNull()) {
-                    upload("0");
+                    showErorrDialog();
                 }
                 break;
             case R.id.btn_confirm:
@@ -531,29 +552,21 @@ public class DangerPosActivity extends AppCompatActivity {
         String lat = latDangerShow.getText().toString().trim();
         String type = typePos + "";
         String factor = factorDangerShow.getText().toString().trim();
-        String person;
-        String house;
-        String farm;
-        String money;
+        String person = personDangerShow.getText().toString().trim();
+        String house = houseDangerShow.getText().toString().trim();
+        String farm = areaDangerShow.getText().toString().trim();
+        String money = moneyDangerShow.getText().toString().trim();
         if (personDangerShow.getText().toString().trim().equals(null)) {
             person = "0";
-        } else {
-            person = personDangerShow.getText().toString().trim();
         }
         if (houseDangerShow.getText().toString().trim().equals(null)) {
             house = "0";
-        } else {
-            house = houseDangerShow.getText().toString().trim();
         }
         if (areaDangerShow.getText().toString().trim().equals(null)) {
             farm = "0";
-        } else {
-            farm = areaDangerShow.getText().toString().trim();
         }
-        if (moneyDangerShow.getText().toString().trim().equals(null)) {
+        if (money.equals(null) || money.equals(".")) {
             money = "0";
-        } else {
-            money = moneyDangerShow.getText().toString().trim();
         }
         String other = otherDangerShow.getText().toString().trim();
         String mobile = dReportMobileShow.getText().toString().trim();
@@ -686,6 +699,23 @@ public class DangerPosActivity extends AppCompatActivity {
         finish();
     }
 
+    private void showErorrDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("是否确认当前误报情况？")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        upload("1");
+                    }
+                })
+                .setNegativeButton("不确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                      dialogInterface.dismiss();
+                    }
+                }).show();
+    }
     private void showDialog() {
         new AlertDialog.Builder(context)
                 .setTitle("提示")
@@ -703,7 +733,6 @@ public class DangerPosActivity extends AppCompatActivity {
                     }
                 }).show();
     }
-
 
     private void clickText(final int type) {
         View view = LayoutInflater.from(context).inflate(R.layout.click_popup_view, null);
@@ -759,7 +788,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -796,7 +825,7 @@ public class DangerPosActivity extends AppCompatActivity {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -818,7 +847,7 @@ public class DangerPosActivity extends AppCompatActivity {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
