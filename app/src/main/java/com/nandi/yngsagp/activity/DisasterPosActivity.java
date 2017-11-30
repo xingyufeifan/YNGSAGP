@@ -485,15 +485,11 @@ public class DisasterPosActivity extends AppCompatActivity {
             case R.id.btn_error:
                 if (messageIsTrue()) {
                     upload("0");
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
                 }
                 break;
             case R.id.btn_confirm:
                 if (messageIsTrue()) {
                     upload("1");
-                } else {
-                    ToastUtils.showShort("请填写处置意见");
                 }
                 break;
             case R.id.tv_video:

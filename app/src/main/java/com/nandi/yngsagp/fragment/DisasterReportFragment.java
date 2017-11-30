@@ -269,6 +269,7 @@ public class DisasterReportFragment extends Fragment {
 
     /**
      * EditText竖直方向是否可以滚动
+     *
      * @param editText 需要判断的EditText
      * @return true：可以滚动  false：不可以滚动
      */
@@ -278,16 +279,17 @@ public class DisasterReportFragment extends Fragment {
         //控件内容的总高度
         int scrollRange = editText.getLayout().getHeight();
         //控件实际显示的高度
-        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() -editText.getCompoundPaddingBottom();
+        int scrollExtent = editText.getHeight() - editText.getCompoundPaddingTop() - editText.getCompoundPaddingBottom();
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if(scrollDifference == 0) {
+        if (scrollDifference == 0) {
             return false;
         }
 
         return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
+
     private void enlargePhoto(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
         PhotoView photoView = view.findViewById(R.id.photo_view);
@@ -357,7 +359,7 @@ public class DisasterReportFragment extends Fragment {
         locationClient = new LocationClient(getActivity().getApplicationContext());
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("gcj02");
+        option.setCoorType("WGS84");
         //可选，默认gcj02，设置返回的定位结果坐标系
         option.setScanSpan(1000 * 2);
         //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
@@ -376,13 +378,14 @@ public class DisasterReportFragment extends Fragment {
 
     private class LocationListener extends BDAbstractLocationListener {
 
-        @SuppressLint("SetTextI18n")
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
+            Log.d("cp", "locType:" + locType);
             if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
                 double lon = bdLocation.getLongitude();
                 double lat = bdLocation.getLatitude();
+                Log.d("cp", "lon:" + lon + "/lat:" + lat);
                 dReportLon.setText(lon + "");
                 dReportLat.setText(lat + "");
                 locationClient.stop();
@@ -687,7 +690,7 @@ public class DisasterReportFragment extends Fragment {
                     JSONObject meta = object.getJSONObject("meta");
                     String data = object.getString("data");
                     boolean success = meta.getBoolean("success");
-                    String message= meta.optString("message");
+                    String message = meta.optString("message");
                     if (success) {
                         ToastUtils.showShort(data);
                         clean();
@@ -744,6 +747,7 @@ public class DisasterReportFragment extends Fragment {
             FileUtils.deleteFile(new File(audioPath.getPath()));
         }
     }
+
     private void playAudio(String s) {
         player = new MediaPlayer();
         try {
@@ -816,7 +820,7 @@ public class DisasterReportFragment extends Fragment {
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
         final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
-        final Chronometer chronometer =  view.findViewById(R.id.chronometer);
+        final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -853,7 +857,7 @@ public class DisasterReportFragment extends Fragment {
         btnStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
@@ -875,7 +879,7 @@ public class DisasterReportFragment extends Fragment {
                         ToastUtils.showShort("录音机使用失败！");
                     }
                     recorder.start();
-                }else{
+                } else {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
@@ -885,6 +889,7 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
+
     private void takeVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
