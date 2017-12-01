@@ -1087,6 +1087,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         }else if(TextUtils.isEmpty(deathShow.getText().toString().trim())) {
             deathShow.setError("请填写死亡人数");
             ToastUtils.showShort("请填写死亡人数");
+            return false;
         }
         else if (TextUtils.isEmpty(moneyShow.getText().toString().trim())) {
             moneyShow.setError("请填写财产损失");
