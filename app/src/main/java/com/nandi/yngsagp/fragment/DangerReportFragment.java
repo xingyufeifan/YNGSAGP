@@ -157,8 +157,6 @@ public class DangerReportFragment extends Fragment {
     EditText dReportName;
     @BindView(R.id.ll_dReport)
     LinearLayout llDReport;
-    @BindView(R.id.iv_get_location)
-    ImageView ivGetLocation;
     private int typePos = 0;
     private Context context;
     private PopupWindow popupWindow;
@@ -395,7 +393,7 @@ public class DangerReportFragment extends Fragment {
         return format.format(date);
     }
 
-    @OnClick({R.id.iv_get_location, R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.tv_get_location, R.id.timeDanger, R.id.btn_save, R.id.btn_upload, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.timeDanger:
@@ -442,7 +440,7 @@ public class DangerReportFragment extends Fragment {
                     clickText(2);
                 }
                 break;
-            case R.id.iv_get_location:
+            case R.id.tv_get_location:
                 startLocation();
                 break;
         }

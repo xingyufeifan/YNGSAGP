@@ -195,7 +195,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         TextView tvName = headerView.findViewById(R.id.tv_name);
         TextView tvAccount = headerView.findViewById(R.id.tv_account);
         TextView tvAddress = headerView.findViewById(R.id.tv_address);
-        TextView tvDuty = headerView.findViewById(R.id.tv_duty);
         tvName.setText(name);
         tvAccount.setText(mobile);
         tvAddress.setText(address);
@@ -219,7 +218,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(5).setVisible(false);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
-            tvDuty.setText("监测员");
         } else if ("2".equals(type)) {
             tvTitle.setText("灾情处置");
             navView.getMenu().getItem(0).setChecked(true);
@@ -229,7 +227,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(dangerListFragment);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
-            tvDuty.setText("审核员");
         } else if ("3".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
@@ -239,7 +236,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(3).setVisible(false);
             addFragment(superDisasterFragment);
             addFragment(superDangerFragment);
-            tvDuty.setText("县级");
         } else if ("4".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
@@ -249,7 +245,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(3).setVisible(false);
             addFragment(superDisasterFragment);
             addFragment(superDangerFragment);
-            tvDuty.setText("市级");
         } else if ("5".equals(type)) {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
@@ -259,7 +254,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(3).setVisible(false);
             addFragment(superDisasterFragment);
             addFragment(superDangerFragment);
-            tvDuty.setText("省级");
         }
 
     }

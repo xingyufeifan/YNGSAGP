@@ -23,7 +23,7 @@
     <string name="dReportPhone">手机号码：</string>
     <string name="dReportTime">发现时间：</string>
     <string name="dReportAddress">详细地址：</string>
-    <string name="dReportLocation">发生地点：</string>
+    <string name="dReportLocation">所在地区：</string>
     <string name="dReportType">灾种类型：</string>
     <string name="dReportFactor">诱发因素：</string>
     <string name="dReportInjurd">受伤人数：</string>
@@ -36,7 +36,7 @@
     <string name="dReportLat">纬度：</string>
     <string name="pleaseInput">请输入...</string>
     <string name="dReportMobile">联系电话：</string>
-    <string name="dReportName">电话通知人：</string>
+    <string name="dReportName">联系人：</string>
     <string name="dReportOther">其他信息</string>
     <string name="dReportHandle">处置意见：</string>
     <string name="personDanger">威胁人数：</string>

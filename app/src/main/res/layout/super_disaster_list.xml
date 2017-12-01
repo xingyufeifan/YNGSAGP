@@ -12,11 +12,69 @@
         app:tabBackground="@color/holo_light_primary"
         app:tabIndicatorColor="@color/colorLine"
         app:tabSelectedTextColor="@android:color/holo_blue_dark" />
-
+    <LinearLayout
+        android:id="@+id/ll_nav"
+        android:layout_below="@+id/tab_layout"
+        android:orientation="horizontal"
+        android:background="@drawable/nav_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:background="@color/lineColor"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:text="时间"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textColor="@color/pickerview_timebtn_nor"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:background="@color/lineColor"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:text="地址"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:textColor="@color/pickerview_timebtn_nor"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:background="@color/lineColor"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:text="状态"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:textColor="@color/pickerview_timebtn_nor"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:background="@color/lineColor"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:text="查看"
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:textColor="@color/pickerview_timebtn_nor"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:background="@color/lineColor"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/disasterAlready"
-        android:layout_below="@id/tab_layout"
+        android:layout_below="@id/ll_nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -43,7 +101,7 @@
 
     <LinearLayout
         android:id="@+id/disasterNo"
-        android:layout_below="@id/tab_layout"
+        android:layout_below="@id/ll_nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

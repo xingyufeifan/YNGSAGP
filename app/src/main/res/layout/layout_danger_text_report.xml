@@ -82,14 +82,16 @@
                 android:layout_centerVertical="true"
                 android:text="位置" />
 
-            <ImageView
-                android:id="@+id/iv_get_location"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+            <TextView
+                android:id="@+id/tv_get_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
+                android:text="获取经纬度"
+                android:textSize="18sp"
+                android:textColor="@color/statusColor"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/location_selector"
                 android:layout_marginEnd="10dp" />
         </RelativeLayout>
 
@@ -174,7 +176,7 @@
 
         <TextView
             style="@style/myTextTitle"
-            android:text="原因/类型" />
+            android:text="诱因/类型" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -301,7 +303,7 @@
             <EditText
                 android:id="@+id/areaDanger"
                 style="@style/disasterStyle"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <TextView
@@ -317,7 +319,7 @@
 
             <TextView
                 style="@style/myTextTitle"
-                android:text="电话通知填报" />
+                android:text="群众上报人信息" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -332,7 +334,8 @@
 
                 <EditText
                     android:id="@+id/dReportMobile"
-                    style="@style/disasterStyle" />
+                    style="@style/disasterStyle"
+                    android:inputType="phone" />
             </LinearLayout>
 
             <TextView

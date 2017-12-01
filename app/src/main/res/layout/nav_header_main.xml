@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <TextView
-                android:text="位置:"
+                android:text="所在地区:"
                 android:textColor="@color/header_right_text"
                 android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
@@ -63,24 +63,6 @@
             <TextView
                 android:id="@+id/tv_address"
                 android:text="渝北"
-                android:textColor="@color/header_right_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-            <TextView
-                android:text="职责:"
-                android:textColor="@color/header_right_text"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/tv_duty"
-                android:text="监测员"
                 android:textColor="@color/header_right_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

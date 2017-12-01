@@ -157,7 +157,7 @@
 
         <TextView
             style="@style/myTextTitle"
-            android:text="原因/类型" />
+            android:text="诱因/类型" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -303,7 +303,7 @@
             <EditText
                 android:id="@+id/areaDangerShow"
                 style="@style/disasterStyle"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal" />
         </LinearLayout>
 
         <TextView
@@ -318,7 +318,7 @@
 
             <TextView
                 style="@style/myTextTitle"
-                android:text="电话通知填报" />
+                android:text="群众上报人信息" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -127,8 +127,6 @@ public class DisasterReportFragment extends Fragment {
     TextView tvAudio;
     @BindView(R.id.dReportUser)
     TextView dReportUser;
-    @BindView(R.id.iv_get_location)
-    ImageView ivGetLocation;
     private Context context;
     private File pictureFile;
     private PopupWindow popupWindow;
@@ -403,7 +401,7 @@ public class DisasterReportFragment extends Fragment {
         }
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio, R.id.iv_get_location})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio, R.id.tv_get_location})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -450,7 +448,7 @@ public class DisasterReportFragment extends Fragment {
                     clickText(2);
                 }
                 break;
-            case R.id.iv_get_location:
+            case R.id.tv_get_location:
                 startLocation();
                 break;
         }

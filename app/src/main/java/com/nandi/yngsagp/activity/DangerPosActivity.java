@@ -410,9 +410,6 @@ public class DangerPosActivity extends AppCompatActivity {
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        if ("2".equals(listBean.getPersonType())) {
-            llDReport.setVisibility(View.GONE);
-        }
 
     }
 
@@ -706,7 +703,7 @@ public class DangerPosActivity extends AppCompatActivity {
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        upload("1");
+                        upload("0");
                     }
                 })
                 .setNegativeButton("不确认", new DialogInterface.OnClickListener() {
