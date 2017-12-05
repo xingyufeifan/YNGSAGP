@@ -269,6 +269,7 @@ public class DangerPosActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
     @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
         back.setOnClickListener(new View.OnClickListener() {
@@ -435,7 +436,7 @@ public class DangerPosActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedias/" + listBean.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -482,7 +483,7 @@ public class DangerPosActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.btn_report, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video, R.id.tv_audio})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -505,7 +506,12 @@ public class DangerPosActivity extends AppCompatActivity {
                 break;
             case R.id.btn_confirm:
                 if (textInputNull()) {
-                    showDialog();
+                    showNotice(1);
+                }
+                break;
+            case R.id.btn_report:
+                if (textInputNull()) {
+                    showNotice(0);
                 }
                 break;
             case R.id.tv_video:
@@ -709,24 +715,35 @@ public class DangerPosActivity extends AppCompatActivity {
                 .setNegativeButton("不确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                      dialogInterface.dismiss();
+                        dialogInterface.dismiss();
                     }
                 }).show();
     }
-    private void showDialog() {
+
+    private void showNotice(final int type) {
+        String message;
+        if (type == 0) {
+            message = "确认上报当前险情吗？";
+        } else {
+            message = "确认处理当前险情吗？";
+        }
         new AlertDialog.Builder(context)
                 .setTitle("提示")
-                .setMessage("当前险情能否处理？")
+                .setMessage(message)
                 .setPositiveButton("能处理", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        upload("3");
+                        if (type == 0) {
+                            upload("2");
+                        } else {
+                            upload("3");
+                        }
                     }
                 })
                 .setNegativeButton("不能", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        upload("2");
+                        dialogInterface.dismiss();
                     }
                 }).show();
     }

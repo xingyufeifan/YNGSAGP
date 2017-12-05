@@ -447,7 +447,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedias/" + listBean.getId())
                 .build()
                 .execute(new StringCallback() {
                     @Override

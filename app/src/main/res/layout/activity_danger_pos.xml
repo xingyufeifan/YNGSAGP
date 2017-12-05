@@ -75,13 +75,17 @@
             android:id="@+id/btn_error"
             style="@style/myButtonSave"
             android:background="@drawable/error_btn_shape"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:text="误报" />
-
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_marginEnd="10dp"
+            style="@style/myButtonSave"
+            android:text="上报" />
         <Button
             android:id="@+id/btn_confirm"
             style="@style/myButtonSave"
-            android:text="确认信息" />
+            android:text="处理完成" />
 
     </LinearLayout>
 </RelativeLayout>
