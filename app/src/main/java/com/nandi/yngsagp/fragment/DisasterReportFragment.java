@@ -453,6 +453,7 @@ public class DisasterReportFragment extends Fragment {
                 break;
         }
     }
+
     private void showDialog() {
         new AlertDialog.Builder(context)
                 .setTitle("提示")
@@ -471,6 +472,7 @@ public class DisasterReportFragment extends Fragment {
                     }
                 }).show();
     }
+
     private boolean messageIsTrue() {
         if (TextUtils.isEmpty(dReportTime.getText())) {
             ToastUtils.showShort("请选择时间");
@@ -483,11 +485,11 @@ public class DisasterReportFragment extends Fragment {
             dReportLocation.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        }else if(TextUtils.isEmpty(dReportDeath.getText().toString().trim())){
+        } else if (TextUtils.isEmpty(dReportDeath.getText().toString().trim())) {
             dReportDeath.setError("请填写死亡人数");
             ToastUtils.showShort("请填写死亡人数");
             return false;
-        }else if (TextUtils.isEmpty(dReportMoney.getText())) {
+        } else if (TextUtils.isEmpty(dReportMoney.getText())) {
             dReportMoney.setError("请填写损失财产");
             ToastUtils.showShort("请填写损失财产");
             return false;
@@ -633,27 +635,27 @@ public class DisasterReportFragment extends Fragment {
         String type = typePos + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
-        if (injured.equals(null)){
+        if (injured.equals(null)) {
             injured = "0";
         }
         String death = dReportDeath.getText().toString().trim();
-        if (death.equals(null)){
+        if (death.equals(null)) {
             death = "0";
         }
         String miss = dReportMiss.getText().toString().trim();
-        if (miss.equals(null)){
+        if (miss.equals(null)) {
             miss = "0";
         }
         String farm = dReportFram.getText().toString().trim();
-        if (farm.equals(null)){
+        if (farm.equals(null)) {
             farm = "0";
         }
         String house = dReportHouse.getText().toString().trim();
-        if (house.equals(null)){
+        if (house.equals(null)) {
             house = "0";
         }
         String money = dReportMoney.getText().toString().trim();
-        if (money.equals(null)||money.equals(".")){
+        if (money.equals(null) || money.equals(".")) {
             money = "0";
         }
         String lon = dReportLon.getText().toString().trim();
@@ -710,12 +712,12 @@ public class DisasterReportFragment extends Fragment {
         build.execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                if ("Canceled".equals(e.getMessage())) {
+                String message = e.getMessage();
+                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
-                    Log.d("cp", e.getMessage());
                 }
             }
 

@@ -214,7 +214,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void initData() {
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
 
@@ -635,12 +635,12 @@ public class DisasterPosActivity extends AppCompatActivity {
         build.execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                if ("Canceled".equals(e.getMessage())) {
+                String message = e.getMessage();
+                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
-                    Log.d("cp", e.getMessage());
                 }
             }
 

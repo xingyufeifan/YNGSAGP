@@ -551,12 +551,12 @@ public class DangerReportFragment extends Fragment {
         build.execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                if ("Canceled".equals(e.getMessage())) {
+                String message = e.getMessage();
+                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
                     ToastUtils.showShort("网络连接失败！");
-                    Log.d("cp", e.getMessage());
                 }
             }
 
