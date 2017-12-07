@@ -205,7 +205,7 @@ public class DangerListFragment extends Fragment {
 
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String loadUrl = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + isDisPose + "/2/"+ pageU + "/15/"+role;
+        String loadUrl = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId +"/"+ isDisPose + "/2/"+ pageU + "/15/"+role;
         OkHttpHelper.sendHttpGet(getActivity(), loadUrl, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {

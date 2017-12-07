@@ -14,24 +14,27 @@ import com.nandi.yngsagp.R;
 
 public class ProgressActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_progress);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-		        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-		IntentFilter filter=new IntentFilter("CLOSE_PROGRESS");
-		registerReceiver(receiver, filter);
-	}
-	private BroadcastReceiver receiver=new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			finish();
-		}
-	};
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		unregisterReceiver(receiver);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_progress);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        IntentFilter filter = new IntentFilter("CLOSE_PROGRESS");
+        registerReceiver(receiver, filter);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
 }

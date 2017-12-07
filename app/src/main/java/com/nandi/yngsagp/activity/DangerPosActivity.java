@@ -730,7 +730,7 @@ public class DangerPosActivity extends AppCompatActivity {
         new AlertDialog.Builder(context)
                 .setTitle("提示")
                 .setMessage(message)
-                .setPositiveButton("能处理", new DialogInterface.OnClickListener() {
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (type == 0) {
@@ -740,7 +740,7 @@ public class DangerPosActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .setNegativeButton("不能", new DialogInterface.OnClickListener() {
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
