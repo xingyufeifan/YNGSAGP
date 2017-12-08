@@ -24,6 +24,7 @@ import com.nandi.yngsagp.activity.DisasterPosActivity;
 import com.nandi.yngsagp.activity.SuperDisasterActivity;
 import com.nandi.yngsagp.adapter.SuperAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
+import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.JsonFormat;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -97,22 +98,25 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestA(final RefreshLayout refreshlayouts) {
 
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/"+role;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 System.out.println(response);
                 try {
+                    refreshlayouts.finishRefresh();
                     initJson(response);
                     if (isSuccess) {
                         disasterListA.clear();
                         disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                         pageA = 1;
-                        refreshlayouts.finishRefresh();
                     } else {
-                        refreshlayouts.finishRefresh();
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -130,21 +134,24 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestN(final RefreshLayout refreshlayouts) {
 
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/"+role;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/1/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    refreshlayouts.finishRefresh();
                     initJson(response);
                     if (isSuccess) {
                         disasterListN.clear();
                         disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         pageN = 1;
-                        refreshlayouts.finishRefresh();
                     } else {
-                        refreshlayouts.finishRefresh();
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -163,19 +170,22 @@ public class SuperDisasterFragment extends Fragment {
     private void initJson(String response) throws JSONException {
         JSONObject jsonObject = new JSONObject(response);
         JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-        jsonData = new JSONArray(jsonObject.optString("data"));
         isSuccess = jsonMeta.optBoolean("success");
         message = jsonMeta.optString("message");
+        if (isSuccess) {
+            jsonData = new JSONArray(jsonObject.optString("data"));
+        }
     }
 
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/15/"+role ;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageA + "/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    refreshlayouts.finishLoadmore();
                     initJson(response);
                     if (isSuccess) {
                         if ("[]".equals(jsonData.toString())) {
@@ -183,11 +193,12 @@ public class SuperDisasterFragment extends Fragment {
                         }
                         disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
-
-                        refreshlayouts.finishLoadmore();
                     } else {
-                        refreshlayouts.finishLoadmore();
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -208,11 +219,12 @@ public class SuperDisasterFragment extends Fragment {
 
     private void loadMoreN(final RefreshLayout refreshlayouts) {
         pageN += 1;
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/15/"+role ;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/1/" + pageN + "/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    refreshlayouts.finishLoadmore();
                     initJson(response);
                     if (isSuccess) {
                         if ("[]".equals(jsonData.toString())) {
@@ -220,10 +232,12 @@ public class SuperDisasterFragment extends Fragment {
                         }
                         disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
-                        refreshlayouts.finishLoadmore();
                     } else {
-                        refreshlayouts.finishLoadmore();
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -240,7 +254,6 @@ public class SuperDisasterFragment extends Fragment {
         });
 
     }
-
 
 
     private void setListener() {
@@ -321,6 +334,7 @@ public class SuperDisasterFragment extends Fragment {
         });
 
     }
+
     private void initViews() {
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
@@ -334,7 +348,7 @@ public class SuperDisasterFragment extends Fragment {
         disasterAdapter = new SuperAdapter(getActivity(), disasterListA);
         disasterShow.setAdapter(disasterAdapter);
         disasterNShow.setAdapter(disasterNAdapter);
-        tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 0,true);
+        tabLayout.addTab(tabLayout.newTab().setText("未处理灾情"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("已处理灾情"), 1);
         role = (String) SharedUtils.getShare(getActivity(), Constant.PERSON_TYPE, "0");
         areaId = (String) SharedUtils.getShare(getActivity(), Constant.AREA_ID, "0");
@@ -344,11 +358,12 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/1/1/1/15/"+role;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/1/1/1/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 try {
+                    progressDialog.dismiss();
                     disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
@@ -356,9 +371,12 @@ public class SuperDisasterFragment extends Fragment {
                         disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterAdapter.notifyDataSetChanged();
                     } else {
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
-                    progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -374,21 +392,25 @@ public class SuperDisasterFragment extends Fragment {
 
     private void requestUPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url)+"dangerous/findDangers/" + areaId + "/0/1/1/15/"+role;
+        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/0/1/1/15/" + role;
         OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 disasterListN.clear();
                 try {
+                    progressDialog.dismiss();
                     initJson(response);
                     if (isSuccess) {
                         disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
                         disasterNAdapter.notifyDataSetChanged();
                         tvNoError.setVisibility(View.GONE);
                     } else {
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(getActivity());
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
-                    progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -401,6 +423,7 @@ public class SuperDisasterFragment extends Fragment {
             }
         });
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

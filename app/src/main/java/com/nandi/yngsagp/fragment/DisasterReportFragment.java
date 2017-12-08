@@ -69,6 +69,7 @@ import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
+import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -127,7 +128,7 @@ public class DisasterReportFragment extends Fragment {
     TextView tvAudio;
     @BindView(R.id.dReportUser)
     TextView dReportUser;
-    private Context context;
+    private Activity context;
     private File pictureFile;
     private PopupWindow popupWindow;
     private List<PhotoPath> photoPaths = new ArrayList<>();
@@ -387,6 +388,7 @@ public class DisasterReportFragment extends Fragment {
                 Log.d("cp", "lon:" + lon + "/lat:" + lat);
                 dReportLon.setText(lon + "");
                 dReportLat.setText(lat + "");
+                locationClient.unRegisterLocationListener(this);
                 locationClient.stop();
             }
         }
@@ -735,7 +737,11 @@ public class DisasterReportFragment extends Fragment {
                         ToastUtils.showShort(data);
                         clean();
                     } else {
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(context);
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -743,7 +749,6 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
-
     private void clean() {
         dReportTime.setText("");
         dReportAddress.setText("");

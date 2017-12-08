@@ -66,6 +66,7 @@ import com.nandi.yngsagp.bean.DangerUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
+import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -158,7 +159,7 @@ public class DangerReportFragment extends Fragment {
     @BindView(R.id.ll_dReport)
     LinearLayout llDReport;
     private int typePos = 0;
-    private Context context;
+    private Activity context;
     private PopupWindow popupWindow;
     private File pictureFile;
     private List<PhotoPath> photoPaths = new ArrayList<>();
@@ -495,12 +496,12 @@ public class DangerReportFragment extends Fragment {
             house = "0";
         }
         String money = moneyDanger.getText().toString().trim();
-        if (money.equals(null)||money.equals(".")) {
+        if (money.equals(null) || money.equals(".")) {
             money = "0";
         }
         String farm = areaDanger.getText().toString().trim();
-        if (farm.equals(null)){
-            money ="0";
+        if (farm.equals(null)) {
+            money = "0";
         }
         String other = otherDanger.getText().toString().trim();
         String mobile = dReportMobile.getText().toString().trim();
@@ -552,7 +553,7 @@ public class DangerReportFragment extends Fragment {
             @Override
             public void onError(Call call, Exception e, int id) {
                 String message = e.getMessage();
-                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
+                if ("Canceled".equals(message) || "Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
@@ -573,7 +574,11 @@ public class DangerReportFragment extends Fragment {
                         ToastUtils.showShort(data);
                         clean();
                     } else {
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(context);
+                        } else {
+                            ToastUtils.showShort(message);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -999,7 +1004,7 @@ public class DangerReportFragment extends Fragment {
             locationDanger.setError("请填写地址");
             ToastUtils.showShort("请填写地址");
             return false;
-        }else if (TextUtils.isEmpty(moneyDanger.getText())) {
+        } else if (TextUtils.isEmpty(moneyDanger.getText())) {
             moneyDanger.setError("请填写经济损失");
             ToastUtils.showShort("请填写经济损失");
             return false;

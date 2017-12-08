@@ -1,6 +1,7 @@
 package com.nandi.yngsagp.activity;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -39,6 +40,7 @@ import com.nandi.yngsagp.adapter.MediaAdapter;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.SuperBean;
+import com.nandi.yngsagp.utils.AppUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -132,7 +134,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
     private List<MediaInfo> photoInfos = new ArrayList<>();
     private List<MediaInfo> videoInfos = new ArrayList<>();
     private List<MediaInfo> audioInfos = new ArrayList<>();
-    private Context context;
+    private Activity context;
     private PhotoAdapter photoAdapter;
     private MediaAdapter videoAdapter;
     private MediaAdapter audioAdapter;
@@ -302,28 +304,42 @@ public class SuperDisasterActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray data = object.getJSONArray("data");
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject jsonObject = data.getJSONObject(i);
-                                if ("1".equals(jsonObject.getString("type"))) {
-                                    MediaInfo photo = new MediaInfo();
-                                    photo.setFileName(jsonObject.getString("fileName"));
-                                    photo.setType(jsonObject.getString("type"));
-                                    photoInfos.add(photo);
-                                } else if ("2".equals(jsonObject.getString("type"))) {
-                                    MediaInfo video = new MediaInfo();
-                                    video.setFileName(jsonObject.getString("fileName"));
-                                    video.setType(jsonObject.getString("type"));
-                                    videoInfos.add(video);
-                                } else if ("3".equals(jsonObject.getString("type"))) {
-                                    MediaInfo audio = new MediaInfo();
-                                    audio.setFileName(jsonObject.getString("fileName"));
-                                    audio.setType(jsonObject.getString("type"));
-                                    audioInfos.add(audio);
+                            JSONObject meta = object.getJSONObject("meta");
+                            boolean success = meta.getBoolean("success");
+                            String message = meta.getString("message");
+                            if (success) {
+                                photoInfos.clear();
+                                videoInfos.clear();
+                                audioInfos.clear();
+                                for (int i = 0; i < data.length(); i++) {
+                                    JSONObject jsonObject = data.getJSONObject(i);
+                                    if ("1".equals(jsonObject.getString("type"))) {
+                                        MediaInfo photo = new MediaInfo();
+                                        photo.setFileName(jsonObject.getString("fileName"));
+                                        photo.setType(jsonObject.getString("type"));
+                                        photoInfos.add(photo);
+                                    } else if ("2".equals(jsonObject.getString("type"))) {
+                                        MediaInfo video = new MediaInfo();
+                                        video.setFileName(jsonObject.getString("fileName"));
+                                        video.setType(jsonObject.getString("type"));
+                                        videoInfos.add(video);
+                                    } else if ("3".equals(jsonObject.getString("type"))) {
+                                        MediaInfo audio = new MediaInfo();
+                                        audio.setFileName(jsonObject.getString("fileName"));
+                                        audio.setType(jsonObject.getString("type"));
+                                        audioInfos.add(audio);
+                                    }
+                                }
+                                photoAdapter.notifyDataSetChanged();
+                                videoAdapter.notifyDataSetChanged();
+                                audioAdapter.notifyDataSetChanged();
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(context);
+                                } else {
+                                    ToastUtils.showShort(message);
                                 }
                             }
-                            photoAdapter.notifyDataSetChanged();
-                            videoAdapter.notifyDataSetChanged();
-                            audioAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -366,6 +382,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
             playAudio(file.getAbsolutePath());
         }
     }
+
     private void playAudio(String s) {
         player = new MediaPlayer();
         try {

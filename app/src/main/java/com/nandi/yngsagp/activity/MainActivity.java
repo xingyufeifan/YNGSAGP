@@ -370,8 +370,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setTitle("提示")
                 .setMessage("确定要注销登录吗？")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        setLoginOut();
                         clean();
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
@@ -383,6 +385,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         dialogInterface.dismiss();
                     }
                 }).show();
+    }
+
+    private void setLoginOut() {
+        OkHttpUtils.get().url(getString(R.string.local_base_url)+"appdocking/logout")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                    }
+                });
     }
 
     private void clean() {

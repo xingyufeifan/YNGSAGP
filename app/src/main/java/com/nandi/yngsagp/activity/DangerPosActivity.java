@@ -65,6 +65,7 @@ import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.fragment.DangerListFragment;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
+import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -185,7 +186,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private List<MediaInfo> videoInfos = new ArrayList<>();
     private List<MediaInfo> audioInfos = new ArrayList<>();
     private List<PhotoPath> photoPaths = new ArrayList<>();
-    private Context context;
+    private Activity context;
     private PhotoAdapter photoAdapter;
     private MediaAdapter videoAdapter;
     private MediaAdapter audioAdapter;
@@ -451,31 +452,42 @@ public class DangerPosActivity extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray data = object.getJSONArray("data");
-                            photoInfos.clear();
-                            videoInfos.clear();
-                            audioInfos.clear();
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject jsonObject = data.getJSONObject(i);
-                                if ("1".equals(jsonObject.getString("type"))) {
-                                    MediaInfo photo = new MediaInfo();
-                                    photo.setFileName(jsonObject.getString("fileName"));
-                                    photo.setType(jsonObject.getString("type"));
-                                    photoInfos.add(photo);
-                                } else if ("2".equals(jsonObject.getString("type"))) {
-                                    MediaInfo video = new MediaInfo();
-                                    video.setFileName(jsonObject.getString("fileName"));
-                                    video.setType(jsonObject.getString("type"));
-                                    videoInfos.add(video);
-                                } else if ("3".equals(jsonObject.getString("type"))) {
-                                    MediaInfo audio = new MediaInfo();
-                                    audio.setFileName(jsonObject.getString("fileName"));
-                                    audio.setType(jsonObject.getString("type"));
-                                    audioInfos.add(audio);
+                            JSONObject meta = object.getJSONObject("meta");
+                            boolean success = meta.getBoolean("success");
+                            String message = meta.getString("message");
+                            if (success) {
+                                photoInfos.clear();
+                                videoInfos.clear();
+                                audioInfos.clear();
+                                for (int i = 0; i < data.length(); i++) {
+                                    JSONObject jsonObject = data.getJSONObject(i);
+                                    if ("1".equals(jsonObject.getString("type"))) {
+                                        MediaInfo photo = new MediaInfo();
+                                        photo.setFileName(jsonObject.getString("fileName"));
+                                        photo.setType(jsonObject.getString("type"));
+                                        photoInfos.add(photo);
+                                    } else if ("2".equals(jsonObject.getString("type"))) {
+                                        MediaInfo video = new MediaInfo();
+                                        video.setFileName(jsonObject.getString("fileName"));
+                                        video.setType(jsonObject.getString("type"));
+                                        videoInfos.add(video);
+                                    } else if ("3".equals(jsonObject.getString("type"))) {
+                                        MediaInfo audio = new MediaInfo();
+                                        audio.setFileName(jsonObject.getString("fileName"));
+                                        audio.setType(jsonObject.getString("type"));
+                                        audioInfos.add(audio);
+                                    }
+                                }
+                                photoAdapter.notifyDataSetChanged();
+                                videoAdapter.notifyDataSetChanged();
+                                audioAdapter.notifyDataSetChanged();
+                            }else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(context);
+                                } else {
+                                    ToastUtils.showShort(message);
                                 }
                             }
-                            photoAdapter.notifyDataSetChanged();
-                            videoAdapter.notifyDataSetChanged();
-                            audioAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -599,9 +611,9 @@ public class DangerPosActivity extends AppCompatActivity {
         map.put("opinion", opinion);
         map.put("id", listBean.getId() + "");
         if ("0".equals(i) || "3".equals(i)) {
-            map.put("isDispose", "1");
+            map.put("isDispose", "3");
         } else {
-            map.put("isDispose", "2");
+            map.put("isDispose", "1");
         }
         map.put("disposeMobile", disposeMobile.getText().toString().trim());
         map.put("disposePerson", disposePerson.getText().toString().trim());
@@ -633,7 +645,7 @@ public class DangerPosActivity extends AppCompatActivity {
             @Override
             public void onError(Call call, Exception e, int id) {
                 String message = e.getMessage();
-                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
+                if ("Canceled".equals(message) || "Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
@@ -643,17 +655,23 @@ public class DangerPosActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response, int id) {
+                Log.d("cp***",response);
                 progressDialog.dismiss();
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
-                    String message = object.getString("data");
+                    String data=object.getString("data");
+                    String message = meta.getString("message");
                     boolean success = meta.getBoolean("success");
                     if (success) {
-                        ToastUtils.showShort(message);
+                        ToastUtils.showShort(data);
                         clean();
                     } else {
-                        ToastUtils.showShort(message);
+                        if ("exit".equals(message)) {
+                            AppUtils.startLogin(context);
+                        } else {
+                            ToastUtils.showShort(data);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

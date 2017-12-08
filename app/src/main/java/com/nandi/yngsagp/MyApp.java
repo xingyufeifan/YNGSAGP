@@ -36,8 +36,9 @@ public class MyApp extends Application {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new LoggerInterceptor("网络请求"))
                 .cookieJar(cookieJar)
-                .connectTimeout(1000* 30L, TimeUnit.MILLISECONDS)
+                .connectTimeout(1000 * 30L, TimeUnit.MILLISECONDS)
                 .readTimeout(1000 * 30L, TimeUnit.MILLISECONDS)
+                .writeTimeout(1000 * 30L, TimeUnit.MILLISECONDS)
                 .build();
         OkHttpUtils.initClient(okHttpClient);
     }
@@ -45,6 +46,7 @@ public class MyApp extends Application {
 
     /**
      * 初始化云推送通道
+     *
      * @param applicationContext
      */
     private void initCloudChannel(Context applicationContext) {
@@ -55,6 +57,7 @@ public class MyApp extends Application {
             public void onSuccess(String response) {
                 Log.d(TAG, "init cloudchannel success");
             }
+
             @Override
             public void onFailed(String errorCode, String errorMessage) {
                 Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
