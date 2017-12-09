@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
@@ -32,6 +33,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.utils.InputUtil;
+import com.nandi.yngsagp.utils.MyCountDownTimer;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -272,6 +274,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         final TextView authNum = view.findViewById(R.id.getAuth);
         Button cleanForget = view.findViewById(R.id.btn_clean);
         Button confirmForget = view.findViewById(R.id.btn_confirm);
+        //new倒计时对象,总共的时间,每隔多少秒更新一次时间
+        final MyCountDownTimer myCountDownTimer = new MyCountDownTimer(60000,1000,authNum);
         final AlertDialog show = new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
@@ -313,9 +317,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String passwordF = passwordForget.getText().toString().trim();
                 if (mobileF.length() > 6) {
                     if (userF.length() > 0) {
+                        myCountDownTimer.start();
                         setRequest(mobileF, userF, verF, passwordF, show);
-                        authNum.setText("重新获取");
-                        authNum.setTextColor(Color.RED);
                     } else {
                         ToastUtils.showShort("请输入用户名");
                     }
@@ -361,7 +364,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 return true;
             }
         });
-
     }
 
 
@@ -387,11 +389,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
                             boolean isSuccess = jsonMeta.optBoolean("success");
                             if (isSuccess) {
-                                if (!TextUtils.isEmpty(verF))
+                                if (!TextUtils.isEmpty(verF)) {
                                     show.dismiss();
-                                allView.setVisibility(View.VISIBLE);
+                                    allView.setVisibility(View.VISIBLE);
+                                    ToastUtils.showShort("密码重置成功");
+                                }
                             } else {
-                                ToastUtils.showShort(jsonObject.optString("message"));
+                                ToastUtils.showShort(jsonMeta.optString("message"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

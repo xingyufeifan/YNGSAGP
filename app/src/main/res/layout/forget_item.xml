@@ -21,6 +21,7 @@
             android:id="@+id/mobile_forget"
             style="@style/disasterStyle"
             android:hint="请输入手机号码"
+            android:textSize="14sp"
             android:inputType="phone"
             android:maxLength="11" />
     </LinearLayout>
@@ -45,6 +46,7 @@
         <EditText
             android:id="@+id/user_forget"
             style="@style/disasterStyle"
+            android:textSize="14sp"
             android:hint="请输入用户名" />
     </LinearLayout>
 
@@ -68,9 +70,10 @@
         <EditText
             android:id="@+id/verification"
             style="@style/disasterStyle"
+            android:textSize="14sp"
             android:inputType="phone"
             android:maxLength="11"
-            android:hint="请输入验证码" />
+            />
 
         <TextView
             android:id="@+id/getAuth"
@@ -82,6 +85,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:text="获取验证码"
+
             android:textSize="20sp"/>
     </LinearLayout>
 
@@ -105,7 +109,9 @@
         <EditText
             android:id="@+id/new_password"
             style="@style/disasterStyle"
-            android:hint="请输入新密码" />
+            android:hint="请输入新密码(只能字母、数字)"
+            android:textSize="14sp"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
     </LinearLayout>
 
     <TextView
