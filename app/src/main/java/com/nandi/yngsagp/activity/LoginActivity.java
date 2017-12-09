@@ -1,8 +1,11 @@
 package com.nandi.yngsagp.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
@@ -10,6 +13,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +25,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +48,7 @@ import butterknife.ButterKnife;
 import me.weyye.hipermission.HiPermission;
 import me.weyye.hipermission.PermissionCallback;
 import me.weyye.hipermission.PermissionItem;
+import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -69,6 +78,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     LinearLayout llInputMobile;
     @BindView(R.id.ll_input_psd)
     LinearLayout llInputPsd;
+    @BindView(R.id.forget)
+    TextView forget;
+    @BindView(R.id.allView)
+    LinearLayout allView;
     private int screenHeight = 0;//屏幕高度
     private int keyHeight = 0; //软件盘弹起后所占高度
     private String pwd;
@@ -123,6 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         cleanPassword.setOnClickListener(this);
         ivShowPwd.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+        forget.setOnClickListener(this);
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -242,7 +256,148 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     progressDialog.show();
                 }
                 break;
+            case R.id.forget:
+                initForget();
+                allView.setVisibility(View.GONE);
+                break;
         }
+    }
+
+    private void initForget() {
+        final View view = LayoutInflater.from(context).inflate(R.layout.forget_item, null);
+        final EditText mobileForget = view.findViewById(R.id.mobile_forget);
+        final EditText userForget = view.findViewById(R.id.user_forget);
+        final EditText verForget = view.findViewById(R.id.verification);
+        final EditText passwordForget = view.findViewById(R.id.new_password);
+        final TextView authNum = view.findViewById(R.id.getAuth);
+        Button cleanForget = view.findViewById(R.id.btn_clean);
+        Button confirmForget = view.findViewById(R.id.btn_confirm);
+        final AlertDialog show = new AlertDialog.Builder(context)
+                .setView(view)
+                .setCancelable(false)
+                .show();
+        mobileForget.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s)) {
+                    authNum.setEnabled(true);
+                } else {
+                    authNum.setEnabled(false);
+                }
+            }
+        });
+        cleanForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show.dismiss();
+                allView.setVisibility(View.VISIBLE);
+            }
+        });
+        authNum.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View v) {
+                String mobileF = mobileForget.getText().toString().trim();
+                String userF = userForget.getText().toString().trim();
+                String verF = verForget.getText().toString().trim();
+                String passwordF = passwordForget.getText().toString().trim();
+                if (mobileF.length() > 6) {
+                    if (userF.length() > 0) {
+                        setRequest(mobileF, userF, verF, passwordF, show);
+                        authNum.setText("重新获取");
+                        authNum.setTextColor(Color.RED);
+                    } else {
+                        ToastUtils.showShort("请输入用户名");
+                    }
+                } else {
+                    ToastUtils.showShort("请输入正确的手机号码");
+                }
+            }
+        });
+        confirmForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String mobileF = mobileForget.getText().toString().trim();
+                final String userF = userForget.getText().toString().trim();
+                final String verF = verForget.getText().toString().trim();
+                final String passwordF = passwordForget.getText().toString().trim();
+                if (textSure()) {
+                    setRequest(mobileF, userF, verF, passwordF, show);
+                }
+            }
+
+            private boolean textSure() {
+                final String mobileF = mobileForget.getText().toString().trim();
+                final String userF = userForget.getText().toString().trim();
+                final String verF = verForget.getText().toString().trim();
+                final String passwordF = passwordForget.getText().toString().trim();
+                if (mobileF.length()==0){
+                    mobileForget.setError("请输入手机号");
+                    ToastUtils.showShort("请输入手机号");
+                    return false;
+                }else if (userF.length() == 0){
+                    userForget.setError("请输入用户名");
+                    ToastUtils.showShort("请输入用户名");
+                    return false;
+                }else if (verF.length() == 0) {
+                    verForget.setError("请输入验证码");
+                    ToastUtils.showShort("请输入验证码");
+                    return false;
+                } else if (passwordF.length() ==0) {
+                    passwordForget.setError("请输入密码");
+                    ToastUtils.showShort("请输入密码");
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    }
+
+
+    private void setRequest(String mobileF, String userF, final String verF, String passwordF, final AlertDialog show) {
+        String url = getString(R.string.local_base_url) + "appdocking/forgetAppUser";
+        OkHttpUtils.post().url(url)
+                .addParams("username", mobileF)
+                .addParams("nickname", userF)
+                .addParams("authCode", verF)
+                .addParams("newPassWord", passwordF)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("请求失败");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        System.out.println("response = " + response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                            boolean isSuccess = jsonMeta.optBoolean("success");
+                            if (isSuccess) {
+                                if (!TextUtils.isEmpty(verF))
+                                    show.dismiss();
+                                allView.setVisibility(View.VISIBLE);
+                            } else {
+                                ToastUtils.showShort(jsonObject.optString("message"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     private void loginPost() {
@@ -273,7 +428,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onError(Exception error) {
-                showToast("网络连接失败" );
+                showToast("网络连接失败");
                 progressDialog.dismiss();
             }
         });

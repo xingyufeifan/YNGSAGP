@@ -12,8 +12,7 @@ import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.bean.MediaInfo;
 
 import java.util.List;
-
-/**
+ /**
  * Created by ChenPeng on 2017/11/22.
  */
 

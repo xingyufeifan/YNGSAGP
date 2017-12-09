@@ -43,6 +43,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/allView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_report"
@@ -152,18 +153,29 @@
                         android:textSize="18sp"
                         android:textStyle="bold"/>
 
-                    <Button
-                        android:id="@+id/btn_login"
+
+                    <TextView
+                        android:id="@+id/forget"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/login_btn_shape"
-                        android:text="@string/login"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="20sp" />
+                        android:text="忘记密码？"
+                        android:textColor="@color/media_title_bg"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
                 </RelativeLayout>
 
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/login_btn_shape"
+                    android:text="@string/login"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
