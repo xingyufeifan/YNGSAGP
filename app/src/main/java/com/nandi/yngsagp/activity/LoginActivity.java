@@ -91,6 +91,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ProgressDialog progressDialog;
     private Context mContext;
     private boolean isCheck = false;
+    private MyCountDownTimer myCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +276,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Button cleanForget = view.findViewById(R.id.btn_clean);
         Button confirmForget = view.findViewById(R.id.btn_confirm);
         //new倒计时对象,总共的时间,每隔多少秒更新一次时间
-        final MyCountDownTimer myCountDownTimer = new MyCountDownTimer(60000,1000,authNum);
+        myCountDownTimer = new MyCountDownTimer(60000, 1000, authNum);
         final AlertDialog show = new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
@@ -317,7 +318,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String passwordF = passwordForget.getText().toString().trim();
                 if (mobileF.length() > 6) {
                     if (userF.length() > 0) {
-                        myCountDownTimer.start();
                         setRequest(mobileF, userF, verF, passwordF, show);
                     } else {
                         ToastUtils.showShort("请输入用户名");
@@ -344,19 +344,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 final String userF = userForget.getText().toString().trim();
                 final String verF = verForget.getText().toString().trim();
                 final String passwordF = passwordForget.getText().toString().trim();
-                if (mobileF.length()==0){
+                if (mobileF.length() == 0) {
                     mobileForget.setError("请输入手机号");
                     ToastUtils.showShort("请输入手机号");
                     return false;
-                }else if (userF.length() == 0){
+                } else if (userF.length() == 0) {
                     userForget.setError("请输入用户名");
                     ToastUtils.showShort("请输入用户名");
                     return false;
-                }else if (verF.length() == 0) {
+                } else if (verF.length() == 0) {
                     verForget.setError("请输入验证码");
                     ToastUtils.showShort("请输入验证码");
                     return false;
-                } else if (passwordF.length() ==0) {
+                } else if (passwordF.length() == 0) {
                     passwordForget.setError("请输入密码");
                     ToastUtils.showShort("请输入密码");
                     return false;
@@ -393,6 +393,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     show.dismiss();
                                     allView.setVisibility(View.VISIBLE);
                                     ToastUtils.showShort("密码重置成功");
+                                } else {
+                                    myCountDownTimer.start();
                                 }
                             } else {
                                 ToastUtils.showShort(jsonMeta.optString("message"));

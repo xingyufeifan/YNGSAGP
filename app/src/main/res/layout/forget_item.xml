@@ -85,8 +85,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:text="获取验证码"
-
-            android:textSize="20sp"/>
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <TextView
