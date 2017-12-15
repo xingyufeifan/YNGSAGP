@@ -412,20 +412,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
 
-                progressDialog.dismiss();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                    boolean isSuccess = jsonMeta.optBoolean("success");
-                    if (isSuccess) {
-                        initJson(jsonObject);
-                        finish();
-                        ToNextActivity(MainActivity.class);
-                    } else {
-                        String message = jsonMeta.optString("message");
-                        etPassword.setText("");
-                        showToast(message);
-                    }
+                    progressDialog.dismiss();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                        boolean isSuccess = jsonMeta.optBoolean("success");
+                        if (isSuccess) {
+                            initJson(jsonObject);
+                            finish();
+                            ToNextActivity(MainActivity.class);
+                        } else {
+                            String message = jsonMeta.optString("message");
+                            etPassword.setText("");
+                            showToast(message);
+                        }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -441,33 +441,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initJson(JSONObject jsonObject) throws JSONException {
-        JSONObject jsonData = new JSONObject(jsonObject.optString("data"));
-        String area_id = jsonData.optString("area_id");
-        SharedUtils.putShare(mContext, Constant.AREA_ID, area_id);
-        String address = jsonData.optString("address");
-        SharedUtils.putShare(mContext, Constant.ADDRESS, address);
-        String name = jsonData.optString("nickname");
-        SharedUtils.putShare(mContext, Constant.NAME, name);
-        String personType = jsonData.optString("role");
-        SharedUtils.putShare(mContext, Constant.PERSON_TYPE, personType);
-        SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
-        if (isCheck) {
-            SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
-            SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
-        }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            // 获得当前得到焦点的View，一般情况下就是EditText（特殊情况就是轨迹求或者实体案件会移动焦点）
-            View v = getCurrentFocus();
-            if (InputUtil.isShouldHideInput(v, ev)) {
-                InputUtil.hideSoftInput(v.getWindowToken(), context);
+        String data = jsonObject.optString("data");
+        if (!"用户无访问权限".equals(data)){
+            JSONObject jsonData = new JSONObject(data);
+            String area_id = jsonData.optString("area_id");
+            SharedUtils.putShare(mContext, Constant.AREA_ID, area_id);
+            String address = jsonData.optString("address");
+            SharedUtils.putShare(mContext, Constant.ADDRESS, address);
+            String name = jsonData.optString("nickname");
+            SharedUtils.putShare(mContext, Constant.NAME, name);
+            String personType = jsonData.optString("role");
+            SharedUtils.putShare(mContext, Constant.PERSON_TYPE, personType);
+            SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
+            if (isCheck) {
+                SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
+                SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
             }
         }
-        return super.dispatchTouchEvent(ev);
     }
+//
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//            // 获得当前得到焦点的View，一般情况下就是EditText（特殊情况就是轨迹求或者实体案件会移动焦点）
+//            View v = getCurrentFocus();
+//            if (InputUtil.isShouldHideInput(v, ev)) {
+//                InputUtil.hideSoftInput(v.getWindowToken(), context);
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
 
     //权限申请
     private void checkPremission() {

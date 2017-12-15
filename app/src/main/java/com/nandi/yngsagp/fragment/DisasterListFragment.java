@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,8 @@ public class DisasterListFragment extends Fragment {
     private boolean isSuccess;
     private String message;
     private ProgressDialog progressDialog;
+    private String data;
+    private JSONObject jsonObject;
 
 
     @Nullable
@@ -106,10 +109,15 @@ public class DisasterListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        disasterListA.clear();
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterAdapter.notifyDataSetChanged();
-                        pageA = 1;
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            disasterListA.clear();
+                            disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterAdapter.notifyDataSetChanged();
+                            pageA = 1;
+                        } else {
+                            Log.d("dis", "initJson: 用户无访问权限");
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -141,10 +149,13 @@ public class DisasterListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        disasterListN.clear();
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterNAdapter.notifyDataSetChanged();
-                        pageN = 1;
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            disasterListN.clear();
+                            disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterNAdapter.notifyDataSetChanged();
+                            pageN = 1;
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -167,13 +178,11 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void initJson(String response) throws JSONException {
-        JSONObject jsonObject = new JSONObject(response);
+        jsonObject = new JSONObject(response);
         JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
         isSuccess = jsonMeta.optBoolean("success");
         message = jsonMeta.optString("message");
-        if (isSuccess) {
-            jsonData = new JSONArray(jsonObject.optString("data"));
-        }
+        data = jsonObject.optString("data");
     }
 
 
@@ -187,11 +196,14 @@ public class DisasterListFragment extends Fragment {
                     refreshlayouts.finishLoadmore();
                     initJson(response);
                     if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            if ("[]".equals(jsonData.toString())) {
+                                ToastUtils.showShort("没有更多数据了");
+                            }
+                            disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterAdapter.notifyDataSetChanged();
                         }
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterAdapter.notifyDataSetChanged();
 
                     } else {
                         if ("exit".equals(message)) {
@@ -227,11 +239,14 @@ public class DisasterListFragment extends Fragment {
                     initJson(response);
                     refreshlayouts.finishLoadmore();
                     if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            if ("[]".equals(jsonData.toString())) {
+                                ToastUtils.showShort("没有更多数据了");
+                            }
+                            disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterNAdapter.notifyDataSetChanged();
                         }
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterNAdapter.notifyDataSetChanged();
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -239,6 +254,7 @@ public class DisasterListFragment extends Fragment {
                             ToastUtils.showShort(message);
                         }
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -362,16 +378,22 @@ public class DisasterListFragment extends Fragment {
             @Override
             public void onSuccess(String response) {
                 try {
+                    progressDialog.dismiss();
                     disasterListA.clear();
                     initJson(response);
                     if (isSuccess) {
-                        tvAyError.setVisibility(View.GONE);
-                        disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterAdapter.notifyDataSetChanged();
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            tvAyError.setVisibility(View.GONE);
+                            disasterListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.d("dis", "initJson: 用户无访问权限");
+                        }
                     } else {
                         ToastUtils.showShort(message);
                     }
-                    progressDialog.dismiss();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -393,15 +415,19 @@ public class DisasterListFragment extends Fragment {
             public void onSuccess(String response) {
                 disasterListN.clear();
                 try {
+                    progressDialog.dismiss();
                     initJson(response);
                     if (isSuccess) {
-                        disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        disasterNAdapter.notifyDataSetChanged();
-                        tvNoError.setVisibility(View.GONE);
-                    } else {
-                        ToastUtils.showShort(message);
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            disasterListN.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            disasterNAdapter.notifyDataSetChanged();
+                            tvNoError.setVisibility(View.GONE);
+                        } else {
+                            Log.d("dis", "initJson: 用户无访问权限");
+                        }
                     }
-                    progressDialog.dismiss();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

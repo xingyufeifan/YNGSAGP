@@ -101,7 +101,7 @@
             <TextView
                 android:id="@+id/timeShow"
                 style="@style/disasterStyle"
-                android:hint="请选择...(必填)" />
+                android:hint="@string/mustSelect" />
         </LinearLayout>
 
         <TextView
@@ -126,7 +126,7 @@
             <TextView
                 android:id="@+id/locationShow"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)" />
+                android:hint="@string/mustInput" />
         </LinearLayout>
 
         <TextView style="@style/myDivide" />
@@ -145,7 +145,7 @@
             <TextView
                 android:id="@+id/addressShow"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)" />
+                android:hint="@string/mustInput" />
         </LinearLayout>
 
 
@@ -294,6 +294,7 @@
             <TextView
                 android:id="@+id/deathShow"
                 style="@style/disasterStyle"
+                android:hint="@string/mustInput"
                 android:inputType="number" />
         </LinearLayout>
 
@@ -375,7 +376,7 @@
             <TextView
                 android:id="@+id/moneyShow"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)"
+                android:hint="@string/mustInput"
                 android:inputType="number|numberDecimal" />
         </LinearLayout>
 

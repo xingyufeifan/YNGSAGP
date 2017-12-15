@@ -449,6 +449,7 @@ public class DangerPosActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         progressDialog.dismiss();
+                        System.out.println("response = " + response);
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray data = object.getJSONArray("data");
@@ -617,6 +618,7 @@ public class DangerPosActivity extends AppCompatActivity {
         }
         map.put("disposeMobile", disposeMobile.getText().toString().trim());
         map.put("disposePerson", disposePerson.getText().toString().trim());
+        map.put("disasterNum", listBean.getDisasterNum().trim());
         setUploadRequest(map);
     }
 

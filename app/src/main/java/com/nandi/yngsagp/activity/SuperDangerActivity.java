@@ -335,11 +335,7 @@ public class SuperDangerActivity extends AppCompatActivity {
                                 videoAdapter.notifyDataSetChanged();
                                 audioAdapter.notifyDataSetChanged();
                             } else {
-                                if ("exit".equals(message)) {
-                                    AppUtils.startLogin(context);
-                                } else {
-                                    ToastUtils.showShort(message);
-                                }
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

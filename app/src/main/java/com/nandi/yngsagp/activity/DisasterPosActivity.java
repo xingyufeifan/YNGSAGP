@@ -621,6 +621,7 @@ public class DisasterPosActivity extends AppCompatActivity {
             map.put("isDispose", "1");
         }
         map.put("isDanger", i);//0误报 1确认灾情
+        map.put("disasterNum", listBean.getDisasterNum().trim());
         setUploadRequest(map);
     }
 
@@ -664,7 +665,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                     JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
                     String data=object.getString("data");
-                    String message = object.getString("message");
+                    String message = meta.getString("message");
                     boolean success = meta.getBoolean("success");
                     if (success) {
                         ToastUtils.showShort(data);

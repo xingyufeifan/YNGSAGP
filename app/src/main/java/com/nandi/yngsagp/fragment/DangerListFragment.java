@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class DangerListFragment extends Fragment {
     private boolean isSuccess;
     private String message;
     private ProgressDialog progressDialog;
+    private String data;
 
 
     @Nullable
@@ -106,10 +108,13 @@ public class DangerListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        dangerListA.clear();
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerAdapter.notifyDataSetChanged();
-                        pageA = 1;
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            dangerListA.clear();
+                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerAdapter.notifyDataSetChanged();
+                            pageA = 1;
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -140,10 +145,13 @@ public class DangerListFragment extends Fragment {
                     refreshlayouts.finishRefresh();
                     initJson(response);
                     if (isSuccess) {
-                        dangerListU.clear();
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerUAdapter.notifyDataSetChanged();
-                        pageU = 1;
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            dangerListU.clear();
+                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerUAdapter.notifyDataSetChanged();
+                            pageU = 1;
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -170,9 +178,7 @@ public class DangerListFragment extends Fragment {
         jsonMeta = new JSONObject(jsonObject.optString("meta"));
         isSuccess = jsonMeta.optBoolean("success");
         message = jsonMeta.optString("message");
-        if (isSuccess) {
-            jsonData = new JSONArray(jsonObject.optString("data"));
-        }
+        data = jsonObject.optString("data");
     }
 
 
@@ -187,11 +193,14 @@ public class DangerListFragment extends Fragment {
                 try {
                     initJson(response);
                     if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            if ("[]".equals(jsonData.toString())) {
+                                ToastUtils.showShort("没有更多数据了");
+                            }
+                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerAdapter.notifyDataSetChanged();
                         }
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerAdapter.notifyDataSetChanged();
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -225,11 +234,14 @@ public class DangerListFragment extends Fragment {
                     refreshlayouts.finishLoadmore();
                     initJson(response);
                     if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            if ("[]".equals(jsonData.toString())) {
+                                ToastUtils.showShort("没有更多数据了");
+                            }
+                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerUAdapter.notifyDataSetChanged();
                         }
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerUAdapter.notifyDataSetChanged();
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());
@@ -366,9 +378,12 @@ public class DangerListFragment extends Fragment {
                     dangerListA.clear();
                     initJson(response);
                     if (isSuccess) {
-                        tvAyError.setVisibility(View.GONE);
-                        dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerAdapter.notifyDataSetChanged();
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            tvAyError.setVisibility(View.GONE);
+                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerAdapter.notifyDataSetChanged();
+                        }
 
                     } else {
                         if ("exit".equals(message)) {
@@ -401,9 +416,12 @@ public class DangerListFragment extends Fragment {
                     dangerListU.clear();
                     initJson(response);
                     if (isSuccess) {
-                        dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        dangerUAdapter.notifyDataSetChanged();
-                        tvNoError.setVisibility(View.GONE);
+                        if (!"用户无访问权限".equals(data)) {
+                            jsonData = new JSONArray(data);
+                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                            dangerUAdapter.notifyDataSetChanged();
+                            tvNoError.setVisibility(View.GONE);
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(getActivity());

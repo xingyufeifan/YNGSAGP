@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void checkUpdate() {
-        String url = "http://192.168.10.195:8080/yncmd/version/findNewVersionNumber/" + AppUtils.getVerCode(this);
+        String url = getString(R.string.local_base_url)+"version/findNewVersionNumber/" + AppUtils.getVerCode(this);
         OkHttpHelper.sendHttpGet(context, url, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         builder.setPositiveButton("更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new DownloadUtils(context).downloadAPK("http://192.168.10.195:8080/yncmd/version/down", "app-release.apk");
+                new DownloadUtils(context).downloadAPK(getString(R.string.local_base_url)+"version/down", "app-release.apk");
                 dialog.dismiss();
             }
         });

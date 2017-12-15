@@ -64,7 +64,7 @@
             <TextView
                 android:id="@+id/dReportTime"
                 style="@style/disasterStyle"
-                android:hint="请选择...(必填)" />
+                android:hint="@string/mustSelect" />
         </LinearLayout>
 
         <TextView
@@ -109,7 +109,7 @@
             <TextView
                 android:id="@+id/dReportLocation"
                 style="@style/disasterStyle"
-                android:hint="请输入..." />
+                android:hint="@string/pleaseInput" />
         </LinearLayout>
 
         <TextView style="@style/myDivide" />
@@ -128,7 +128,7 @@
             <EditText
                 android:id="@+id/dReportAddress"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)" />
+                android:hint="@string/mustInput" />
         </LinearLayout>
 
         <TextView style="@style/myDivide" />
@@ -253,7 +253,7 @@
             <EditText
                 android:id="@+id/dReportDeath"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)"
+                android:hint="@string/mustInput"
                 android:inputType="number" />
         </LinearLayout>
 
@@ -330,7 +330,7 @@
             <EditText
                 android:id="@+id/dReportMoney"
                 style="@style/disasterStyle"
-                android:hint="请输入...(必填)"
+                android:hint="@string/mustInput"
                 android:inputType="number|numberDecimal" />
         </LinearLayout>
 
