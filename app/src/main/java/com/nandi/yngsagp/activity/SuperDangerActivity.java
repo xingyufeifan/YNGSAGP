@@ -166,12 +166,12 @@ public class SuperDangerActivity extends AppCompatActivity {
         rvPhotoUploaded.setAdapter(photoAdapter);
         rvVideoUpdated.setAdapter(videoAdapter);
         rvAudioUpdated.setAdapter(audioAdapter);
-        userDangerShow.setText((CharSequence) listBean.getPersonel());
-        xqNumShow.setText((CharSequence) listBean.getDisasterNum());
-        phoneDangerShow.setText((CharSequence) listBean.getPhoneNum());
+        userDangerShow.setText(listBean.getPersonel());
+        xqNumShow.setText(listBean.getDisasterNum());
+        phoneDangerShow.setText(listBean.getPhoneNum());
         timeDangerShow.setText((CharSequence) listBean.getHappenTime());
-        locationDangerShow.setText((CharSequence) listBean.getCurrentLocation());
-        addressDangerShow.setText((CharSequence) listBean.getAddress());
+        locationDangerShow.setText(listBean.getCurrentLocation());
+        addressDangerShow.setText(listBean.getAddress());
         typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
         typeDangerShow.setEnabled(false);
         factorDangerShow.setText((CharSequence) listBean.getFactor());
@@ -179,12 +179,12 @@ public class SuperDangerActivity extends AppCompatActivity {
         areaDangerShow.setText((CharSequence) listBean.getFarmland());
         houseDangerShow.setText((CharSequence) listBean.getHouseNum());
         moneyDangerShow.setText((CharSequence) listBean.getPotentialLoss());
-        lonDangerShow.setText((CharSequence) listBean.getLongitude());
-        latDangerShow.setText((CharSequence) listBean.getLatitude());
+        lonDangerShow.setText(listBean.getLongitude());
+        latDangerShow.setText(listBean.getLatitude());
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
-        if ("2".equals((CharSequence) listBean.getPersonType())) {
+        if ("2".equals(listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         ToastUtils.showShort(listBean.getForecastLevel());
@@ -215,9 +215,9 @@ public class SuperDangerActivity extends AppCompatActivity {
             llHandle.setVisibility(View.GONE);
         } else {
             tvTitle.setText("已处理险情");
-            disposePerson.setText((CharSequence) listBean.getDisposePerson());
-            disposeMobile.setText((CharSequence) listBean.getDisposeMobile());
-            etHandle.setText((CharSequence) listBean.getOpinion());
+            disposePerson.setText(listBean.getDisposePerson());
+            disposeMobile.setText(listBean.getDisposeMobile());
+            etHandle.setText(listBean.getOpinion());
         }
     }
 

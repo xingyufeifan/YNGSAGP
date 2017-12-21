@@ -163,12 +163,12 @@ public class SuperDisasterActivity extends AppCompatActivity {
         rvPhotoUploaded.setAdapter(photoAdapter);
         rvVideoUpdated.setAdapter(videoAdapter);
         rvAudioUpdated.setAdapter(audioAdapter);
-        userShow.setText((CharSequence) listBeans.getPersonel());
-        disNumShow.setText((CharSequence) listBeans.getDisasterNum());
-        phoneShow.setText((CharSequence) listBeans.getPhoneNum());
-        timeShow.setText((CharSequence) listBeans.getFindTime());
-        locationShow.setText((CharSequence) listBeans.getCurrentLocation());
-        addressShow.setText((CharSequence) listBeans.getAddress());
+        userShow.setText(listBeans.getPersonel());
+        disNumShow.setText(listBeans.getDisasterNum());
+        phoneShow.setText(listBeans.getPhoneNum());
+        timeShow.setText(listBeans.getFindTime());
+        locationShow.setText(listBeans.getCurrentLocation());
+        addressShow.setText(listBeans.getAddress());
         typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()));
         typeShow.setEnabled(false);
         factorShow.setText((CharSequence) listBeans.getFactor());
@@ -177,13 +177,13 @@ public class SuperDisasterActivity extends AppCompatActivity {
         missShow.setText((CharSequence) listBeans.getMissingNum());
         farmShow.setText((CharSequence) listBeans.getFarmland());
         houseShow.setText((CharSequence) listBeans.getHouseNum());
-        moneyShow.setText((CharSequence) listBeans.getLossProperty());
-        lonShow.setText((CharSequence) listBeans.getLongitude());
-        latShow.setText((CharSequence) listBeans.getLatitude());
+        moneyShow.setText(listBeans.getLossProperty());
+        lonShow.setText(listBeans.getLongitude());
+        latShow.setText(listBeans.getLatitude());
         otherShow.setText((CharSequence) listBeans.getOtherThing());
         mobileShow.setText((CharSequence) listBeans.getMonitorPhone());
         nameShow.setText((CharSequence) listBeans.getMonitorName());
-        if ("2".equals((CharSequence) listBeans.getPersonType())) {
+        if ("2".equals(listBeans.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         ToastUtils.showShort(listBeans.getForecastLevel());

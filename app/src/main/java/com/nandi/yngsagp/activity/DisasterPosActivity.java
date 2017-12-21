@@ -238,12 +238,12 @@ public class DisasterPosActivity extends AppCompatActivity {
         rvPhoto.setAdapter(pictureAdapter);
         tabLayout.addTab(tabLayout.newTab().setText("文本信息"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
-        userShow.setText((CharSequence) listBean.getPersonel());
-        disNumShow.setText((CharSequence) listBean.getDisasterNum());
-        phoneShow.setText((CharSequence) listBean.getPhoneNum());
-        timeShow.setText((CharSequence) listBean.getFindTime());
-        locationShow.setText((CharSequence) listBean.getCurrentLocation());
-        addressShow.setText((CharSequence) listBean.getAddress());
+        userShow.setText(listBean.getPersonel());
+        disNumShow.setText(listBean.getDisasterNum());
+        phoneShow.setText(listBean.getPhoneNum());
+        timeShow.setText(listBean.getFindTime());
+        locationShow.setText(listBean.getCurrentLocation());
+        addressShow.setText(listBean.getAddress());
         typeShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
         factorShow.setText((CharSequence) listBean.getFactor());
         injurdShow.setText((CharSequence) listBean.getInjurdNum());
@@ -251,13 +251,13 @@ public class DisasterPosActivity extends AppCompatActivity {
         missShow.setText((CharSequence) listBean.getMissingNum());
         farmShow.setText((CharSequence) listBean.getFarmland());
         houseShow.setText((CharSequence) listBean.getHouseNum());
-        moneyShow.setText((CharSequence) listBean.getLossProperty());
-        lonShow.setText((CharSequence) listBean.getLongitude());
-        latShow.setText((CharSequence) listBean.getLatitude());
+        moneyShow.setText(listBean.getLossProperty());
+        lonShow.setText(listBean.getLongitude());
+        latShow.setText(listBean.getLatitude());
         otherShow.setText((CharSequence) listBean.getOtherThing());
         mobileShow.setText((CharSequence) listBean.getMonitorPhone());
         nameShow.setText((CharSequence) listBean.getMonitorName());
-        if ("1".equals((CharSequence) listBean.getPersonType())) {
+        if ("1".equals(listBean.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
         int isDispose = listBean.getIsDispose();
@@ -429,7 +429,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void enlargePicture(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
-        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+        PhotoView photoView = view.findViewById(R.id.photo_view);
         photoView.setImageBitmap(ImageUtils.getBitmap(path, 1280, 720));
         new android.support.v7.app.AlertDialog.Builder(context, R.style.Transparent)
                 .setView(view)
@@ -778,7 +778,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
-        final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
+        final CheckBox btnStart = view.findViewById(R.id.btn_start_recode);
         final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -787,7 +787,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                 String time = chronometer.getText().toString();
             }
         });
-        final TextView tv = (TextView) view.findViewById(R.id.tv_time);
+        final TextView tv = view.findViewById(R.id.tv_time);
         final AlertDialog show = new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
@@ -866,8 +866,8 @@ public class DisasterPosActivity extends AppCompatActivity {
 
     private void choosePhoto() {
         View view = LayoutInflater.from(context).inflate(R.layout.popup_view, null);
-        TextView tvTake = (TextView) view.findViewById(R.id.tv_take_photo);
-        TextView tvChoose = (TextView) view.findViewById(R.id.tv_choose_photo);
+        TextView tvTake = view.findViewById(R.id.tv_take_photo);
+        TextView tvChoose = view.findViewById(R.id.tv_choose_photo);
         tvTake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

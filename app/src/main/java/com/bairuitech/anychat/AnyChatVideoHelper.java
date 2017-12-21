@@ -221,7 +221,7 @@ class VideoRenderer implements Callback {
 				if (rotation == 90 || rotation == 270) {
 					temp_b_w = b_h;
 					temp_b_h = b_w;
-					matrix.postTranslate((float)(1.0f/2)*(b_h - b_w), (float)(1.0f/2)*(b_w - b_h));
+					matrix.postTranslate(1.0f/2 *(b_h - b_w), 1.0f/2 *(b_w - b_h));
 				}
 			}
 			if (c_h * temp_b_w > c_w * temp_b_h) {

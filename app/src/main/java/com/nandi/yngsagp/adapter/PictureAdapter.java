@@ -75,8 +75,8 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PicViewH
 
         PicViewHolder(View itemView) {
             super(itemView);
-            ivImage = (ImageView) itemView.findViewById(R.id.iv_item_picture);
-            ivDelete = (ImageView) itemView.findViewById(R.id.iv_item_delete);
+            ivImage = itemView.findViewById(R.id.iv_item_picture);
+            ivDelete = itemView.findViewById(R.id.iv_item_delete);
         }
     }
 }

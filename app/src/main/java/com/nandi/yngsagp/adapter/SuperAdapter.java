@@ -58,16 +58,13 @@ public class SuperAdapter extends RecyclerView.Adapter<SuperAdapter.MyViewHolder
                     holder.tvType.setText("未处理");
                     break;
                 case 1:
-                    holder.tvType.setText("已完成");
-                    break;
-                case 2:
                     holder.tvType.setText("已上报");
                     break;
-                case 3:
+                case 2:
                     holder.tvType.setText("处置中");
                     break;
-                case 4:
-                    holder.tvType.setText("调查中");
+                case 3:
+                    holder.tvType.setText("已完成");
                     break;
             }
         }

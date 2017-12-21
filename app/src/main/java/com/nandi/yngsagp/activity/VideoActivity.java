@@ -72,12 +72,12 @@ public class VideoActivity extends Activity implements AnyChatBaseEvent {
         this.setContentView(R.layout.video_frame);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         this.setTitle("与 \"" + anychatSDK.GetUserName(userID) + "\" 对话中");
-        mMyView = (SurfaceView) findViewById(R.id.surface_local);
-        mOtherView = (SurfaceView) findViewById(R.id.surface_remote);
-        mImgSwitchVideo = (ImageButton) findViewById(R.id.ImgSwichVideo);
-        mEndCallBtn = (Button) findViewById(R.id.endCall);
-        mBtnSpeakCtrl = (ImageButton) findViewById(R.id.btn_speakControl);
-        mBtnCameraCtrl = (ImageButton) findViewById(R.id.btn_cameraControl);
+        mMyView = findViewById(R.id.surface_local);
+        mOtherView = findViewById(R.id.surface_remote);
+        mImgSwitchVideo = findViewById(R.id.ImgSwichVideo);
+        mEndCallBtn = findViewById(R.id.endCall);
+        mBtnSpeakCtrl = findViewById(R.id.btn_speakControl);
+        mBtnCameraCtrl = findViewById(R.id.btn_cameraControl);
         mBtnSpeakCtrl.setOnClickListener(onClickListener);
         mBtnCameraCtrl.setOnClickListener(onClickListener);
         mImgSwitchVideo.setOnClickListener(onClickListener);
@@ -324,7 +324,7 @@ public class VideoActivity extends Activity implements AnyChatBaseEvent {
         DisplayMetrics dMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dMetrics);
         width = (float) dMetrics.widthPixels / 4;
-        LinearLayout layoutLocal = (LinearLayout) this
+        LinearLayout layoutLocal = this
                 .findViewById(R.id.frame_local_area);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) layoutLocal
                 .getLayoutParams();

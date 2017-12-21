@@ -380,7 +380,7 @@ public class AnyChatCoreSDK
     	{
 		case AnyChatDefine.WM_GV_CONNECT:			
 			if(baseEvent != null)
-				baseEvent.OnAnyChatConnectMessage(wParam>=1?true:false);
+				baseEvent.OnAnyChatConnectMessage(wParam >= 1);
 			break;
 		case AnyChatDefine.WM_GV_LOGINSYSTEM:
 			if(baseEvent != null)
@@ -392,7 +392,7 @@ public class AnyChatCoreSDK
 			break;
 		case AnyChatDefine.WM_GV_USERATROOM:
 			if(baseEvent != null)
-				baseEvent.OnAnyChatUserAtRoomMessage(wParam,lParam>=1?true:false);
+				baseEvent.OnAnyChatUserAtRoomMessage(wParam, lParam >= 1);
 			break;
 		case AnyChatDefine.WM_GV_LINKCLOSE:
 			if(baseEvent != null)
@@ -404,7 +404,7 @@ public class AnyChatCoreSDK
 			break;
 		case AnyChatDefine.WM_GV_MICSTATECHANGE:
 			if(stateChgEvent != null)
-				stateChgEvent.OnAnyChatMicStateChgMessage(wParam,lParam==0?false:true);
+				stateChgEvent.OnAnyChatMicStateChgMessage(wParam, lParam != 0);
 			break;			
 		case AnyChatDefine.WM_GV_CAMERASTATE:
 			if(stateChgEvent != null)
@@ -412,7 +412,7 @@ public class AnyChatCoreSDK
 			break;
 		case AnyChatDefine.WM_GV_CHATMODECHG:
 			if(stateChgEvent != null)
-				stateChgEvent.OnAnyChatChatModeChgMessage(wParam,lParam==0?true:false);
+				stateChgEvent.OnAnyChatChatModeChgMessage(wParam, lParam == 0);
 			break;
 		case AnyChatDefine.WM_GV_ACTIVESTATE:
 			if(stateChgEvent != null)
@@ -462,7 +462,7 @@ public class AnyChatCoreSDK
 				mAudioHelper.ReleaseAudioRecorder();
 			break;
 		case AnyChatDefine.WM_GV_VIDEOCAPCTRL:
-			mCameraHelper.CaptureControl(wParam==0 ? false : true);
+			mCameraHelper.CaptureControl(wParam != 0);
 			break;
 		default:
 			break;
@@ -503,7 +503,7 @@ public class AnyChatCoreSDK
                  int secret = tBundle.getInt("SECRET");
                  String message = tBundle.getString("MESSAGE");
                  if(anychat.textMsgEvent != null)
-                	 anychat.textMsgEvent.OnAnyChatTextMessage(fromid, toid, secret!=0?true:false, message);
+                	 anychat.textMsgEvent.OnAnyChatTextMessage(fromid, toid, secret != 0, message);
              }
              else if(type == HANDLE_TYPE_TRANSFILE)
              {

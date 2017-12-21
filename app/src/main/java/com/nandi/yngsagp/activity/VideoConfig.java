@@ -66,7 +66,7 @@ public class VideoConfig extends Activity {
 		mConfigEntity = ConfigService.LoadConfig(this);
 		setContentView(R.layout.videoconfig);
 		
-		mImgBtnReturn = (ImageView) this.findViewById(R.id.iv_back);
+		mImgBtnReturn = this.findViewById(R.id.iv_back);
 		mImgBtnReturn.setOnClickListener(onClickListener);
 		//初始化界面
 		InitialLayout();
@@ -75,57 +75,57 @@ public class VideoConfig extends Activity {
 	private void InitialLayout() {
 		
 		// 启用P2P网络连接
-		mEnableP2PBox = (CheckBox)this.findViewById(R.id.enableP2PBox);
+		mEnableP2PBox = this.findViewById(R.id.enableP2PBox);
 		mEnableP2PBox.setTextColor(Color.BLACK);
 		mEnableP2PBox.setChecked(mConfigEntity.mEnableP2P != 0);
 		
 		// Overlay视频模式
-		mVideoOverlayBox = (CheckBox)this.findViewById(R.id.videoOverlayBox);
+		mVideoOverlayBox = this.findViewById(R.id.videoOverlayBox);
 		mVideoOverlayBox.setTextColor(Color.BLACK);
 		mVideoOverlayBox.setChecked(mConfigEntity.mVideoOverlay != 0);
 		
 		// 翻转视频
-		mVideoRotateBox = (CheckBox)this.findViewById(R.id.videoRotateBox);
+		mVideoRotateBox = this.findViewById(R.id.videoRotateBox);
 		mVideoRotateBox.setTextColor(Color.BLACK);
 		mVideoRotateBox.setChecked(mConfigEntity.mVideoRotateMode != 0); 
 		
 		// 本地视频采集偏色修正
-		mFixColorDeviation = (CheckBox)this.findViewById(R.id.fixColorDeviation);
+		mFixColorDeviation = this.findViewById(R.id.fixColorDeviation);
 		mFixColorDeviation.setTextColor(Color.BLACK);
 	    mFixColorDeviation.setChecked(mConfigEntity.mFixColorDeviation != 0);  
 		
 	    // 启用视频GPU渲染
-	    mVideoShowGPURender = (CheckBox)this.findViewById(R.id.videoShowGPURender);
+	    mVideoShowGPURender = this.findViewById(R.id.videoShowGPURender);
 	    mVideoShowGPURender.setTextColor(Color.BLACK);
 	    mVideoShowGPURender.setChecked(mConfigEntity.mVideoShowGPURender!=0); 	
 	    
 	    // 本地视频跟随设备自动旋转
-	    mVideoAutoRotation = (CheckBox)this.findViewById(R.id.videoAutoRotation);
+	    mVideoAutoRotation = this.findViewById(R.id.videoAutoRotation);
 	    mVideoAutoRotation.setTextColor(Color.BLACK);
 	    mVideoAutoRotation.setChecked(mConfigEntity.mVideoAutoRotation != 0); 
 		
 	    // 强制使用ARMv6指令集（安全模式）
-	    mUseARMv6Box = (CheckBox)this.findViewById(R.id.useARMv6Box);
+	    mUseARMv6Box = this.findViewById(R.id.useARMv6Box);
 	    mUseARMv6Box.setTextColor(Color.BLACK);
 	    mUseARMv6Box.setChecked(mConfigEntity.mUseARMv6Lib != 0); 
 	    
 	    // 启用回音消除（AEC）
-	    mUseAECBox = (CheckBox)this.findViewById(R.id.useAECBox);
+	    mUseAECBox = this.findViewById(R.id.useAECBox);
 	    mUseAECBox.setTextColor(Color.BLACK);
 	    mUseAECBox.setChecked(mConfigEntity.mEnableAEC != 0); 
 	    
 	    // 启用平台内置硬件编解码（需重启应用程序）
-	    mUseHWCodecBox = (CheckBox)this.findViewById(R.id.useHWCodecBox);
+	    mUseHWCodecBox = this.findViewById(R.id.useHWCodecBox);
 	    mUseHWCodecBox.setTextColor(Color.BLACK);
 	    mUseHWCodecBox.setChecked(mConfigEntity.mUseHWCodec != 0);
 	  
 	    // 插入配置模式选择项
-	    TextView configModelLable = (TextView)this.findViewById(R.id.configModelLable);
+	    TextView configModelLable = this.findViewById(R.id.configModelLable);
 	    configModelLable.setTextColor(Color.BLACK);
 	    configModelLable.setText("选择配置模式： ");
 	     
-	    mServerModelConfigBtn = (RadioButton)findViewById(R.id.serverModelConfigBtn);
-	    mCustomModelConfigBtn = (RadioButton)findViewById(R.id.customModelConfigBtn);
+	    mServerModelConfigBtn = findViewById(R.id.serverModelConfigBtn);
+	    mCustomModelConfigBtn = findViewById(R.id.customModelConfigBtn);
 	    mServerModelConfigBtn.setTextColor(Color.BLACK);
 	    mCustomModelConfigBtn.setTextColor(Color.BLACK);
     	mServerModelConfigBtn.setOnClickListener(onClickListener);
@@ -137,11 +137,11 @@ public class VideoConfig extends Activity {
     		mCustomModelConfigBtn.setChecked(true);
     		
     	//选择视频分辨率：
-    	mResolutionTV = (TextView)this.findViewById(R.id.resolutionTV);
+    	mResolutionTV = this.findViewById(R.id.resolutionTV);
     	mResolutionTV.setTextColor(Color.BLACK);
    	
     	// 插入视频分辨率
-    	mVideoSizeSpinner = (Spinner)this.findViewById(R.id.videoSizeSpinner);
+    	mVideoSizeSpinner = this.findViewById(R.id.videoSizeSpinner);
     	ArrayAdapter<String> videoSizeAdapter;
     	videoSizeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mArrVideoSizeStr);
     	videoSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
@@ -168,9 +168,9 @@ public class VideoConfig extends Activity {
     	mVideoPresetSpinner = InsertSpinnerInterface(4, mArrVideoPresetStr, mArrVideoPresetValue, mConfigEntity.mVideoPreset);
     	
     	// 根据配置模式，确定是否需要显示自定义的配置项
-    	CustomControlsShow(mConfigEntity.mConfigMode == 0 ? false : true);
+    	CustomControlsShow(mConfigEntity.mConfigMode != 0);
     	
-    	mSaveBtn = (Button)this.findViewById(R.id.saveBtn);
+    	mSaveBtn = this.findViewById(R.id.saveBtn);
     	mSaveBtn.setText("保存设置");
     	mSaveBtn.setOnClickListener(onClickListener);
 	}
@@ -229,13 +229,13 @@ public class VideoConfig extends Activity {
 	private Spinner InsertSpinnerInterface(int spinnerIndex, String[] context, int[] value, int select) {
 		Spinner spinner = null;
 		if (spinnerIndex == 1){
-			spinner = (Spinner)this.findViewById(R.id.videoBitrateSpinner);
+			spinner = this.findViewById(R.id.videoBitrateSpinner);
 		}else if (spinnerIndex == 2) {
-			spinner = (Spinner)this.findViewById(R.id.videoFPSSpinner);
+			spinner = this.findViewById(R.id.videoFPSSpinner);
 		}else if (spinnerIndex == 3) {
-			spinner = (Spinner)this.findViewById(R.id.videoQualitySpinner);
+			spinner = this.findViewById(R.id.videoQualitySpinner);
 		}else if (spinnerIndex == 4) {
-			spinner = (Spinner)this.findViewById(R.id.videoPresetSpinner);
+			spinner = this.findViewById(R.id.videoPresetSpinner);
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, context);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

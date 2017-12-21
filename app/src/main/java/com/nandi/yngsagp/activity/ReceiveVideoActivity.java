@@ -67,9 +67,9 @@ public class ReceiveVideoActivity extends Activity implements OnClickListener {
     }
 
     private void initView() {
-        Button btnAccept = (Button) findViewById(R.id.btn_accept);
-        Button btnReject = (Button) findViewById(R.id.btn_reject);
-        TextView tvMsg = (TextView) findViewById(R.id.tv_msg);
+        Button btnAccept = findViewById(R.id.btn_accept);
+        Button btnReject = findViewById(R.id.btn_reject);
+        TextView tvMsg = findViewById(R.id.tv_msg);
         btnAccept.setOnClickListener(this);
         btnReject.setOnClickListener(this);
         tvMsg.setText(message.getMessage());

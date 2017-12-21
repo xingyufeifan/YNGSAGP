@@ -33,7 +33,7 @@ public class AppUtils {
     }
 
     public static void startLogin(Activity context) {
-        ToastUtils.showShort("当前账号已在其他地方登录");
+        ToastUtils.showShort("登录时间过期，请重新登录");
         SharedUtils.removeShare(context, Constant.IS_LOGIN);
         SharedUtils.removeShare(context, Constant.PASSWORD);
         GreedDaoHelper.deleteAll();

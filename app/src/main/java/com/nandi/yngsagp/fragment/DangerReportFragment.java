@@ -361,7 +361,7 @@ public class DangerReportFragment extends Fragment {
 
     private void enlargePhoto(String path) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
-        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo_view);
+        PhotoView photoView = view.findViewById(R.id.photo_view);
         photoView.setImageBitmap(ImageUtils.getBitmap(path, 1280, 720));
         new android.support.v7.app.AlertDialog.Builder(context, R.style.Transparent)
                 .setView(view)
@@ -689,7 +689,7 @@ public class DangerReportFragment extends Fragment {
 
     private void takeAudio() {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_recoder, null);
-        final CheckBox btnStart = (CheckBox) view.findViewById(R.id.btn_start_recode);
+        final CheckBox btnStart = view.findViewById(R.id.btn_start_recode);
         final Chronometer chronometer = view.findViewById(R.id.chronometer);
         final ImageView close = view.findViewById(R.id.dialog_close);
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -698,7 +698,7 @@ public class DangerReportFragment extends Fragment {
                 String time = chronometer.getText().toString();
             }
         });
-        final TextView tv = (TextView) view.findViewById(R.id.tv_time);
+        final TextView tv = view.findViewById(R.id.tv_time);
         final AlertDialog show = new AlertDialog.Builder(context)
                 .setView(view)
                 .setCancelable(false)
@@ -900,8 +900,8 @@ public class DangerReportFragment extends Fragment {
 
     private void choosePhoto() {
         View view = LayoutInflater.from(context).inflate(R.layout.popup_view, null);
-        TextView tvTake = (TextView) view.findViewById(R.id.tv_take_photo);
-        TextView tvChoose = (TextView) view.findViewById(R.id.tv_choose_photo);
+        TextView tvTake = view.findViewById(R.id.tv_take_photo);
+        TextView tvChoose = view.findViewById(R.id.tv_choose_photo);
         tvTake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
