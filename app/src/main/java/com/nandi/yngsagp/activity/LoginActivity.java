@@ -451,6 +451,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String name = jsonData.optString("nickname");
             SharedUtils.putShare(mContext, Constant.NAME, name);
             String personType = jsonData.optString("role");
+            SharedUtils.putShare(mContext,Constant.SESSION_ID,jsonData.optString("sessionID"));
             SharedUtils.putShare(mContext, Constant.PERSON_TYPE, personType);
             SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
             if (isCheck) {

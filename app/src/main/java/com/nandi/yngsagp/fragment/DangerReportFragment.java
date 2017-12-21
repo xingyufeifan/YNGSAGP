@@ -171,7 +171,7 @@ public class DangerReportFragment extends Fragment {
     private LocationClient locationClient;
     private RequestCall build;
     private MediaPlayer player;
-
+    private String sessionId;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -186,6 +186,7 @@ public class DangerReportFragment extends Fragment {
     }
 
     private void initData() {
+        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
         DangerUBean queryDanger = GreedDaoHelper.queryDanger();
         List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(2);
         VideoPath queryVideo = GreedDaoHelper.queryVideo(2);
@@ -249,6 +250,7 @@ public class DangerReportFragment extends Fragment {
                 double lat = bdLocation.getLatitude();
                 lonDanger.setText(lon + "");
                 latDanger.setText(lat + "");
+                locationClient.unRegisterLocationListener(this);
                 locationClient.stop();
             }
         }
@@ -531,7 +533,7 @@ public class DangerReportFragment extends Fragment {
 
     private void setRequest(Map<String, String> map) {
         progressDialog.show();
-        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/add").addHeader("sessionID",sessionId);
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));

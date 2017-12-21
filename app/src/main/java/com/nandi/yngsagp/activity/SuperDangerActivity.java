@@ -45,6 +45,7 @@ import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.AppUtils;
+import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -142,7 +143,7 @@ public class SuperDangerActivity extends AppCompatActivity {
     private MediaAdapter videoAdapter;
     private MediaAdapter audioAdapter;
     private MediaPlayer player;
-
+    private String sessionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,6 +281,7 @@ public class SuperDangerActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -290,7 +292,8 @@ public class SuperDangerActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedia/" + listBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedia/" + listBean.getId())
+                .addHeader("sessionID",sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -360,7 +363,8 @@ public class SuperDangerActivity extends AppCompatActivity {
         File file = new File(fileDir, mediaInfo.getFileName());
         if (!file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID",sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
@@ -466,7 +470,8 @@ public class SuperDangerActivity extends AppCompatActivity {
         File file = new File(fileDir, mediaInfo.getFileName());
         if (!file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID",sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override

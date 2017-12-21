@@ -199,7 +199,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private MediaPlayer player;
     private int typePos;
     private RequestCall build;
-
+    private String sessionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -394,6 +394,7 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
         listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
         xqNumShow.setText(listBean.getDisasterNum());
         userDangerShow.setText(listBean.getPersonel());
@@ -437,7 +438,8 @@ public class DangerPosActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/findMedias/" + listBean.getId())
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedias/" + listBean.getId())
+                .addHeader("sessionID",sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -625,7 +627,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void setUploadRequest(Map<String, String> map) {
         progressDialog.setMessage("正在上传");
         progressDialog.show();
-        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/update");
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/update").addHeader("sessionID",sessionId);
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
@@ -972,7 +974,8 @@ public class DangerPosActivity extends AppCompatActivity {
         File file = new File(fileDir, mediaInfo.getFileName());
         if (!file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID",sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
@@ -1078,7 +1081,8 @@ public class DangerPosActivity extends AppCompatActivity {
         File file = new File(fileDir, mediaInfo.getFileName());
         if (!file.exists()) {
             progressDialog.show();
-            OkHttpUtils.get().url(getString(R.string.local_base_url) + "dangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID",sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override

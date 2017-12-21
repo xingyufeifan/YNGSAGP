@@ -15,5 +15,6 @@ public class Constant {
     public  static  final  String IS_LOGIN = "isLogin";
     public  static  final  String DISASTER = "disaster";
     public  static  final  String TYPE = "type";
+    public  static  final  String  SESSION_ID="sessionId";
 
 }

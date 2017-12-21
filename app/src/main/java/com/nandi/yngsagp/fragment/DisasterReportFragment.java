@@ -181,6 +181,7 @@ public class DisasterReportFragment extends Fragment {
     private int typePos;
     private LocationClient locationClient;
     private MediaPlayer player;
+    private String sessionId;
 
     @Nullable
     @Override
@@ -315,6 +316,7 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void initData() {
+        sessionId= (String) SharedUtils.getShare(getActivity(),Constant.SESSION_ID,"");
         DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
         List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(1);
         VideoPath queryVideo = GreedDaoHelper.queryVideo(1);
@@ -693,7 +695,7 @@ public class DisasterReportFragment extends Fragment {
     @SuppressLint("SimpleDateFormat")
     private void setRequest(Map<String, String> map) {
         progressDialog.show();
-        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "dangerous/add");
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/add").addHeader("sessionID",sessionId);
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));

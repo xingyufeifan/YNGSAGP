@@ -17,18 +17,18 @@ import android.widget.LinearLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
-import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.activity.SuperDangerActivity;
 import com.nandi.yngsagp.adapter.DisposAdapter;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.JsonFormat;
-import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 
 /**
@@ -81,7 +82,7 @@ public class SuperDangerFragment extends Fragment {
     private boolean isSuccess;
     private String message;
     private ProgressDialog progressDialog;
-
+    private String sessionId;
 
     @Nullable
     @Override
@@ -95,75 +96,75 @@ public class SuperDangerFragment extends Fragment {
 
 
     private void requestA(final RefreshLayout refreshlayouts) {
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
-        System.out.println("requestA = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                refreshlayouts.finishRefresh();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        superListA.clear();
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
-                        pageA = 1;
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort("刷新失败，请重试");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        refreshlayouts.finishRefresh();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                superListA.clear();
+                                superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superAdapter.notifyDataSetChanged();
+                                pageA = 1;
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                refreshlayouts.finishRefresh();
-                ToastUtils.showShort("刷新失败，请重试");
-            }
-        });
-
+                });
     }
 
     private void requestU(final RefreshLayout refreshlayouts) {
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
-        System.out.println("requestU = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                refreshlayouts.finishRefresh();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        superListU.clear();
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
-                        pageU = 1;
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort("刷新失败，请重试");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        refreshlayouts.finishRefresh();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                superListU.clear();
+                                superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superUAdapter.notifyDataSetChanged();
+                                pageU = 1;
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                refreshlayouts.finishRefresh();
-                ToastUtils.showShort("刷新失败，请重试");
-
-            }
-        });
-
+                });
     }
 
     private void initJson(String response) throws JSONException {
@@ -179,81 +180,78 @@ public class SuperDangerFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/" + role;
-        System.out.println("loadMoreA = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                refreshlayouts.finishLoadmore();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
-                        }
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("加载失败,请重试");
+                        refreshlayouts.finishLoadmore();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        refreshlayouts.finishLoadmore();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                if ("[]".equals(jsonData.toString())) {
+                                    ToastUtils.showShort("没有更多数据了");
+                                }
+                                superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superAdapter.notifyDataSetChanged();
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-                ToastUtils.showShort("加载失败,请重试");
-                refreshlayouts.finishLoadmore();
-            }
-        });
-
+                });
     }
 
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/15/" + role;
-        System.out.println("loadMoreU = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    refreshlayouts.finishLoadmore();
-                    initJson(response);
-                    if (isSuccess) {
-                        if ("[]".equals(jsonData.toString())) {
-                            ToastUtils.showShort("没有更多数据了");
-                        }
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("加载失败,请重试");
+                        refreshlayouts.finishLoadmore();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            refreshlayouts.finishLoadmore();
+                            initJson(response);
+                            if (isSuccess) {
+                                if ("[]".equals(jsonData.toString())) {
+                                    ToastUtils.showShort("没有更多数据了");
+                                }
+                                superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superUAdapter.notifyDataSetChanged();
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-                ToastUtils.showShort("加载失败,请重试");
-                refreshlayouts.finishLoadmore();
-            }
-        });
-
+                });
     }
 
 
@@ -323,6 +321,7 @@ public class SuperDangerFragment extends Fragment {
     }
 
     private void initViews() {
+        sessionId = (String) SharedUtils.getShare(getActivity(), Constant.SESSION_ID, "");
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -345,71 +344,74 @@ public class SuperDangerFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/1/2/1/15/" + role;
-        System.out.println("requestAPos = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println(response);
-                progressDialog.dismiss();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superAdapter.notifyDataSetChanged();
-                        tvAyError.setVisibility(View.GONE);
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/1/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        tvAyError.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        progressDialog.dismiss();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                superListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superAdapter.notifyDataSetChanged();
+                                tvAyError.setVisibility(View.GONE);
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                tvAyError.setVisibility(View.VISIBLE);
-                progressDialog.dismiss();
-            }
-        });
+                });
     }
 
     private void requestUPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/0/2/1/15/" + role;
-        System.out.println("requestUPos = " + url);
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    progressDialog.dismiss();
-                    initJson(response);
-                    if (isSuccess) {
-                        superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                        superUAdapter.notifyDataSetChanged();
-                        tvNoError.setVisibility(View.GONE);
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/0/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        tvNoError.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            progressDialog.dismiss();
+                            initJson(response);
+                            if (isSuccess) {
+                                superListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                superUAdapter.notifyDataSetChanged();
+                                tvNoError.setVisibility(View.GONE);
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                tvNoError.setVisibility(View.VISIBLE);
-                progressDialog.dismiss();
-            }
-        });
+                });
     }
 
 

@@ -4,6 +4,7 @@ package com.nandi.yngsagp.fragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -31,6 +32,8 @@ import com.nandi.yngsagp.utils.SharedUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 
 /**
@@ -85,7 +89,7 @@ public class DangerListFragment extends Fragment {
     private String message;
     private ProgressDialog progressDialog;
     private String data;
-
+    private String sessionId;
 
     @Nullable
     @Override
@@ -99,78 +103,81 @@ public class DangerListFragment extends Fragment {
 
 
     private void requestA(final RefreshLayout refreshlayouts) {
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                refreshlayouts.finishRefresh();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            dangerListA.clear();
-                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerAdapter.notifyDataSetChanged();
-                            pageA = 1;
-                        }
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort("数据刷新失败...");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        refreshlayouts.finishRefresh();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    dangerListA.clear();
+                                    dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerAdapter.notifyDataSetChanged();
+                                    pageA = 1;
+                                }
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                refreshlayouts.finishRefresh();
-                ToastUtils.showShort("数据刷新失败...");
-            }
-        });
-
+                });
     }
 
     private void requestU(final RefreshLayout refreshlayouts) {
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    refreshlayouts.finishRefresh();
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            dangerListU.clear();
-                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerUAdapter.notifyDataSetChanged();
-                            pageU = 1;
-                        }
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        refreshlayouts.finishRefresh();
+                        ToastUtils.showShort("数据刷新失败...");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            refreshlayouts.finishRefresh();
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    dangerListU.clear();
+                                    dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerUAdapter.notifyDataSetChanged();
+                                    pageU = 1;
+                                }
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                refreshlayouts.finishRefresh();
-                ToastUtils.showShort("数据刷新失败...");
-            }
-        });
-
+                });
     }
 
     private void initJson(String response) throws JSONException {
@@ -184,85 +191,85 @@ public class DangerListFragment extends Fragment {
 
     private void loadMoreA(final RefreshLayout refreshlayouts) {
         pageA += 1;
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println("response = " + response);
-                refreshlayouts.finishLoadmore();
-                try {
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            if ("[]".equals(jsonData.toString())) {
-                                ToastUtils.showShort("没有更多数据了");
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageA + "/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("加载失败，请重试");
+                        refreshlayouts.finishLoadmore();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        refreshlayouts.finishLoadmore();
+                        try {
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    if ("[]".equals(jsonData.toString())) {
+                                        ToastUtils.showShort("没有更多数据了");
+                                    }
+                                    dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
                             }
-                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-                ToastUtils.showShort("加载失败，请重试");
-                refreshlayouts.finishLoadmore();
-            }
-        });
-
+                });
     }
 
     private void loadMoreU(final RefreshLayout refreshlayouts) {
         pageU += 1;
-        String loadUrl = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), loadUrl, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    refreshlayouts.finishLoadmore();
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            if ("[]".equals(jsonData.toString())) {
-                                ToastUtils.showShort("没有更多数据了");
-                            }
-                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerUAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
-                        }
+        String loadUrl = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/" + isDisPose + "/2/" + pageU + "/15/" + role;
+        OkHttpUtils.get().url(loadUrl)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort("加载失败，请重试");
+                        refreshlayouts.finishLoadmore();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            refreshlayouts.finishLoadmore();
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    if ("[]".equals(jsonData.toString())) {
+                                        ToastUtils.showShort("没有更多数据了");
+                                    }
+                                    dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerUAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-            }
-
-            @Override
-            public void onError(Exception error) {
-                ToastUtils.showShort("加载失败，请重试");
-                refreshlayouts.finishLoadmore();
-            }
-        });
-
+                    }
+                });
     }
 
 
@@ -347,6 +354,7 @@ public class DangerListFragment extends Fragment {
     }
 
     private void initViews() {
+        sessionId = (String) SharedUtils.getShare(getActivity(), Constant.SESSION_ID, "");
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -369,77 +377,83 @@ public class DangerListFragment extends Fragment {
 
     private void requestAPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/1/2/1/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    progressDialog.dismiss();
-                    dangerListA.clear();
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            tvAyError.setVisibility(View.GONE);
-                            dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerAdapter.notifyDataSetChanged();
-                        }
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/1/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        tvAyError.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                    }
 
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            progressDialog.dismiss();
+                            dangerListA.clear();
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    tvAyError.setVisibility(View.GONE);
+                                    dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerAdapter.notifyDataSetChanged();
+                                }
+
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                tvAyError.setVisibility(View.VISIBLE);
-                progressDialog.dismiss();
-            }
-        });
+                });
     }
 
     private void requestUPos() {
         progressDialog.show();
-        String url = getString(R.string.local_base_url) + "dangerous/findDangers/" + areaId + "/0/2/1/15/" + role;
-        OkHttpHelper.sendHttpGet(getActivity(), url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    progressDialog.dismiss();
-                    dangerListU.clear();
-                    initJson(response);
-                    if (isSuccess) {
-                        if (!"用户无访问权限".equals(data)) {
-                            jsonData = new JSONArray(data);
-                            dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                            dangerUAdapter.notifyDataSetChanged();
-                            tvNoError.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if ("exit".equals(message)) {
-                            AppUtils.startLogin(getActivity());
-                        } else {
-                            ToastUtils.showShort(message);
+        String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/0/2/1/15/" + role;
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        tvNoError.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            progressDialog.dismiss();
+                            dangerListU.clear();
+                            initJson(response);
+                            if (isSuccess) {
+                                if (!"用户无访问权限".equals(data)) {
+                                    jsonData = new JSONArray(data);
+                                    dangerListU.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
+                                    dangerUAdapter.notifyDataSetChanged();
+                                    tvNoError.setVisibility(View.GONE);
+                                }
+                            } else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Exception error) {
-                tvNoError.setVisibility(View.VISIBLE);
-                progressDialog.dismiss();
-            }
-        });
+                });
     }
 
     @Override
