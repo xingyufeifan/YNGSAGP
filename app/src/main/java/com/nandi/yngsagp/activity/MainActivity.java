@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private SuperDangerFragment superDangerFragment;
     private CloudPushService pushService;
     private String account;
+    private String sessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initData() {
+        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
         mobile = (String) SharedUtils.getShare(context, Constant.MOBILE, "");
         address = (String) SharedUtils.getShare(context, Constant.ADDRESS, "");
         type = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "");
@@ -389,6 +391,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void setLoginOut() {
         OkHttpUtils.get().url(getString(R.string.local_base_url)+"appdocking/logout")
+                .addHeader("sessionID",sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override

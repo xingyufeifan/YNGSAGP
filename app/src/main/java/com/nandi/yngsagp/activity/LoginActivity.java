@@ -5,11 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -407,7 +410,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void loginPost() {
-        OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url) + "appdocking/login/" + mobile + "/" + pwd, new OkHttpCallback() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        String imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE))
+                .getDeviceId();
+        OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url) + "appdocking/login/" + mobile + "/" + pwd+"/"+imei, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
@@ -419,6 +427,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         boolean isSuccess = jsonMeta.optBoolean("success");
                         if (isSuccess) {
                             initJson(jsonObject);
+
                             finish();
                             ToNextActivity(MainActivity.class);
                         } else {
@@ -480,6 +489,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "定位", R.drawable.permission_ic_location));
         permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "读写SD卡", R.drawable.permission_ic_storage));
         permissionItems.add(new PermissionItem(Manifest.permission.RECORD_AUDIO, "录音", R.drawable.permission_ic_micro_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话", R.drawable.permission_ic_phone));
         HiPermission.create(this)
                 .title("权限申请")
                 .permissions(permissionItems)

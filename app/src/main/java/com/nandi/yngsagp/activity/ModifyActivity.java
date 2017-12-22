@@ -16,6 +16,8 @@ import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.utils.OkHttpHelper;
 import com.nandi.yngsagp.utils.SharedUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by qingsong on 2017/11/16.
@@ -46,6 +49,7 @@ public class ModifyActivity extends AppCompatActivity {
     @BindView(R.id.back)
     ImageView back;
     private Context mContext;
+    private String sessionId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class ModifyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         modifyUser.setText((String) SharedUtils.getShare(this, Constant.MOBILE, ""));
+        sessionId= (String) SharedUtils.getShare(mContext,Constant.SESSION_ID,"");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,33 +83,36 @@ public class ModifyActivity extends AppCompatActivity {
             case R.id.modify_sure:
                 String url = getString(R.string.local_base_url)+"appdocking/updateAppUser/" + modifyUser.getText().toString().trim() + "/" + modifyPsw.getText().toString().trim() + "/" + modifyNpsw.getText().toString().trim();
                 if (textInput()) {
-                    OkHttpHelper.sendHttpGet(this, url, new OkHttpCallback() {
-                        @Override
-                        public void onSuccess(String response) {
-                            try {
-                                System.out.println("response = " + response);
-                                JSONObject jsonObject = new JSONObject(response);
-                                String meta = jsonObject.optString("meta");
-                                JSONObject metaJson = new JSONObject(meta);
-                                if (metaJson.optBoolean("success")) {
-//                                   ToastUtils.showShort(R.string.password_success);
-                                    SharedUtils.removeShare(mContext, Constant.PASSWORD);
-                                    startActivity(new Intent(mContext, LoginActivity.class));
-                                    finish();
-                                } else {
-                                    ToastUtils.showShort(metaJson.optString("message"));
+                    OkHttpUtils.get().url(url)
+                            .addHeader("sessionID",sessionId)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    ToastUtils.showShort("连接失败");
                                 }
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    try {
+                                        System.out.println("response = " + response);
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        String meta = jsonObject.optString("meta");
+                                        JSONObject metaJson = new JSONObject(meta);
+                                        if (metaJson.optBoolean("success")) {
+//                                   ToastUtils.showShort(R.string.password_success);
+                                            SharedUtils.removeShare(mContext, Constant.PASSWORD);
+                                            startActivity(new Intent(mContext, LoginActivity.class));
+                                            finish();
+                                        } else {
+                                            ToastUtils.showShort(metaJson.optString("message"));
+                                        }
 
-                        @Override
-                        public void onError(Exception error) {
-
-                        }
-                    });
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                 }
                 break;
         }

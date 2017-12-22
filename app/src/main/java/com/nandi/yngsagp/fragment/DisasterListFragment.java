@@ -182,6 +182,7 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void initJson(String response) throws JSONException {
+        Log.d("cp","response:"+response);
         jsonObject = new JSONObject(response);
         JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
         isSuccess = jsonMeta.optBoolean("success");

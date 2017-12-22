@@ -383,11 +383,9 @@ public class DisasterReportFragment extends Fragment {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
-            Log.d("cp", "locType:" + locType);
             if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
                 double lon = bdLocation.getLongitude();
                 double lat = bdLocation.getLatitude();
-                Log.d("cp", "lon:" + lon + "/lat:" + lat);
                 dReportLon.setText(lon + "");
                 dReportLat.setText(lat + "");
                 locationClient.unRegisterLocationListener(this);
