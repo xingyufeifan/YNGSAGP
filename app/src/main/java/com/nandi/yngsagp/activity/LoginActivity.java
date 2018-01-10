@@ -77,8 +77,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     ImageView icMobile;
     @BindView(R.id.ic_password)
     ImageView icPassword;
-    @BindView(R.id.checkbox)
-    CheckBox checkbox;
     @BindView(R.id.ll_input_mobile)
     LinearLayout llInputMobile;
     @BindView(R.id.ll_input_psd)
@@ -143,12 +141,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         ivShowPwd.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         forget.setOnClickListener(this);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isCheck = isChecked;
-            }
-        });
         etMobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -415,26 +407,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         String imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE))
                 .getDeviceId();
-        OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url) + "appdocking/login/" + mobile + "/" + pwd+"/"+imei, new OkHttpCallback() {
+        OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url) + "appdocking/login/" + mobile + "/" + pwd + "/" + imei, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
                 System.out.println("response = " + response);
 
-                    progressDialog.dismiss();
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                        boolean isSuccess = jsonMeta.optBoolean("success");
-                        if (isSuccess) {
-                            initJson(jsonObject);
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                    boolean isSuccess = jsonMeta.optBoolean("success");
+                    if (isSuccess) {
+                        initJson(jsonObject);
 
-                            finish();
-                            ToNextActivity(MainActivity.class);
-                        } else {
-                            String message = jsonMeta.optString("message");
-                            etPassword.setText("");
-                            showToast(message);
-                        }
+                        finish();
+                        ToNextActivity(MainActivity.class);
+                    } else {
+                        String message = jsonMeta.optString("message");
+                        etPassword.setText("");
+                        showToast(message);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -451,7 +443,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initJson(JSONObject jsonObject) throws JSONException {
         String data = jsonObject.optString("data");
-        if (!"用户无访问权限".equals(data)){
+        if (!"用户无访问权限".equals(data)) {
             JSONObject jsonData = new JSONObject(data);
             String area_id = jsonData.optString("area_id");
             SharedUtils.putShare(mContext, Constant.AREA_ID, area_id);
@@ -460,13 +452,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String name = jsonData.optString("nickname");
             SharedUtils.putShare(mContext, Constant.NAME, name);
             String personType = jsonData.optString("role");
-            SharedUtils.putShare(mContext,Constant.SESSION_ID,jsonData.optString("sessionID"));
+            SharedUtils.putShare(mContext, Constant.SESSION_ID, jsonData.optString("sessionID"));
             SharedUtils.putShare(mContext, Constant.PERSON_TYPE, personType);
             SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
-            if (isCheck) {
-                SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
-                SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
-            }
+            SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
+            SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
         }
     }
 //

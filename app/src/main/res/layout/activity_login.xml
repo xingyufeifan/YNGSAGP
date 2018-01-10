@@ -143,15 +143,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
-                    <CheckBox
-                        android:id="@+id/checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="记住密码"
-                        android:textColor="@color/media_title_bg"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
 
 
                     <TextView

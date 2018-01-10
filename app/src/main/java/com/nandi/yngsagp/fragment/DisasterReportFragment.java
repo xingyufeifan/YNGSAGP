@@ -637,27 +637,27 @@ public class DisasterReportFragment extends Fragment {
         String type = typePos + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
-        if (injured.equals(null)) {
+        if (TextUtils.isEmpty(injured)) {
             injured = "0";
         }
         String death = dReportDeath.getText().toString().trim();
-        if (death.equals(null)) {
+        if (TextUtils.isEmpty(death)) {
             death = "0";
         }
         String miss = dReportMiss.getText().toString().trim();
-        if (miss.equals(null)) {
+        if (TextUtils.isEmpty(miss)) {
             miss = "0";
         }
         String farm = dReportFram.getText().toString().trim();
-        if (farm.equals(null)) {
+        if (TextUtils.isEmpty(farm)) {
             farm = "0";
         }
         String house = dReportHouse.getText().toString().trim();
-        if (house.equals(null)) {
+        if (TextUtils.isEmpty(house)) {
             house = "0";
         }
         String money = dReportMoney.getText().toString().trim();
-        if (money.equals(null) || money.equals(".")) {
+        if (TextUtils.isEmpty(money) || money.equals(".")) {
             money = "0";
         }
         String lon = dReportLon.getText().toString().trim();

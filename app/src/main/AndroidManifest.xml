@@ -47,10 +47,11 @@
             android:value="gaqFUji6IN1I7Urix3uRf9dvfPDL9fv6" />
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24692056" />
+            android:value="24754821" />
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="98c048c2ed6ab28dd97197a0a50c1d71" />
+            android:value="141f0e3cc43fb61b4576f3cd381b2520" />
+
         <activity
             android:name=".activity.WelcomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation">
@@ -93,6 +94,7 @@
         <activity
             android:name=".activity.VideoConfig"
             android:configChanges="keyboardHidden|orientation|screenSize|navigation" />
+
         <receiver
             android:name=".receiver.MyReceiver"
             android:exported="false">
@@ -106,11 +108,12 @@
                 <action android:name="com.alibaba.sdk.android.push.RECEIVE" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-        <service android:name=".service.MyService"/>
+        <service android:name=".service.MyService" />
 
     </application>
 

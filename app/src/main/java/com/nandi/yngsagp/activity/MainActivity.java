@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -132,36 +134,38 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void checkUpdate() {
-        String url = getString(R.string.local_base_url)+"version/findNewVersionNumber/" + AppUtils.getVerCode(this);
-        OkHttpHelper.sendHttpGet(context, url, new OkHttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
-                    boolean isSuccess = jsonMeta.optBoolean("success");
-                    if (isSuccess) {
-                        String data = jsonObject.optString("data");
-                        if ("200".equals(data)) {
-                            showNoticeDialog();
-                        } else if ("300".equals(data)) {
-                        }
+        String url = getString(R.string.local_base_url)+"appDangerous/findNewVersionNumber/" + AppUtils.getVerCode(this);
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID",sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
 
-                    } else {
-                        String message = jsonMeta.optString("message");
-                        showToast(message);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onError(Exception error) {
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                            boolean isSuccess = jsonMeta.optBoolean("success");
+                            if (isSuccess) {
+                                String data = jsonObject.optString("data");
+                                if ("200".equals(data)) {
+                                    showNoticeDialog();
+                                } else if ("300".equals(data)) {
+                                }
 
-            }
-        });
-
+                            } else {
+                                String message = jsonMeta.optString("message");
+                                showToast(message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
     }
 
@@ -170,11 +174,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Dialog dialog;
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
         builder.setTitle("版本更新");
-        builder.setMessage("");
+        builder.setMessage("发现新版本，是否立即更新？");
         builder.setPositiveButton("更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new DownloadUtils(context).downloadAPK(getString(R.string.local_base_url)+"version/down", "app-release.apk");
+                new DownloadUtils(context).downloadAPK(getString(R.string.local_base_url)+"appDangerous/down", AppUtils.getVerCode(context)+"app_release.apk");
                 dialog.dismiss();
             }
         });
@@ -376,6 +380,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         setLoginOut();
+                        NotificationManager manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        if (manager != null) {
+                            manager.cancelAll();
+                        }
                         clean();
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();

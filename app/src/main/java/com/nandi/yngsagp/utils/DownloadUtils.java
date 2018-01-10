@@ -111,20 +111,18 @@ public class DownloadUtils {
     private void installAPK() {
         File file = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                , "app-release.apk");
+                , AppUtils.getVerCode(mContext)+"app_release.apk");
         Intent i = new Intent(Intent.ACTION_VIEW);
         // 由于没有在Activity环境下启动Activity,设置下面的标签
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (Build.VERSION.SDK_INT >= 24) { //判读版本是否在7.0以上
             //参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
-            Uri apkUri =
-                    FileProvider.getUriForFile(mContext, "com.nandi.yngsagp.fileprovider", file);
+            Uri apkUri = FileProvider.getUriForFile(mContext, "com.nandi.yngsagp.fileprovider", file);
             //添加这一句表示对目标应用临时授权该Uri所代表的文件
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             i.setDataAndType(apkUri, "application/vnd.android.package-archive");
         } else {
-            i.setDataAndType(Uri.fromFile(file),
-                    "application/vnd.android.package-archive");
+            i.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         }
         mContext.startActivity(i);
 

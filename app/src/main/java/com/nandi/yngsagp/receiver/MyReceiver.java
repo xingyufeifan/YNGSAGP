@@ -33,8 +33,20 @@ public class MyReceiver extends MessageReceiver {
 
     @Override
     public void onNotification(Context context, String title, String summary, Map<String, String> extraMap) {
-        // TODO 处理推送通知
         Log.e(REC_TAG, "Receive notification, title: " + title + ", summary: " + summary + ", extraMap: " + extraMap);
+        manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String type = extraMap.get("type");
+        if ("1".equals(type)) {
+            Message message = new Message();
+            message.setUserId(Integer.parseInt(extraMap.get("userid")));
+            message.setInviteMan(extraMap.get("invite"));
+            message.setMessage(extraMap.get("message"));
+            message.setRoomId(Integer.parseInt(extraMap.get("room")));
+            Intent intent = new Intent(context, ReceiveVideoActivity.class);
+            intent.putExtra("MESSAGE", message);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
     }
 
     @Override
@@ -77,7 +89,7 @@ public class MyReceiver extends MessageReceiver {
             intent.putExtra("USER_ID", message.getUserId());
             pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
-            intent.putExtra(Constant.TYPE,message.getType());
+            intent.putExtra(Constant.TYPE, message.getType());
             intent.setClass(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
