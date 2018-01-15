@@ -2,11 +2,12 @@
 <resources>
     <string-array name="dangerType">
         <item>请选择(必选)</item>
+        <item>不稳定斜坡</item>
         <item>滑坡</item>
         <item>崩塌</item>
         <item>泥石流</item>
+        <item>地面塌陷</item>
         <item>地面沉降</item>
         <item>地裂缝</item>
-        <item>地面塌陷</item>
     </string-array>
 </resources>

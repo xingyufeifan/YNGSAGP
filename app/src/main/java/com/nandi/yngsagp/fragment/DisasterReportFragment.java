@@ -634,7 +634,7 @@ public class DisasterReportFragment extends Fragment {
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = typePos + "";
+        String type = typePos-1 + "";
         String factor = dReportFactor.getText().toString().trim();
         String injured = dReportInjurd.getText().toString().trim();
         if (TextUtils.isEmpty(injured)) {

@@ -245,7 +245,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         timeShow.setText(listBean.getFindTime());
         locationShow.setText(listBean.getCurrentLocation());
         addressShow.setText(listBean.getAddress());
-        typeShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
+        typeShow.setSelection(Integer.parseInt(listBean.getDisasterType())+1);
         factorShow.setText((CharSequence) listBean.getFactor());
         injurdShow.setText((CharSequence) listBean.getInjurdNum());
         deathShow.setText((CharSequence) listBean.getDeathNum());

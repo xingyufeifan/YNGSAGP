@@ -198,7 +198,6 @@ public class DangerPosActivity extends AppCompatActivity {
     private MediaRecorder recorder;
     private MediaPlayer player;
     private int typePos;
-    private RequestCall build;
     private String sessionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -386,11 +385,8 @@ public class DangerPosActivity extends AppCompatActivity {
         //控件内容总高度与实际显示高度的差值
         int scrollDifference = scrollRange - scrollExtent;
 
-        if (scrollDifference == 0) {
-            return false;
-        }
+        return scrollDifference != 0 && ((scrollY > 0) || (scrollY < scrollDifference - 1));
 
-        return (scrollY > 0) || (scrollY < scrollDifference - 1);
     }
 
     private void initData() {
@@ -402,7 +398,7 @@ public class DangerPosActivity extends AppCompatActivity {
         timeDangerShow.setText((CharSequence) listBean.getHappenTime());
         locationDangerShow.setText(listBean.getCurrentLocation());
         addressDangerShow.setText(listBean.getAddress());
-        typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType()));
+        typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType())+1);
         factorDangerShow.setText((CharSequence) listBean.getFactor());
         personDangerShow.setText((CharSequence) listBean.getPersonNum());
         houseDangerShow.setText((CharSequence) listBean.getHouseNum());
@@ -574,16 +570,16 @@ public class DangerPosActivity extends AppCompatActivity {
         String house = houseDangerShow.getText().toString().trim();
         String farm = areaDangerShow.getText().toString().trim();
         String money = moneyDangerShow.getText().toString().trim();
-        if (personDangerShow.getText().toString().trim().equals(null)) {
+        if (TextUtils.isEmpty(person)) {
             person = "0";
         }
-        if (houseDangerShow.getText().toString().trim().equals(null)) {
+        if (house.isEmpty()) {
             house = "0";
         }
-        if (areaDangerShow.getText().toString().trim().equals(null)) {
+        if (farm.isEmpty()) {
             farm = "0";
         }
-        if (money.equals(null) || money.equals(".")) {
+        if (money.isEmpty()) {
             money = "0";
         }
         String other = otherDangerShow.getText().toString().trim();
@@ -644,7 +640,7 @@ public class DangerPosActivity extends AppCompatActivity {
         }
         formBuilder.params(map);
         formBuilder.addParams("type", "2");
-        build = formBuilder.build();
+        RequestCall build = formBuilder.build();
         build.execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
