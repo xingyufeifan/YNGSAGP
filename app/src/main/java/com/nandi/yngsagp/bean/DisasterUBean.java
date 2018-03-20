@@ -29,12 +29,13 @@ public class DisasterUBean {
     private String other;
     private String reportName;
     private String reportMobile;
-    @Generated(hash = 1971410804)
+    private int disasterPosition;
+    @Generated(hash = 1622756623)
     public DisasterUBean(Long id, String reportMan, String phone, String time,
             String address, String location, String type, String factor,
             String injured, String death, String miss, String farm, String house,
             String money, String lon, String lat, String other, String reportName,
-            String reportMobile) {
+            String reportMobile, int disasterPosition) {
         this.id = id;
         this.reportMan = reportMan;
         this.phone = phone;
@@ -54,6 +55,7 @@ public class DisasterUBean {
         this.other = other;
         this.reportName = reportName;
         this.reportMobile = reportMobile;
+        this.disasterPosition = disasterPosition;
     }
     @Generated(hash = 920846843)
     public DisasterUBean() {
@@ -196,5 +198,11 @@ public class DisasterUBean {
                 ", reportName='" + reportName + '\'' +
                 ", reportMobile='" + reportMobile + '\'' +
                 '}';
+    }
+    public int getDisasterPosition() {
+        return this.disasterPosition;
+    }
+    public void setDisasterPosition(int disasterPosition) {
+        this.disasterPosition = disasterPosition;
     }
 }

@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +35,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.bean.DisasterPoint;
 import com.nandi.yngsagp.fragment.DangerListFragment;
 import com.nandi.yngsagp.fragment.DangerReportFragment;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
@@ -50,6 +54,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private CloudPushService pushService;
     private String account;
     private String sessionId;
+    private MyReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +113,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.d("cp", "开启推送通道失败");
             }
         });
-        if ("1".equals(type)){
-            account = mobile;
-        }else{
-            account = areaId;
-        }
-        pushService.bindAccount(account, new CommonCallback() {
+//        if ("1".equals(type)) {
+//            account = mobile;
+//        } else {
+//            account = areaId;
+//        }
+        pushService.bindAccount(mobile, new CommonCallback() {
             @Override
             public void onSuccess(String s) {
                 Log.d("cp", "绑定账号成功");
@@ -125,18 +132,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initData() {
-        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
+        sessionId = (String) SharedUtils.getShare(context, Constant.SESSION_ID, "");
         mobile = (String) SharedUtils.getShare(context, Constant.MOBILE, "");
         address = (String) SharedUtils.getShare(context, Constant.ADDRESS, "");
         type = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "");
         name = (String) SharedUtils.getShare(context, Constant.NAME, "");
-        areaId= (String) SharedUtils.getShare(context,Constant.AREA_ID,"");
+        areaId = (String) SharedUtils.getShare(context, Constant.AREA_ID, "");
     }
 
     private void checkUpdate() {
-        String url = getString(R.string.local_base_url)+"appDangerous/findNewVersionNumber/" + AppUtils.getVerCode(this);
+        String url = getString(R.string.local_base_url) + "appDangerous/findNewVersionNumber/" + AppUtils.getVerCode(this);
         OkHttpUtils.get().url(url)
-                .addHeader("sessionID",sessionId)
+                .addHeader("sessionID", sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -159,7 +166,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                             } else {
                                 String message = jsonMeta.optString("message");
-                                showToast(message);
+//                                showToast(message);
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(MainActivity.this);
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -178,7 +190,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         builder.setPositiveButton("更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new DownloadUtils(context).downloadAPK(getString(R.string.local_base_url)+"appDangerous/down", AppUtils.getVerCode(context)+"app_release.apk");
+                new DownloadUtils(context).downloadAPK(getString(R.string.local_base_url) + "appDangerous/down", AppUtils.getVerCode(context) + "app_release.apk");
                 dialog.dismiss();
             }
         });
@@ -195,6 +207,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initViews() {
+        receiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_DISASTER_UPLOADED);
+        intentFilter.addAction(Constant.ACTION_DANGER_UPLOADED);
+        registerReceiver(receiver, intentFilter);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         View headerView = navView.getHeaderView(0);
@@ -233,25 +250,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             addFragment(dangerListFragment);
             addFragment(disasterReportFragment);
             addFragment(dangerReportFragment);
-        } else if ("3".equals(type)) {
-            tvTitle.setText("灾情数据");
-            navView.getMenu().getItem(4).setChecked(true);
-            navView.getMenu().getItem(0).setVisible(false);
-            navView.getMenu().getItem(1).setVisible(false);
-            navView.getMenu().getItem(2).setVisible(false);
-            navView.getMenu().getItem(3).setVisible(false);
-            addFragment(superDisasterFragment);
-            addFragment(superDangerFragment);
-        } else if ("4".equals(type)) {
-            tvTitle.setText("灾情数据");
-            navView.getMenu().getItem(4).setChecked(true);
-            navView.getMenu().getItem(0).setVisible(false);
-            navView.getMenu().getItem(1).setVisible(false);
-            navView.getMenu().getItem(2).setVisible(false);
-            navView.getMenu().getItem(3).setVisible(false);
-            addFragment(superDisasterFragment);
-            addFragment(superDangerFragment);
-        } else if ("5".equals(type)) {
+        } else {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
             navView.getMenu().getItem(0).setVisible(false);
@@ -320,13 +319,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 break;
             case R.id.nav_modify_password:
-                startActivity(new Intent(context,ModifyActivity.class));
+                startActivity(new Intent(context, ModifyActivity.class));
                 break;
             case R.id.nav_clear:
                 clear();
                 break;
             case R.id.nav_login_out:
                 loginOut();
+                break;
+            case R.id.nav_setting:
+                startActivity(new Intent(context,VideoConfig.class));
                 break;
         }
         return true;
@@ -361,8 +363,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void showFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.show(fragment);
-        transaction.commit();
+        if (fragment.isHidden()) {
+            transaction.show(fragment);
+            transaction.commit();
+        }
     }
 
     private void hideFragment(Fragment fragment) {
@@ -380,7 +384,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         setLoginOut();
-                        NotificationManager manager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         if (manager != null) {
                             manager.cancelAll();
                         }
@@ -398,8 +402,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void setLoginOut() {
-        OkHttpUtils.get().url(getString(R.string.local_base_url)+"appdocking/logout")
-                .addHeader("sessionID",sessionId)
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "appdocking/logout")
+                .addHeader("sessionID", sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -463,5 +467,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         }
                     }).show();
         }
+    }
+
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.d("cp", action);
+            if (Constant.ACTION_DISASTER_UPLOADED.equals(action)) {
+                tvTitle.setText("灾情处置");
+                navView.getMenu().getItem(0).setChecked(true);
+                hideFragment(disasterReportFragment);
+                hideFragment(dangerReportFragment);
+                showFragment(disasterListFragment);
+                hideFragment(dangerListFragment);
+            } else if (Constant.ACTION_DANGER_UPLOADED.equals(action)) {
+                tvTitle.setText("险情处置");
+                navView.getMenu().getItem(1).setChecked(true);
+                hideFragment(disasterReportFragment);
+                hideFragment(dangerReportFragment);
+                hideFragment(disasterListFragment);
+                showFragment(dangerListFragment);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 }

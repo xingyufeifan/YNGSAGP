@@ -77,6 +77,9 @@ public class SuperBean implements Serializable {
     private String opinion;
     private String disposePerson;
     private String disposeMobile;
+    private String disastersName;
+    private String disastersId;
+
     public String getOpinion() {
         return opinion;
     }
@@ -350,5 +353,21 @@ public class SuperBean implements Serializable {
 
     public void setAreaId(Object areaId) {
         this.areaId = areaId;
+    }
+
+    public String getDisastersName() {
+        return disastersName;
+    }
+
+    public void setDisastersName(String disastersName) {
+        this.disastersName = disastersName;
+    }
+
+    public String getDisastersId() {
+        return disastersId;
+    }
+
+    public void setDisastersId(String disastersId) {
+        this.disastersId = disastersId;
     }
 }

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nandi.yngsagp.bean.AudioPath;
 import com.nandi.yngsagp.bean.DangerUBean;
+import com.nandi.yngsagp.bean.DisasterPoint;
 import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
@@ -95,6 +96,15 @@ public class GreedDaoHelper {
 
     public static DangerUBean queryDanger() {
         return daoSession.getDangerUBeanDao().queryBuilder().unique();
+    }
+    public static void insertDisasterPoint(List<DisasterPoint> disasterPoints){
+        daoSession.getDisasterPointDao().insertInTx(disasterPoints);
+    }
+    public static void deleteDisasterPoint(){
+        daoSession.getDisasterPointDao().deleteAll();
+    }
+    public static List<DisasterPoint> getDisasterPointList(){
+        return daoSession.getDisasterPointDao().queryBuilder().list();
     }
     public static void deleteAll(){
         daoSession.getPhotoPathDao().deleteAll();

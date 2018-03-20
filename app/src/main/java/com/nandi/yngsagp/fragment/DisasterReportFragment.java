@@ -5,10 +5,9 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,17 +37,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -65,6 +63,7 @@ import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.PictureAdapter;
 import com.nandi.yngsagp.bean.AudioPath;
+import com.nandi.yngsagp.bean.DisasterPoint;
 import com.nandi.yngsagp.bean.DisasterUBean;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
@@ -87,6 +86,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -105,6 +105,7 @@ public class DisasterReportFragment extends Fragment {
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int TAKE_VIDEO = 3;
+    private static final int FILE_SELECT_CODE = 4;
     Unbinder unbinder;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
@@ -128,6 +129,16 @@ public class DisasterReportFragment extends Fragment {
     TextView tvAudio;
     @BindView(R.id.dReportUser)
     TextView dReportUser;
+    @BindView(R.id.iv_check_file)
+    Button ivCheckFile;
+    @BindView(R.id.sp_factor_type)
+    Spinner spFactorType;
+    @BindView(R.id.tv_file)
+    TextView tvFile;
+    @BindView(R.id.sp_disaster_point)
+    Spinner spDisasterPoint;
+    @BindView(R.id.ll_upload_file)
+    LinearLayout llUploadFile;
     private Activity context;
     private File pictureFile;
     private PopupWindow popupWindow;
@@ -143,8 +154,6 @@ public class DisasterReportFragment extends Fragment {
     TextView dReportLocation;
     @BindView(R.id.dReportType)
     Spinner dReportType;
-    @BindView(R.id.dReportFactor)
-    EditText dReportFactor;
     @BindView(R.id.dReportInjurd)
     EditText dReportInjurd;
     @BindView(R.id.dReportDeath)
@@ -182,6 +191,9 @@ public class DisasterReportFragment extends Fragment {
     private LocationClient locationClient;
     private MediaPlayer player;
     private String sessionId;
+    private String type;
+    private List<DisasterPoint> disasterPoints;
+    private List<String> disasterName = new ArrayList<>();
 
     @Nullable
     @Override
@@ -197,6 +209,9 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void setAdapter() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, disasterName);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDisasterPoint.setAdapter(arrayAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
         rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhoto.setAdapter(pictureAdapter);
@@ -309,6 +324,8 @@ public class DisasterReportFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("媒体信息"), 1);
         if ("2".equals(SharedUtils.getShare(context, Constant.PERSON_TYPE, "0"))) {
             llDReport.setVisibility(View.VISIBLE);
+            ivCheckFile.setVisibility(View.VISIBLE);
+            llUploadFile.setVisibility(View.VISIBLE);
         }
         dReportUser.setText((CharSequence) SharedUtils.getShare(context, Constant.NAME, ""));
         dReportPhone.setText((CharSequence) SharedUtils.getShare(context, Constant.MOBILE, ""));
@@ -316,12 +333,18 @@ public class DisasterReportFragment extends Fragment {
     }
 
     private void initData() {
-        sessionId= (String) SharedUtils.getShare(getActivity(),Constant.SESSION_ID,"");
+        disasterPoints = GreedDaoHelper.getDisasterPointList();
+        for (DisasterPoint disasterPoint : disasterPoints) {
+            disasterName.add(disasterPoint.getDisName());
+        }
+        type = (String) SharedUtils.getShare(context, Constant.PERSON_TYPE, "");
+        sessionId = (String) SharedUtils.getShare(getActivity(), Constant.SESSION_ID, "");
         DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
         List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(1);
         VideoPath queryVideo = GreedDaoHelper.queryVideo(1);
         AudioPath queryAudio = GreedDaoHelper.queryAudio(1);
         if (disasterUBean != null) {
+            spDisasterPoint.setSelection(disasterUBean.getDisasterPosition());
             dReportUser.setText(disasterUBean.getReportMan());
             dReportPhone.setText(disasterUBean.getPhone());
             dReportTime.setText(disasterUBean.getTime());
@@ -329,7 +352,7 @@ public class DisasterReportFragment extends Fragment {
             dReportLocation.setText(disasterUBean.getLocation());
             typePos = Integer.parseInt(disasterUBean.getType());
             dReportType.setSelection(Integer.parseInt(disasterUBean.getType()), true);
-            dReportFactor.setText(disasterUBean.getFactor());
+            spFactorType.setSelection(Integer.parseInt(disasterUBean.getFactor()));
             dReportInjurd.setText(disasterUBean.getInjured());
             dReportDeath.setText(disasterUBean.getDeath());
             dReportMiss.setText(disasterUBean.getMiss());
@@ -403,7 +426,7 @@ public class DisasterReportFragment extends Fragment {
         }
     }
 
-    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio, R.id.tv_get_location})
+    @OnClick({R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_save, R.id.btn_upload, R.id.dReportTime, R.id.tv_video, R.id.tv_audio, R.id.tv_get_location, R.id.iv_check_file, R.id.tv_file})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -453,6 +476,27 @@ public class DisasterReportFragment extends Fragment {
             case R.id.tv_get_location:
                 startLocation();
                 break;
+            case R.id.iv_check_file:
+                checkFile();
+                break;
+            case R.id.tv_file:
+                if (!TextUtils.isEmpty(tvFile.getText())) {
+                    clickText(3);
+                }
+                break;
+        }
+    }
+
+
+    private void checkFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");//过滤文件类型（所有）
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "请选择文件！"), FILE_SELECT_CODE);
+        } catch (ActivityNotFoundException ex) {
+            ToastUtils.showShort("未找到文件管理器");
         }
     }
 
@@ -501,6 +545,9 @@ public class DisasterReportFragment extends Fragment {
         } else if (TextUtils.isEmpty(dReportLon.getText())) {
             ToastUtils.showShort("请获取坐标信息");
             return false;
+        } else if (spFactorType.getSelectedItemPosition() == 0) {
+            ToastUtils.showShort("请选择诱发因素");
+            return false;
         }
         return true;
     }
@@ -514,12 +561,21 @@ public class DisasterReportFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (type == 1) {
-                    Uri uri = Uri.parse(tvVideo.getText().toString());
+                    Uri uri;
+                    File videoFile=new File(tvVideo.getText().toString());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+                        uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+                    } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
+                        uri = Uri.fromFile(videoFile);
+                    }
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "video/mp4");
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.setDataAndType(uri, "video/*");//todo
                     startActivity(intent);
-                } else {
+                } else if (type == 2) {
                     playAudio(tvAudio.getText().toString());
+                } else {
+                    openFile(tvFile.getText().toString());
                 }
                 popupWindow.dismiss();
             }
@@ -533,13 +589,15 @@ public class DisasterReportFragment extends Fragment {
                     }
                     tvVideo.setText("");
                     videoFile = null;
-                } else {
+                } else if (type == 2) {
                     File file = new File(audioPath);
                     if (file.exists()) {
                         file.delete();
                     }
                     tvAudio.setText("");
                     audioPath = null;
+                } else {
+                    tvFile.setText("");
                 }
                 popupWindow.dismiss();
             }
@@ -560,6 +618,11 @@ public class DisasterReportFragment extends Fragment {
         });
     }
 
+    private void openFile(String s) {
+        Intent intent = AppUtils.openFile(s, context);
+        startActivity(intent);
+    }
+
     private String getTime(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(date);
@@ -567,13 +630,14 @@ public class DisasterReportFragment extends Fragment {
 
     private void save() {
         DisasterUBean disasterUBean = new DisasterUBean();
+        int disasterPosition = spDisasterPoint.getSelectedItemPosition();
         String reportMan = dReportUser.getText().toString().trim();
         String phone = dReportPhone.getText().toString().trim();
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
         String type = typePos + "";
-        String factor = dReportFactor.getText().toString().trim();
+        String factor = spFactorType.getSelectedItemPosition() + "";
         String injured = dReportInjurd.getText().toString().trim();
         String death = dReportDeath.getText().toString().trim();
         String miss = dReportMiss.getText().toString().trim();
@@ -604,6 +668,7 @@ public class DisasterReportFragment extends Fragment {
         disasterUBean.setReportName(reportName);
         disasterUBean.setReportMobile(reportMobile);
         disasterUBean.setId(1L);
+        disasterUBean.setDisasterPosition(disasterPosition);
         GreedDaoHelper.insertDisaster(disasterUBean);
         List<PhotoPath> queryPhoto = GreedDaoHelper.queryPhoto(1);
         if (queryPhoto != null && queryPhoto.size() > 0) {
@@ -629,13 +694,14 @@ public class DisasterReportFragment extends Fragment {
 
     private void upload() {
         Map<String, String> map = new HashMap<>();
+        String disasterId = disasterPoints.get(spDisasterPoint.getSelectedItemPosition()).getDisId();
         String reportMan = dReportUser.getText().toString().trim();
         String phone = dReportPhone.getText().toString().trim();
         String time = dReportTime.getText().toString().trim();
         String address = dReportAddress.getText().toString().trim();
         String location = dReportLocation.getText().toString().trim();
-        String type = typePos-1 + "";
-        String factor = dReportFactor.getText().toString().trim();
+        String type = typePos - 1 + "";
+        String factor = spFactorType.getSelectedItemPosition() + "";
         String injured = dReportInjurd.getText().toString().trim();
         if (TextUtils.isEmpty(injured)) {
             injured = "0";
@@ -687,13 +753,14 @@ public class DisasterReportFragment extends Fragment {
         map.put("monitorPhone", reportMobile);
         map.put("areaId", areaId);
         map.put("personType", personType);
+        map.put("disastersId", disasterId);
         setRequest(map);
     }
 
     @SuppressLint("SimpleDateFormat")
     private void setRequest(Map<String, String> map) {
         progressDialog.show();
-        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/add").addHeader("sessionID",sessionId);
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/add").addHeader("sessionID", sessionId);
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
@@ -706,7 +773,11 @@ public class DisasterReportFragment extends Fragment {
         }
         if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
             Log.d("cp", "音频添加");
-            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".ogg", new File(audioPath));
+        }
+        if (!TextUtils.isEmpty(tvFile.getText().toString())) {
+            File file = new File(tvFile.getText().toString());
+            formBuilder.addFile("file", file.getName(), file);
         }
         formBuilder.params(map);
         formBuilder.addParams("type", "1");
@@ -715,7 +786,7 @@ public class DisasterReportFragment extends Fragment {
             @Override
             public void onError(Call call, Exception e, int id) {
                 String message = e.getMessage();
-                if ("Canceled".equals(message)||"Socket closed".equals(message)) {
+                if ("Canceled".equals(message) || "Socket closed".equals(message)) {
                     ToastUtils.showShort("取消上传！");
                 } else {
                     progressDialog.dismiss();
@@ -736,6 +807,10 @@ public class DisasterReportFragment extends Fragment {
                     if (success) {
                         ToastUtils.showShort(data);
                         clean();
+                        if ("2".equals(type)) {
+                            Intent intent = new Intent(Constant.ACTION_DISASTER_UPLOADED);
+                            context.sendBroadcast(intent);
+                        }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(context);
@@ -749,12 +824,13 @@ public class DisasterReportFragment extends Fragment {
             }
         });
     }
+
     private void clean() {
         dReportTime.setText("");
         dReportAddress.setText("");
         typePos = 0;
         dReportType.setSelection(0);
-        dReportFactor.setText("");
+        spFactorType.setSelection(0);
         dReportInjurd.setText("");
         dReportDeath.setText("");
         dReportMiss.setText("");
@@ -768,6 +844,7 @@ public class DisasterReportFragment extends Fragment {
         dReportName.setText("");
         tvAudio.setText("");
         tvVideo.setText("");
+        tvFile.setText("");
         photoPaths.clear();
         pictureAdapter.notifyDataSetChanged();
         DisasterUBean disasterUBean = GreedDaoHelper.queryDisaster();
@@ -906,13 +983,13 @@ public class DisasterReportFragment extends Fragment {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
-                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".ogg";
                     } else {
                         ToastUtils.showShort("文件夹创建失败");
                     }
                     recorder = new MediaRecorder();
                     recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     recorder.setOutputFile(audioPath);
                     chronometer.start();// 开始计时
@@ -1037,7 +1114,6 @@ public class DisasterReportFragment extends Fragment {
                         cursor.moveToFirst();
                         // 最后根据索引值获取图片路径
                         String path = cursor.getString(column_index);
-                        System.out.println("照片路径：" + path);
                         Bitmap bitmap1 = BitmapFactory.decodeFile(new File(path).getAbsolutePath());
                         PictureUtils.compressImageToFile(bitmap1, new File(path));
                         PhotoPath photoPath = new PhotoPath();
@@ -1049,6 +1125,24 @@ public class DisasterReportFragment extends Fragment {
                     break;
                 case TAKE_VIDEO:
                     tvVideo.setText(videoFile.getAbsolutePath());
+                    break;
+                case FILE_SELECT_CODE:
+                    Uri fileUri = data.getData();
+                    if (fileUri != null) {
+                        String path = AppUtils.getPath(context, fileUri);
+
+                        if (path != null) {
+                            String end = path.substring(path.lastIndexOf(".") + 1, path.length()).toLowerCase(Locale.getDefault());
+                            if ("ppt".equals(end) || "pptx".equals(end) || "xls".equals(end)
+                                    || "xlsx".equals(end) || "doc".equals(end) || "docx".equals(end)
+                                    || "pdf".equals(end) || "txt".equals(end)) {
+                                tvFile.setText(path);
+                            } else {
+                                ToastUtils.showShort("不支持上传此类型文件");
+                            }
+                        }
+
+                    }
                     break;
             }
         }

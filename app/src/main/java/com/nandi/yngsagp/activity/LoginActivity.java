@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,9 +34,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nandi.yngsagp.Constant;
 import com.nandi.yngsagp.OkHttpCallback;
 import com.nandi.yngsagp.R;
+import com.nandi.yngsagp.bean.DisasterPoint;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.MyCountDownTimer;
 import com.nandi.yngsagp.utils.OkHttpHelper;
@@ -42,6 +48,7 @@ import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,6 +100,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private Context mContext;
     private boolean isCheck = false;
     private MyCountDownTimer myCountDownTimer;
+    private ArrayList<DisasterPoint> disasterPoints = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -405,12 +413,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        String imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE))
-                .getDeviceId();
+        String imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE)).getDeviceId();
         OkHttpHelper.sendHttpGet(this, getResources().getString(R.string.local_base_url) + "appdocking/login/" + mobile + "/" + pwd + "/" + imei, new OkHttpCallback() {
             @Override
             public void onSuccess(String response) {
-                System.out.println("response = " + response);
 
                 progressDialog.dismiss();
                 try {
@@ -419,9 +425,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     boolean isSuccess = jsonMeta.optBoolean("success");
                     if (isSuccess) {
                         initJson(jsonObject);
-
-                        finish();
                         ToNextActivity(MainActivity.class);
+                        finish();
                     } else {
                         String message = jsonMeta.optString("message");
                         etPassword.setText("");
@@ -457,6 +462,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             SharedUtils.putShare(mContext, Constant.MOBILE, mobile);
             SharedUtils.putShare(mContext, Constant.PASSWORD, pwd);
             SharedUtils.putShare(mContext, Constant.IS_LOGIN, true);
+            if ("1".equals(personType) || "2".equals(personType)) {
+                try {
+                    JSONArray array = jsonData.getJSONArray("basicInfo");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        DisasterPoint disasterPoint = new DisasterPoint();
+                        disasterPoint.setDisId(object.optString("id"));
+                        disasterPoint.setDisName(object.optString("dis_name"));
+                        disasterPoints.add(disasterPoint);
+                    }
+                    GreedDaoHelper.deleteDisasterPoint();
+                    GreedDaoHelper.insertDisasterPoint(disasterPoints);
+                    Log.d("chenpeng", "type:" + personType);
+                    Log.d("chenpeng", "size:" + disasterPoints.size());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 //
@@ -478,6 +501,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         permissionItems.add(new PermissionItem(Manifest.permission.CAMERA, "照相机", R.drawable.permission_ic_camera));
         permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "定位", R.drawable.permission_ic_location));
         permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "读写SD卡", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_EXTERNAL_STORAGE, "读写SD卡", R.drawable.permission_ic_storage));
         permissionItems.add(new PermissionItem(Manifest.permission.RECORD_AUDIO, "录音", R.drawable.permission_ic_micro_phone));
         permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话", R.drawable.permission_ic_phone));
         HiPermission.create(this)

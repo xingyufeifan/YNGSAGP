@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="播放"
+        android:text="打开"
         android:textColor="@color/colorWhite"
         android:background="@color/colorPrimary"
         android:textSize="20sp" />

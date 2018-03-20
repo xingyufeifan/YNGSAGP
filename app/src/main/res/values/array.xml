@@ -10,4 +10,21 @@
         <item>地面沉降</item>
         <item>地裂缝</item>
     </string-array>
+    <string-array name="factorType">
+        <item>请选择(必选)</item>
+        <item>降雨</item>
+        <item>冰雪冻融</item>
+        <item>地震</item>
+        <item>风化</item>
+        <item>卸荷</item>
+        <item>斜坡陡峭</item>
+        <item>人工加载</item>
+        <item>开挖坡脚</item>
+        <item>坡脚冲刷</item>
+        <item>爆破振动</item>
+        <item>植被破坏</item>
+        <item>节理发育</item>
+        <item>动水压力</item>
+        <item>其他</item>
+    </string-array>
 </resources>

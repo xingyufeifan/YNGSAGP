@@ -22,7 +22,7 @@ public class ConfigService {
 		configEntity.mResolutionHeight = sharedPreferences.getInt("ResolutionHeight", 240);
 		configEntity.mVideoBitrate = sharedPreferences.getInt("VideoBitrate", 150 * 1000);
 		configEntity.mVideoFps = sharedPreferences.getInt("VideoFps", 10);
-		configEntity.mVideoQuality = sharedPreferences.getInt("VideoQuality", ConfigEntity.VIDEO_QUALITY_GOOD);
+		configEntity.mVideoQuality = sharedPreferences.getInt("VideoQuality", ConfigEntity.VIDEO_QUALITY_BEST);
 		configEntity.mVideoPreset = sharedPreferences.getInt("VideoPreset", 3);
 		configEntity.mVideoOverlay = sharedPreferences.getInt("VideoOverlay", 1);
 		configEntity.mVideoRotateMode = sharedPreferences.getInt("VideoRotateMode", 0);

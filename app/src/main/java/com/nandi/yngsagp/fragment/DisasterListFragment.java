@@ -3,7 +3,10 @@ package com.nandi.yngsagp.fragment;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -86,6 +89,7 @@ public class DisasterListFragment extends Fragment {
     private String data;
     private JSONObject jsonObject;
     private String sessionId;
+    private MyReceiver receiver;
 
     @Nullable
     @Override
@@ -356,6 +360,10 @@ public class DisasterListFragment extends Fragment {
     }
 
     private void initViews() {
+        receiver=new MyReceiver();
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_DISASTER_UPLOADED);
+        getActivity().registerReceiver(receiver,intentFilter);
         sessionId = (String) SharedUtils.getShare(getActivity(), Constant.SESSION_ID, "");
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
@@ -377,7 +385,7 @@ public class DisasterListFragment extends Fragment {
         requestUPos();
     }
 
-    private void requestAPos() {
+    public void requestAPos() {
         progressDialog.show();
         String url = getString(R.string.local_base_url) + "appDangerous/findDangers/" + areaId + "/1/1/1/15/" + role;
         OkHttpUtils.get().url(url)
@@ -393,6 +401,7 @@ public class DisasterListFragment extends Fragment {
                     @Override
                     public void onResponse(String response, int id) {
                         try {
+                            Log.d("chenpeng",response);
                             progressDialog.dismiss();
                             disasterListA.clear();
                             initJson(response);
@@ -405,10 +414,7 @@ public class DisasterListFragment extends Fragment {
                                 } else {
                                     Log.d("dis", "initJson: 用户无访问权限");
                                 }
-                            } else {
-                                ToastUtils.showShort(message);
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -444,6 +450,12 @@ public class DisasterListFragment extends Fragment {
                                 } else {
                                     Log.d("dis", "initJson: 用户无访问权限");
                                 }
+                            }else {
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(getActivity());
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
                             }
 
                         } catch (JSONException e) {
@@ -461,10 +473,20 @@ public class DisasterListFragment extends Fragment {
             requestUPos();
         }
     }
+    class MyReceiver extends BroadcastReceiver{
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_DISASTER_UPLOADED.equals(action)){
+                requestUPos();
+            }
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getActivity().unregisterReceiver(receiver);
     }
 }

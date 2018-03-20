@@ -103,6 +103,22 @@
                 style="@style/disasterStyle"
                 android:hint="@string/mustSelect" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                style="@style/myLeftText"
+                android:text="灾害点：" />
+
+            <TextView
+                android:id="@+id/tv_disaster_name"
+                style="@style/disasterStyle"
+                />
+        </LinearLayout>
 
         <TextView
             style="@style/myDivide"
@@ -246,10 +262,13 @@
                 style="@style/myLeftText"
                 android:text="@string/dReportFactor"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/factorShow"
-                style="@style/disasterStyle" />
+            <Spinner
+                android:id="@+id/sp_factor_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:entries="@array/factorType" />
         </LinearLayout>
 
 

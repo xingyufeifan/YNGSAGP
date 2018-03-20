@@ -51,7 +51,7 @@ public class MyService extends Service implements AnyChatBaseEvent {
         mBroadcastReceiver = new MyBroadReceiver();
         registerReceiver(mBroadcastReceiver, filter);
         name= (String) SharedUtils.getShare(this,"NAME","自己");
-        ip= (String) SharedUtils.getShare(this,"IP","183.230.108.112");
+        ip= (String) SharedUtils.getShare(this,"IP","183.224.17.135");
         port= (int) SharedUtils.getShare(this,"PORT",8906);
         Log.e("MyService", "启动了服务.....");
     }

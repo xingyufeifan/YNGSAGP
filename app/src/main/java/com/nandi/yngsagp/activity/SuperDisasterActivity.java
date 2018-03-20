@@ -4,8 +4,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,12 +12,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
@@ -90,8 +89,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
     TextView disNumShow;
     @BindView(R.id.typeShow)
     Spinner typeShow;
-    @BindView(R.id.factorShow)
-    TextView factorShow;
     @BindView(R.id.injurdShow)
     TextView injurdShow;
     @BindView(R.id.deathShow)
@@ -130,17 +127,26 @@ public class SuperDisasterActivity extends AppCompatActivity {
     RecyclerView rvAudioUpdated;
     @BindView(R.id.media_layout)
     LinearLayout mediaLayout;
+    @BindView(R.id.rv_file_updated)
+    RecyclerView rvFileUpdated;
+    @BindView(R.id.sp_factor_type)
+    Spinner spFactorType;
+    @BindView(R.id.tv_disaster_name)
+    TextView tvDisasterName;
     private SuperBean listBeans;
     private ProgressDialog progressDialog;
     private List<MediaInfo> photoInfos = new ArrayList<>();
     private List<MediaInfo> videoInfos = new ArrayList<>();
     private List<MediaInfo> audioInfos = new ArrayList<>();
+    private List<MediaInfo> fileInfos = new ArrayList<>();
     private Activity context;
     private PhotoAdapter photoAdapter;
     private MediaAdapter videoAdapter;
     private MediaAdapter audioAdapter;
+    private MediaAdapter fileAdapter;
     private MediaPlayer player;
     private String sessionId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,21 +164,26 @@ public class SuperDisasterActivity extends AppCompatActivity {
         photoAdapter = new PhotoAdapter(context, photoInfos);
         videoAdapter = new MediaAdapter(context, videoInfos);
         audioAdapter = new MediaAdapter(context, audioInfos);
+        fileAdapter = new MediaAdapter(context, fileInfos);
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvVideoUpdated.setLayoutManager(new LinearLayoutManager(context));
         rvAudioUpdated.setLayoutManager(new LinearLayoutManager(context));
+        rvFileUpdated.setLayoutManager(new LinearLayoutManager(context));
         rvPhotoUploaded.setAdapter(photoAdapter);
         rvVideoUpdated.setAdapter(videoAdapter);
         rvAudioUpdated.setAdapter(audioAdapter);
+        rvFileUpdated.setAdapter(fileAdapter);
+        tvDisasterName.setText(listBeans.getDisastersName());
         userShow.setText(listBeans.getPersonel());
         disNumShow.setText(listBeans.getDisasterNum());
         phoneShow.setText(listBeans.getPhoneNum());
         timeShow.setText(listBeans.getFindTime());
         locationShow.setText(listBeans.getCurrentLocation());
         addressShow.setText(listBeans.getAddress());
-        typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()));
-        typeShow.setEnabled(false);
-        factorShow.setText((CharSequence) listBeans.getFactor());
+        typeShow.setSelection(Integer.parseInt(listBeans.getDisasterType()) + 1);
+        typeShow.setEnabled(false);//todo
+        spFactorType.setSelection(Integer.parseInt((String) listBeans.getFactor()));
+        spFactorType.setEnabled(false);
         injurdShow.setText((CharSequence) listBeans.getInjurdNum());
         deathShow.setText((CharSequence) listBeans.getDeathNum());
         missShow.setText((CharSequence) listBeans.getMissingNum());
@@ -187,7 +198,6 @@ public class SuperDisasterActivity extends AppCompatActivity {
         if ("2".equals(listBeans.getPersonType())) {
             llDReport.setVisibility(View.GONE);
         }
-        ToastUtils.showShort(listBeans.getForecastLevel());
         if ("1".equals(listBeans.getLevel())) {
             level.setText("小型");
         } else if ("2".equals(listBeans.getLevel())) {
@@ -266,8 +276,44 @@ public class SuperDisasterActivity extends AppCompatActivity {
                 playNetAudio(audioInfos.get(position));
             }
         });
+        fileAdapter.setOnItemClickListener(new MediaAdapter.OnItemViewClickListener() {
+            @Override
+            public void onMediaClick(int position) {
+                downloadFile(fileInfos.get(position));
+            }
+        });
     }
 
+    private void downloadFile(MediaInfo mediaInfo) {
+        File fileDir = createFileDir("docFile");
+        File file = new File(fileDir, mediaInfo.getFileName());
+        if (!file.exists()) {
+            progressDialog.show();
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID", sessionId)
+                    .build()
+                    .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            ToastUtils.showShort("获取数据失败");
+                            progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onResponse(File response, int id) {
+                            progressDialog.dismiss();
+                            openFile(response.getAbsolutePath());
+                        }
+                    });
+        } else {
+            openFile(file.getAbsolutePath());
+        }
+    }
+
+    private void openFile(String absolutePath) {
+        Intent intent = AppUtils.openFile(absolutePath,context);
+        startActivity(intent);
+    }
 
     private void enlargePhoto(MediaInfo mediaInfo) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_enlarge_photo, null);
@@ -280,7 +326,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
+        sessionId = (String) SharedUtils.getShare(context, Constant.SESSION_ID, "");
         progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -291,8 +337,8 @@ public class SuperDisasterActivity extends AppCompatActivity {
 
     private void setRequest() {
         progressDialog.show();
-        OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedia/" + listBeans.getId())
-                .addHeader("sessionID",sessionId)
+        OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedias/" + listBeans.getId())
+                .addHeader("sessionID", sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -303,6 +349,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.d("cp", response);
                         progressDialog.dismiss();
                         try {
                             JSONObject object = new JSONObject(response);
@@ -314,6 +361,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
                                 photoInfos.clear();
                                 videoInfos.clear();
                                 audioInfos.clear();
+                                fileInfos.clear();
                                 for (int i = 0; i < data.length(); i++) {
                                     JSONObject jsonObject = data.getJSONObject(i);
                                     if ("1".equals(jsonObject.getString("type"))) {
@@ -331,11 +379,17 @@ public class SuperDisasterActivity extends AppCompatActivity {
                                         audio.setFileName(jsonObject.getString("fileName"));
                                         audio.setType(jsonObject.getString("type"));
                                         audioInfos.add(audio);
+                                    } else if ("4".equals(jsonObject.getString("type"))) {
+                                        MediaInfo file = new MediaInfo();
+                                        file.setFileName(jsonObject.getString("fileName"));
+                                        file.setType(jsonObject.getString("type"));
+                                        fileInfos.add(file);
                                     }
                                 }
                                 photoAdapter.notifyDataSetChanged();
                                 videoAdapter.notifyDataSetChanged();
                                 audioAdapter.notifyDataSetChanged();
+                                fileAdapter.notifyDataSetChanged();
                             } else {
                                 if ("exit".equals(message)) {
                                     AppUtils.startLogin(context);
@@ -367,7 +421,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
         if (!file.exists()) {
             progressDialog.show();
             OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
-                    .addHeader("sessionID",sessionId)
+                    .addHeader("sessionID", sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
@@ -460,10 +514,11 @@ public class SuperDisasterActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = Uri.parse(response.getAbsolutePath());
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
-            uri = Uri.parse("file://" + response.getAbsolutePath());
+            uri = Uri.fromFile(response);
         }
+        it.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         it.setDataAndType(uri, type);
         startActivity(it);
     }
@@ -474,7 +529,7 @@ public class SuperDisasterActivity extends AppCompatActivity {
         if (!file.exists()) {
             progressDialog.show();
             OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
-                    .addHeader("sessionID",sessionId)
+                    .addHeader("sessionID", sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override

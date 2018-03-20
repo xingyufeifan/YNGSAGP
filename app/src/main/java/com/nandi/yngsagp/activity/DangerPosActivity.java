@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
@@ -45,7 +46,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,12 +59,12 @@ import com.nandi.yngsagp.R;
 import com.nandi.yngsagp.adapter.MediaAdapter;
 import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.adapter.PictureAdapter;
-import com.nandi.yngsagp.bean.DisposBean;
+import com.nandi.yngsagp.bean.DisasterPoint;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.fragment.DangerListFragment;
-import com.nandi.yngsagp.fragment.DisasterListFragment;
+import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
 import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
@@ -86,6 +86,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -97,6 +98,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int TAKE_VIDEO = 3;
+    private static final int FILE_SELECT_CODE = 4;
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.tv_title)
@@ -123,8 +125,6 @@ public class DangerPosActivity extends AppCompatActivity {
     TextView xqNumShow;
     @BindView(R.id.typeDangerShow)
     Spinner typeDangerShow;
-    @BindView(R.id.factorDangerShow)
-    EditText factorDangerShow;
     @BindView(R.id.personDangerShow)
     EditText personDangerShow;
     @BindView(R.id.houseDangerShow)
@@ -179,17 +179,31 @@ public class DangerPosActivity extends AppCompatActivity {
     RecyclerView rvVideoUpdated;
     @BindView(R.id.rv_audio_updated)
     RecyclerView rvAudioUpdated;
+    @BindView(R.id.sp_factor_type)
+    Spinner spFactorType;
+    @BindView(R.id.rv_file_updated)
+    RecyclerView rvFileUpdated;
+    @BindView(R.id.iv_check_file)
+    ImageView ivCheckFile;
+    @BindView(R.id.tv_file)
+    TextView tvFile;
+    @BindView(R.id.sp_disaster_point)
+    Spinner spDisasterPoint;
+    @BindView(R.id.btn_report)
+    Button btnReport;
 
     private SuperBean listBean;
     private ProgressDialog progressDialog;
     private List<MediaInfo> photoInfos = new ArrayList<>();
     private List<MediaInfo> videoInfos = new ArrayList<>();
     private List<MediaInfo> audioInfos = new ArrayList<>();
+    private List<MediaInfo> fileInfos = new ArrayList<>();
     private List<PhotoPath> photoPaths = new ArrayList<>();
     private Activity context;
     private PhotoAdapter photoAdapter;
     private MediaAdapter videoAdapter;
     private MediaAdapter audioAdapter;
+    private MediaAdapter fileAdapter;
     private PictureAdapter pictureAdapter;
     private File pictureFile;
     private File videoFile;
@@ -199,6 +213,9 @@ public class DangerPosActivity extends AppCompatActivity {
     private MediaPlayer player;
     private int typePos;
     private String sessionId;
+    private List<DisasterPoint> disasterPoints;
+    private List<String> disasterName = new ArrayList<>();
+    private int currentDisasterPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,15 +232,22 @@ public class DangerPosActivity extends AppCompatActivity {
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("正在获取数据");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, disasterName);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDisasterPoint.setAdapter(arrayAdapter);
+        spDisasterPoint.setSelection(currentDisasterPosition);
         photoAdapter = new PhotoAdapter(context, photoInfos);
         videoAdapter = new MediaAdapter(context, videoInfos);
         audioAdapter = new MediaAdapter(context, audioInfos);
+        fileAdapter = new MediaAdapter(context, fileInfos);
         rvPhotoUploaded.setLayoutManager(new GridLayoutManager(context, 3));
         rvVideoUpdated.setLayoutManager(new LinearLayoutManager(context));
         rvAudioUpdated.setLayoutManager(new LinearLayoutManager(context));
+        rvFileUpdated.setLayoutManager(new LinearLayoutManager(context));
         rvPhotoUploaded.setAdapter(photoAdapter);
         rvVideoUpdated.setAdapter(videoAdapter);
         rvAudioUpdated.setAdapter(audioAdapter);
+        rvFileUpdated.setAdapter(fileAdapter);
         pictureAdapter = new PictureAdapter(context, photoPaths);
         rvPhoto.setLayoutManager(new GridLayoutManager(context, 3));
         rvPhoto.setAdapter(pictureAdapter);
@@ -243,7 +267,8 @@ public class DangerPosActivity extends AppCompatActivity {
             ll1.setVisibility(View.GONE);
             addressDangerShow.setEnabled(false);
             typeDangerShow.setEnabled(false);
-            factorDangerShow.setEnabled(false);
+            spFactorType.setEnabled(false);
+            spDisasterPoint.setEnabled(false);
             personDangerShow.setEnabled(false);
             houseDangerShow.setEnabled(false);
             moneyDangerShow.setEnabled(false);
@@ -329,6 +354,12 @@ public class DangerPosActivity extends AppCompatActivity {
                 playNetAudio(audioInfos.get(position));
             }
         });
+        fileAdapter.setOnItemClickListener(new MediaAdapter.OnItemViewClickListener() {
+            @Override
+            public void onMediaClick(int position) {
+                downloadFile(fileInfos.get(position));
+            }
+        });
         pictureAdapter.setOnItemViewClickListener(new PictureAdapter.OnItemViewClickListener() {
             @Override
             public void onPictureClick(int position) {
@@ -390,16 +421,25 @@ public class DangerPosActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        sessionId= (String) SharedUtils.getShare(context,Constant.SESSION_ID,"");
+        sessionId = (String) SharedUtils.getShare(context, Constant.SESSION_ID, "");
         listBean = (SuperBean) getIntent().getSerializableExtra(Constant.DISASTER);
+        disasterPoints = GreedDaoHelper.getDisasterPointList();
+        for (int i = 0; i < disasterPoints.size(); i++) {
+            disasterName.add(disasterPoints.get(i).getDisName());
+            if (listBean.getDisastersName().equals(disasterPoints.get(i).getDisName())) {
+                currentDisasterPosition = i;
+            }
+        }
+        Log.d("chenpeng","danger:"+disasterPoints.toString());
         xqNumShow.setText(listBean.getDisasterNum());
         userDangerShow.setText(listBean.getPersonel());
         phoneDangerShow.setText(listBean.getPhoneNum());
         timeDangerShow.setText((CharSequence) listBean.getHappenTime());
         locationDangerShow.setText(listBean.getCurrentLocation());
         addressDangerShow.setText(listBean.getAddress());
-        typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType())+1);
-        factorDangerShow.setText((CharSequence) listBean.getFactor());
+        Log.d("cp", listBean.getDisasterType());
+        typeDangerShow.setSelection(Integer.parseInt(listBean.getDisasterType()) + 1);
+        spFactorType.setSelection(Integer.parseInt((String) listBean.getFactor()));
         personDangerShow.setText((CharSequence) listBean.getPersonNum());
         houseDangerShow.setText((CharSequence) listBean.getHouseNum());
         areaDangerShow.setText((CharSequence) listBean.getArea());
@@ -431,11 +471,41 @@ public class DangerPosActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void downloadFile(MediaInfo mediaInfo) {
+        File fileDir = createFileDir("docFile");
+        File file = new File(fileDir, mediaInfo.getFileName());
+        if (!file.exists()) {
+            progressDialog.show();
+            OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
+                    .addHeader("sessionID", sessionId)
+                    .build()
+                    .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            ToastUtils.showShort("获取数据失败");
+                            progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onResponse(File response, int id) {
+                            progressDialog.dismiss();
+                            openFile(response.getAbsolutePath());
+                        }
+                    });
+        } else {
+            openFile(file.getAbsolutePath());
+        }
+    }
+
+    private void openFile(String absolutePath) {
+        Intent intent = AppUtils.openFile(absolutePath,context);
+        startActivity(intent);
+    }
 
     private void setRequest() {
         progressDialog.show();
         OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedias/" + listBean.getId())
-                .addHeader("sessionID",sessionId)
+                .addHeader("sessionID", sessionId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -447,7 +517,7 @@ public class DangerPosActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         progressDialog.dismiss();
-                        System.out.println("response = " + response);
+                        Log.d("cp", response);
                         try {
                             JSONObject object = new JSONObject(response);
                             JSONArray data = object.getJSONArray("data");
@@ -458,6 +528,7 @@ public class DangerPosActivity extends AppCompatActivity {
                                 photoInfos.clear();
                                 videoInfos.clear();
                                 audioInfos.clear();
+                                fileInfos.clear();
                                 for (int i = 0; i < data.length(); i++) {
                                     JSONObject jsonObject = data.getJSONObject(i);
                                     if ("1".equals(jsonObject.getString("type"))) {
@@ -475,12 +546,18 @@ public class DangerPosActivity extends AppCompatActivity {
                                         audio.setFileName(jsonObject.getString("fileName"));
                                         audio.setType(jsonObject.getString("type"));
                                         audioInfos.add(audio);
+                                    } else if ("4".equals(jsonObject.getString("type"))) {
+                                        MediaInfo file = new MediaInfo();
+                                        file.setFileName(jsonObject.getString("fileName"));
+                                        file.setType(jsonObject.getString("type"));
+                                        fileInfos.add(file);
                                     }
                                 }
                                 photoAdapter.notifyDataSetChanged();
                                 videoAdapter.notifyDataSetChanged();
                                 audioAdapter.notifyDataSetChanged();
-                            }else {
+                                fileAdapter.notifyDataSetChanged();
+                            } else {
                                 if ("exit".equals(message)) {
                                     AppUtils.startLogin(context);
                                 } else {
@@ -494,7 +571,7 @@ public class DangerPosActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick({R.id.btn_report, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video, R.id.tv_audio})
+    @OnClick({R.id.btn_report, R.id.iv_take_photo, R.id.iv_take_video, R.id.iv_take_audio, R.id.btn_error, R.id.btn_confirm, R.id.tv_video, R.id.tv_audio, R.id.tv_file, R.id.iv_check_file})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_take_photo:
@@ -535,6 +612,26 @@ public class DangerPosActivity extends AppCompatActivity {
                     clickText(2);
                 }
                 break;
+            case R.id.tv_file:
+                if (!TextUtils.isEmpty(tvFile.getText())) {
+                    clickText(3);
+                }
+                break;
+            case R.id.iv_check_file:
+                checkFile();
+                break;
+        }
+    }
+
+    private void checkFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");//过滤文件类型（所有）
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "请选择文件！"), FILE_SELECT_CODE);
+        } catch (ActivityNotFoundException ex) {
+            ToastUtils.showShort("未找到文件管理器");
         }
     }
 
@@ -557,6 +654,7 @@ public class DangerPosActivity extends AppCompatActivity {
 
     private void upload(String i) {
         Map<String, String> map = new HashMap<>();
+        String disastersId=disasterPoints.get(spDisasterPoint.getSelectedItemPosition()).getDisId();
         String reportMan = userDangerShow.getText().toString().trim();
         String phone = phoneDangerShow.getText().toString().trim();
         String time = timeDangerShow.getText().toString().trim();
@@ -564,8 +662,8 @@ public class DangerPosActivity extends AppCompatActivity {
         String location = locationDangerShow.getText().toString().trim();
         String lon = lonDangerShow.getText().toString().trim();
         String lat = latDangerShow.getText().toString().trim();
-        String type = typePos + "";
-        String factor = factorDangerShow.getText().toString().trim();
+        String type = typePos - 1 + "";
+        String factor = spFactorType.getSelectedItemPosition() + "";
         String person = personDangerShow.getText().toString().trim();
         String house = houseDangerShow.getText().toString().trim();
         String farm = areaDangerShow.getText().toString().trim();
@@ -609,6 +707,7 @@ public class DangerPosActivity extends AppCompatActivity {
         map.put("isDanger", i);
         map.put("opinion", opinion);
         map.put("id", listBean.getId() + "");
+        map.put("disastersId",disastersId);
         if ("0".equals(i) || "3".equals(i)) {
             map.put("isDispose", "3");
         } else {
@@ -623,7 +722,7 @@ public class DangerPosActivity extends AppCompatActivity {
     private void setUploadRequest(Map<String, String> map) {
         progressDialog.setMessage("正在上传");
         progressDialog.show();
-        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/update").addHeader("sessionID",sessionId);
+        PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/update").addHeader("sessionID", sessionId);
         for (PhotoPath photoPath : photoPaths) {
             if (photoPath != null) {
                 formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg", new File(photoPath.getPath()));
@@ -636,7 +735,11 @@ public class DangerPosActivity extends AppCompatActivity {
         }
         if (!TextUtils.isEmpty(tvAudio.getText().toString())) {
             Log.d("cp", "音频添加");
-            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3", new File(audioPath));
+            formBuilder.addFile("file", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".ogg", new File(audioPath));
+        }
+        if (!TextUtils.isEmpty(tvFile.getText().toString())) {
+            File file = new File(tvFile.getText().toString());
+            formBuilder.addFile("file", file.getName(), file);
         }
         formBuilder.params(map);
         formBuilder.addParams("type", "2");
@@ -655,12 +758,12 @@ public class DangerPosActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response, int id) {
-                Log.d("cp***",response);
+                Log.d("cp***", response);
                 progressDialog.dismiss();
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONObject meta = object.getJSONObject("meta");
-                    String data=object.getString("data");
+                    String data = object.getString("data");
                     String message = meta.getString("message");
                     boolean success = meta.getBoolean("success");
                     if (success) {
@@ -775,8 +878,10 @@ public class DangerPosActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (type == 1) {
                     playMedia(videoFile, "video/mp4");
-                } else {
+                } else if (type == 2) {
                     playAudio(audioPath);
+                } else {
+                    openFile(tvFile.getText().toString());
                 }
                 popupWindow.dismiss();
             }
@@ -790,13 +895,15 @@ public class DangerPosActivity extends AppCompatActivity {
                     }
                     tvVideo.setText("");
                     videoFile = null;
-                } else {
+                } else if (type == 2) {
                     File file = new File(audioPath);
                     if (file.exists()) {
                         file.delete();
                     }
                     tvAudio.setText("");
                     audioPath = null;
+                } else {
+                    tvFile.setText("");
                 }
                 popupWindow.dismiss();
             }
@@ -861,13 +968,13 @@ public class DangerPosActivity extends AppCompatActivity {
                     tv.setText("正在录音...");
                     File audio = createFileDir("Audio");
                     if (audio != null) {
-                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp3";
+                        audioPath = audio.getPath() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".ogg";
                     } else {
                         ToastUtils.showShort("文件夹创建失败");
                     }
                     recorder = new MediaRecorder();
                     recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                    recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     recorder.setOutputFile(audioPath);
                     chronometer.start();// 开始计时
@@ -971,7 +1078,7 @@ public class DangerPosActivity extends AppCompatActivity {
         if (!file.exists()) {
             progressDialog.show();
             OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
-                    .addHeader("sessionID",sessionId)
+                    .addHeader("sessionID", sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
@@ -1064,10 +1171,11 @@ public class DangerPosActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = Uri.parse(response.getAbsolutePath());
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
-            uri = Uri.parse("file://" + response.getAbsolutePath());
+            uri = Uri.fromFile(response);
         }
+        it.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         it.setDataAndType(uri, type);
         startActivity(it);
     }
@@ -1078,7 +1186,7 @@ public class DangerPosActivity extends AppCompatActivity {
         if (!file.exists()) {
             progressDialog.show();
             OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/download/" + mediaInfo.getFileName() + "/" + mediaInfo.getType())
-                    .addHeader("sessionID",sessionId)
+                    .addHeader("sessionID", sessionId)
                     .build()
                     .execute(new FileCallBack(fileDir.getPath(), mediaInfo.getFileName()) {
                         @Override
@@ -1136,6 +1244,22 @@ public class DangerPosActivity extends AppCompatActivity {
                     break;
                 case TAKE_VIDEO:
                     tvVideo.setText(videoFile.getAbsolutePath());
+                    break;
+                case FILE_SELECT_CODE:
+                    Uri fileUri = data.getData();
+                    if (fileUri != null) {
+                        String path = AppUtils.getPath(context, fileUri);
+                        if (path != null) {
+                            String end = path.substring(path.lastIndexOf(".") + 1, path.length()).toLowerCase(Locale.getDefault());
+                            if ("ppt".equals(end)||"pptx".equals(end)||"xls".equals(end)
+                                    ||"xlsx".equals(end)||"doc".equals(end)||"docx".equals(end)
+                                    ||"pdf".equals(end)||"txt".equals(end)){
+                                tvFile.setText(path);
+                            }else {
+                                ToastUtils.showShort("不支持上传此类型文件");
+                            }
+                        }
+                    }
                     break;
             }
         }

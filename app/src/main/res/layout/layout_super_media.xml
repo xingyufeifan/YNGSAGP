@@ -51,6 +51,17 @@
                 android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
+            <TextView
+                style="@style/myTextTitle"
+                android:text="文件信息" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_file_updated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 

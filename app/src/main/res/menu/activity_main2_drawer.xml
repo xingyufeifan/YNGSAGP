@@ -45,6 +45,10 @@
                 android:icon="@mipmap/icon_clear"
                 android:title="清除缓存" />
             <item
+                android:id="@+id/nav_setting"
+                android:icon="@mipmap/ic_setting"
+                android:title="参数设置" />
+            <item
                 android:id="@+id/nav_login_out"
                 android:icon="@mipmap/ic_off"
                 android:title="注销登录" />

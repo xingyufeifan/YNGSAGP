@@ -52,7 +52,18 @@
                 android:layout_marginBottom="40dp">
 
             </android.support.v7.widget.RecyclerView>
+            <TextView
+                style="@style/myTextTitle"
+                android:text="文件信息"
+                />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_file_updated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
+
+            </android.support.v7.widget.RecyclerView>
             <LinearLayout
                 android:id="@+id/ll_add_media"
                 android:layout_width="match_parent"
@@ -155,6 +166,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="请添加录音文件"
+                    android:padding="10dp"
+                    android:textSize="18sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/lineColor"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/dividerColor"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        style="@style/myTextTitle"
+                        android:layout_centerVertical="true"
+                        android:text="新增文件" />
+
+                    <ImageView
+                        android:id="@+id/iv_check_file"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/add_file"
+                        android:layout_marginEnd="10dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:textSize="18sp" />
                 <View

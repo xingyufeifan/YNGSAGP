@@ -3,7 +3,10 @@ package com.nandi.yngsagp.fragment;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -90,6 +93,7 @@ public class DangerListFragment extends Fragment {
     private ProgressDialog progressDialog;
     private String data;
     private String sessionId;
+    private MyReceiver receiver;
 
     @Nullable
     @Override
@@ -354,6 +358,10 @@ public class DangerListFragment extends Fragment {
     }
 
     private void initViews() {
+        receiver=new MyReceiver();
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_DANGER_UPLOADED);
+        getActivity().registerReceiver(receiver,intentFilter);
         sessionId = (String) SharedUtils.getShare(getActivity(), Constant.SESSION_ID, "");
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
@@ -464,10 +472,20 @@ public class DangerListFragment extends Fragment {
             requestAPos();
         }
     }
+    class MyReceiver extends BroadcastReceiver {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_DANGER_UPLOADED.equals(action)){
+                requestUPos();
+            }
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        getActivity().unregisterReceiver(receiver);
     }
 }

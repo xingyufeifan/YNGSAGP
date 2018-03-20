@@ -21,12 +21,14 @@
                 android:text="姓名:"
                 android:textColor="@color/header_right_text"
                 android:layout_marginRight="10dp"
+                android:textSize="@dimen/header_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
             <TextView
                 android:id="@+id/tv_name"
                 android:text="李青松"
+                android:textSize="@dimen/header_text_size"
                 android:textColor="@color/header_right_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -40,12 +42,14 @@
                 android:text="账号:"
                 android:textColor="@color/header_right_text"
                 android:layout_marginRight="10dp"
+                android:textSize="@dimen/header_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tv_account"
                 android:text="13569558467"
                 android:textColor="@color/header_right_text"
+                android:textSize="@dimen/header_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -59,12 +63,14 @@
                 android:textColor="@color/header_right_text"
                 android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/header_text_size"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/tv_address"
                 android:text="渝北"
                 android:textColor="@color/header_right_text"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/header_text_size"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>

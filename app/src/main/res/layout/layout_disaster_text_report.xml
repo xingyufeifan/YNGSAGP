@@ -66,7 +66,25 @@
                 style="@style/disasterStyle"
                 android:hint="@string/mustSelect" />
         </LinearLayout>
+        <TextView style="@style/myDivide" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp">
 
+            <TextView
+                style="@style/myLeftText"
+                android:layout_gravity="center"
+                android:text="隐患点:" />
+            <Spinner
+                android:id="@+id/sp_disaster_point"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </Spinner>
+        </LinearLayout>
         <TextView
             style="@style/myDivide"
             android:layout_marginBottom="10dp" />
@@ -207,9 +225,12 @@
                 style="@style/myLeftText"
                 android:text="@string/dReportFactor" />
 
-            <EditText
-                android:id="@+id/dReportFactor"
-                style="@style/disasterStyle" />
+            <Spinner
+                android:id="@+id/sp_factor_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:entries="@array/factorType" />
         </LinearLayout>
 
         <TextView

@@ -7,12 +7,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/pickerview_timebtn_nor">
+        android:background="@color/statusColor">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="5dp"
             android:src="@mipmap/ic_back" />
@@ -212,7 +212,7 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="@color/pickerview_timebtn_nor"
+            android:background="@color/statusColor"
             android:text="保存设置"
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
