@@ -6,7 +6,6 @@
     android:layout_marginTop="16dp"
     android:orientation="vertical">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,8 +23,7 @@
                 android:id="@+id/rv_photo_uploaded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp">
-
+                android:layout_marginBottom="20dp">
             </android.support.v7.widget.RecyclerView>
 
             <TextView
@@ -36,8 +34,7 @@
                 android:id="@+id/rv_video_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp">
-
+                android:layout_marginBottom="20dp">
             </android.support.v7.widget.RecyclerView>
 
             <TextView
@@ -48,9 +45,9 @@
                 android:id="@+id/rv_audio_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp">
-
+                android:layout_marginBottom="20dp">
             </android.support.v7.widget.RecyclerView>
+
             <TextView
                 style="@style/myTextTitle"
                 android:text="文件信息" />
@@ -59,9 +56,9 @@
                 android:id="@+id/rv_file_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp">
-
+                android:layout_marginBottom="20dp">
             </android.support.v7.widget.RecyclerView>
+
         </LinearLayout>
     </ScrollView>
 

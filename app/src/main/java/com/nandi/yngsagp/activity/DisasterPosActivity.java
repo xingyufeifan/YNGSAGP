@@ -491,6 +491,7 @@ public class DisasterPosActivity extends AppCompatActivity {
 
 
     private void setRequest() {
+        Log.i("QS", "setRequest: 轻松");
         progressDialog.show();
         OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedias/" + listBean.getId())
                 .addHeader("sessionID", sessionId)
@@ -511,6 +512,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                             JSONObject meta = object.getJSONObject("meta");
                             boolean success = meta.getBoolean("success");
                             String message = meta.getString("message");
+                            Log.i("QS", "setRequest: 轻松"+response);
                             Log.d("chenpeng", response);
                             if (success) {
                                 photoInfos.clear();
@@ -534,6 +536,7 @@ public class DisasterPosActivity extends AppCompatActivity {
                                         audio.setFileName(jsonObject.getString("fileName"));
                                         audio.setType(jsonObject.getString("type"));
                                         audioInfos.add(audio);
+                                        Log.i("QS", "onResponse: "+audioInfos.size());
                                     } else if ("4".equals(jsonObject.getString("type"))) {
                                         MediaInfo file = new MediaInfo();
                                         file.setFileName(jsonObject.getString("fileName"));
