@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="科普宣传"
         android:textSize="20sp"
         android:textColor="#000000"/>
@@ -37,7 +40,12 @@
             android:text="2018-3-21"
             android:textSize="16sp"
             android:textColor="@color/media_title_bg"/>
-
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/holo_light_primary"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>
