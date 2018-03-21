@@ -115,6 +115,7 @@
             android:process=":remote" />
         <service android:name=".service.MyService" />
 
+        <activity android:name=".activity.ScienceActivity"></activity>
     </application>
 
 </manifest>

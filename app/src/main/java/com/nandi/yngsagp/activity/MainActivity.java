@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.sdk.android.push.CloudPushService;
@@ -88,6 +89,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String account;
     private String sessionId;
     private MyReceiver receiver;
+    private TextView msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,46 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initViews();
         checkUpdate();
         bindAccount();
+        scienceRequest();
+    }
+
+    private void scienceRequest() {
+        String url = getString(R.string.local_base_url) + "appDangerous/newPropagandaTotal";
+        OkHttpUtils.get().url(url)
+                .addHeader("sessionID", sessionId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonMeta = new JSONObject(jsonObject.optString("meta"));
+                            boolean isSuccess = jsonMeta.optBoolean("success");
+                            if (isSuccess) {
+                                int data = jsonObject.optInt("data");
+                                if (data>0){
+                                    msg.setText(data+"");
+                                    msg.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                String message = jsonMeta.optString("message");
+//                                showToast(message);
+                                if ("exit".equals(message)) {
+                                    AppUtils.startLogin(MainActivity.this);
+                                } else {
+                                    ToastUtils.showShort(message);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     private void bindAccount() {
@@ -225,6 +267,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
+        RelativeLayout gallery = (RelativeLayout) navView.getMenu().findItem(R.id.nav_science_promotion).getActionView();
+        msg = (TextView) gallery.findViewById(R.id.msg);
+
         navView.setNavigationItemSelectedListener(this);
         disasterReportFragment = new DisasterReportFragment();
         dangerReportFragment = new DangerReportFragment();
@@ -328,8 +373,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 loginOut();
                 break;
             case R.id.nav_setting:
-                startActivity(new Intent(context,VideoConfig.class));
+                startActivity(new Intent(context, VideoConfig.class));
                 break;
+            case R.id.nav_science_promotion:
+                startActivity(new Intent(context,ScienceActivity.class));
+                msg.setVisibility(View.GONE);
         }
         return true;
     }

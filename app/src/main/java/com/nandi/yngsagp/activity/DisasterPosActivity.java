@@ -491,7 +491,6 @@ public class DisasterPosActivity extends AppCompatActivity {
 
 
     private void setRequest() {
-        Log.i("QS", "setRequest: 轻松");
         progressDialog.show();
         OkHttpUtils.get().url(getString(R.string.local_base_url) + "appDangerous/findMedias/" + listBean.getId())
                 .addHeader("sessionID", sessionId)
@@ -512,7 +511,6 @@ public class DisasterPosActivity extends AppCompatActivity {
                             JSONObject meta = object.getJSONObject("meta");
                             boolean success = meta.getBoolean("success");
                             String message = meta.getString("message");
-                            Log.i("QS", "setRequest: 轻松"+response);
                             Log.d("chenpeng", response);
                             if (success) {
                                 photoInfos.clear();

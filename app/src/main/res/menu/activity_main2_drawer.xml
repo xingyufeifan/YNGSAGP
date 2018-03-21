@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group
@@ -32,6 +33,11 @@
             android:id="@+id/nav_danger_data"
             android:icon="@mipmap/ic_danger_data"
             android:title="险情数据" />
+        <item
+            android:id="@+id/nav_science_promotion"
+            android:icon="@mipmap/ic_update_password"
+            app:actionLayout="@layout/badge"
+            android:title="科普宣传" />
     </group>
 
     <item android:title="其他操作">
