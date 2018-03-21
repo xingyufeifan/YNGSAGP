@@ -7,21 +7,37 @@
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="科普宣传"
+        android:textSize="20sp"
+        android:textColor="#000000"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tv_person"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="@drawable/science_background"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="新" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="2018-3-21"
+            android:textSize="16sp"
+            android:textColor="@color/media_title_bg"/>
+
     </LinearLayout>
 
 </LinearLayout>
