@@ -128,7 +128,7 @@ public class DangerListFragment extends Fragment {
                                     jsonData = new JSONArray(data);
                                     dangerListA.clear();
                                     dangerListA.addAll(JsonFormat.stringToList(jsonData.toString(), SuperBean.class));
-                                    dangerAdapter.notifyDataSetChanged();
+                                    dangerAdapter .notifyDataSetChanged();
                                     pageA = 1;
                                 }
                             } else {
