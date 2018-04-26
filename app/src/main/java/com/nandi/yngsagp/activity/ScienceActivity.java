@@ -22,17 +22,27 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * @author qingsong 科普宣传列表
@@ -102,6 +112,7 @@ public class ScienceActivity extends BaseActivity {
             progressDialog.show();
         }
         String url = getString(R.string.local_base_url) + "appDangerous/searchproPaganda";
+
         OkHttpUtils.get().url(url)
                 .addHeader("sessionID", sessionId)
                 .build()
@@ -116,7 +127,6 @@ public class ScienceActivity extends BaseActivity {
                             progressDialog.dismiss();
                         }
                     }
-
                     @Override
                     public void onResponse(String response, int id) {
                         if (requestId == 1) {

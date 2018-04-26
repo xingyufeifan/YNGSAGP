@@ -11,65 +11,76 @@
         app:tabBackground="@color/holo_light_primary"
         app:tabIndicatorColor="@color/colorLine"
         app:tabSelectedTextColor="@android:color/holo_blue_dark" />
+
     <LinearLayout
         android:id="@+id/ll_nav"
-        android:layout_below="@+id/tab_layout"
-        android:orientation="horizontal"
-        android:background="@drawable/nav_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tab_layout"
+        android:background="@drawable/nav_background"
+        android:orientation="horizontal">
+
         <TextView
-            android:background="@color/lineColor"
             android:layout_width="1dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/lineColor" />
+
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
             android:text="时间"
+            android:textColor="@color/pickerview_timebtn_nor"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/lineColor" />
+
+        <TextView
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:gravity="center"
-            android:textSize="18sp"
-            android:textColor="@color/pickerview_timebtn_nor"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:background="@color/lineColor"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"/>
-        <TextView
             android:text="地址"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
             android:textColor="@color/pickerview_timebtn_nor"
-            android:textSize="18sp"
-            android:layout_height="wrap_content" />
+            android:textSize="18sp" />
+
         <TextView
-            android:background="@color/lineColor"
             android:layout_width="1dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/lineColor" />
+
         <TextView
-            android:text="状态"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
-            android:textSize="18sp"
+            android:text="状态"
             android:textColor="@color/pickerview_timebtn_nor"
-            android:layout_height="wrap_content" />
+            android:textSize="18sp" />
+
         <TextView
-            android:background="@color/lineColor"
             android:layout_width="1dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/lineColor" />
+
         <TextView
-            android:text="查看"
             android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="18sp"
+            android:text="查看"
             android:textColor="@color/pickerview_timebtn_nor"
-            android:layout_height="wrap_content" />
+            android:textSize="18sp" />
+
         <TextView
-            android:background="@color/lineColor"
             android:layout_width="1dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/lineColor" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/disasterAlready"
         android:layout_width="match_parent"
@@ -77,13 +88,15 @@
         android:layout_below="@id/ll_nav"
         android:orientation="vertical"
         android:visibility="invisible">
+
         <ImageView
             android:id="@+id/tv_ay_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-           android:src="@drawable/load_error"
-            android:visibility="gone"/>
+            android:src="@drawable/load_error"
+            android:visibility="gone" />
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
@@ -102,15 +115,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ll_nav"
-        android:orientation="vertical"
-     >
+        android:orientation="vertical">
+
         <ImageView
             android:id="@+id/tv_no_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-          android:src="@drawable/load_error"
-            android:visibility="gone"/>
+            android:src="@drawable/load_error"
+            android:visibility="gone" />
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshNLayout"
             android:layout_width="match_parent"

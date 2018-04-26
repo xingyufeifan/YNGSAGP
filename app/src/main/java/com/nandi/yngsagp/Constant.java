@@ -1,7 +1,9 @@
 package com.nandi.yngsagp;
 
 /**
- * Created by qingsong on 2017/11/15.
+ *
+ * @author qingsong
+ * @date 2017/11/15
  */
 
 public class Constant {

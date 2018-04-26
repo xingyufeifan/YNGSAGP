@@ -40,6 +40,7 @@ import com.nandi.yngsagp.adapter.PhotoAdapter;
 import com.nandi.yngsagp.bean.MediaInfo;
 import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.utils.AppUtils;
+import com.nandi.yngsagp.utils.GPSUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -185,8 +186,8 @@ public class SuperDangerActivity extends AppCompatActivity {
         areaDangerShow.setText((CharSequence) listBean.getFarmland());
         houseDangerShow.setText((CharSequence) listBean.getHouseNum());
         moneyDangerShow.setText((CharSequence) listBean.getPotentialLoss());
-        lonDangerShow.setText(listBean.getLongitude());
-        latDangerShow.setText(listBean.getLatitude());
+        lonDangerShow.setText(GPSUtils.gpsInfoConvert(Double.parseDouble(listBean.getLongitude())));
+        latDangerShow.setText(GPSUtils.gpsInfoConvert(Double.parseDouble(listBean.getLatitude())));
         otherDangerShow.setText((CharSequence) listBean.getOtherThing());
         dReportMobileShow.setText((CharSequence) listBean.getMonitorPhone());
         dReportNameShow.setText((CharSequence) listBean.getMonitorName());
@@ -510,7 +511,7 @@ public class SuperDangerActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(response);
         }

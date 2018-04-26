@@ -69,6 +69,7 @@ import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
+import com.nandi.yngsagp.utils.GPSUtils;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -194,6 +195,8 @@ public class DisasterReportFragment extends Fragment {
     private String type;
     private List<DisasterPoint> disasterPoints;
     private List<String> disasterName = new ArrayList<>();
+    private double lon;
+    private double lat;
 
     @Nullable
     @Override
@@ -359,8 +362,10 @@ public class DisasterReportFragment extends Fragment {
             dReportFram.setText(disasterUBean.getFarm());
             dReportHouse.setText(disasterUBean.getHouse());
             dReportMoney.setText(disasterUBean.getMoney());
-            dReportLon.setText(disasterUBean.getLon());
-            dReportLat.setText(disasterUBean.getLat());
+            lon = Double.parseDouble(disasterUBean.getLon());
+            lat = Double.parseDouble(disasterUBean.getLat());
+            dReportLon.setText(GPSUtils.gpsInfoConvert(lon));
+            dReportLat.setText(GPSUtils.gpsInfoConvert(lat));
             dReportOther.setText(disasterUBean.getOther());
             dReportMobile.setText(disasterUBean.getReportMobile());
             dReportName.setText(disasterUBean.getReportName());
@@ -407,10 +412,10 @@ public class DisasterReportFragment extends Fragment {
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
             if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
-                double lon = bdLocation.getLongitude();
-                double lat = bdLocation.getLatitude();
-                dReportLon.setText(lon + "");
-                dReportLat.setText(lat + "");
+                lon = bdLocation.getLongitude();
+                lat = bdLocation.getLatitude();
+                dReportLon.setText(GPSUtils.gpsInfoConvert(lon));
+                dReportLat.setText(GPSUtils.gpsInfoConvert(lat));
                 locationClient.unRegisterLocationListener(this);
                 locationClient.stop();
             }
@@ -483,6 +488,8 @@ public class DisasterReportFragment extends Fragment {
                 if (!TextUtils.isEmpty(tvFile.getText())) {
                     clickText(3);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -562,9 +569,9 @@ public class DisasterReportFragment extends Fragment {
             public void onClick(View view) {
                 if (type == 1) {
                     Uri uri;
-                    File videoFile=new File(tvVideo.getText().toString());
+                    File videoFile = new File(tvVideo.getText().toString());
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-                        uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+                        uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
                     } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
                         uri = Uri.fromFile(videoFile);
                     }
@@ -644,8 +651,6 @@ public class DisasterReportFragment extends Fragment {
         String farm = dReportFram.getText().toString().trim();
         String house = dReportHouse.getText().toString().trim();
         String money = dReportMoney.getText().toString().trim();
-        String lon = dReportLon.getText().toString().trim();
-        String lat = dReportLat.getText().toString().trim();
         String other = dReportOther.getText().toString().trim();
         String reportName = dReportName.getText().toString().trim();
         String reportMobile = dReportMobile.getText().toString().trim();
@@ -662,8 +667,8 @@ public class DisasterReportFragment extends Fragment {
         disasterUBean.setFarm(farm);
         disasterUBean.setHouse(house);
         disasterUBean.setMoney(money);
-        disasterUBean.setLon(lon);
-        disasterUBean.setLat(lat);
+        disasterUBean.setLon(lon + "");
+        disasterUBean.setLat(lat + "");
         disasterUBean.setOther(other);
         disasterUBean.setReportName(reportName);
         disasterUBean.setReportMobile(reportMobile);
@@ -726,8 +731,6 @@ public class DisasterReportFragment extends Fragment {
         if (TextUtils.isEmpty(money) || money.equals(".")) {
             money = "0";
         }
-        String lon = dReportLon.getText().toString().trim();
-        String lat = dReportLat.getText().toString().trim();
         String other = dReportOther.getText().toString().trim();
         String reportName = dReportName.getText().toString().trim();
         String reportMobile = dReportMobile.getText().toString().trim();
@@ -746,8 +749,8 @@ public class DisasterReportFragment extends Fragment {
         map.put("farmland", farm);
         map.put("houseNum", house);
         map.put("lossProperty", money);
-        map.put("longitude", lon);
-        map.put("latitude", lat);
+        map.put("longitude", lon + "");
+        map.put("latitude", String.valueOf(lat));
         map.put("otherThing", other);
         map.put("monitorName", reportName);
         map.put("monitorPhone", reportMobile);
@@ -810,7 +813,7 @@ public class DisasterReportFragment extends Fragment {
                         if ("2".equals(type)) {
                             Intent intent = new Intent(Constant.ACTION_DISASTER_UPLOADED);
                             context.sendBroadcast(intent);
-                        }
+                    }
                     } else {
                         if ("exit".equals(message)) {
                             AppUtils.startLogin(context);
@@ -959,14 +962,13 @@ public class DisasterReportFragment extends Fragment {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(audioPath)) {
-                    return;
+                if (!TextUtils.isEmpty(audioPath)) {
+                    File file2 = new File(audioPath);
+                    if (file2.isFile() && file2.exists()) {
+                        file2.delete();
+                    }
                 }
                 chronometer.stop();// 停止计时
-                File file2 = new File(audioPath);
-                if (file2.isFile() && file2.exists()) {
-                    file2.delete();
-                }
                 if (recorder != null) {
                     recorder.stop();
                     recorder.release();
@@ -1017,7 +1019,7 @@ public class DisasterReportFragment extends Fragment {
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(videoFile);
         }
@@ -1078,7 +1080,7 @@ public class DisasterReportFragment extends Fragment {
         pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
         Uri imageUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             imageUri = Uri.fromFile(pictureFile);
         }
@@ -1130,9 +1132,10 @@ public class DisasterReportFragment extends Fragment {
                     Uri fileUri = data.getData();
                     if (fileUri != null) {
                         String path = AppUtils.getPath(context, fileUri);
-
+                        Log.d("qs", "onActivityResult: "+path);
                         if (path != null) {
                             String end = path.substring(path.lastIndexOf(".") + 1, path.length()).toLowerCase(Locale.getDefault());
+                            Log.d("qs", "onActivityResult: "+end);
                             if ("ppt".equals(end) || "pptx".equals(end) || "xls".equals(end)
                                     || "xlsx".equals(end) || "doc".equals(end) || "docx".equals(end)
                                     || "pdf".equals(end) || "txt".equals(end)) {
@@ -1144,6 +1147,8 @@ public class DisasterReportFragment extends Fragment {
 
                     }
                     break;
+                    default:
+                        break;
             }
         }
     }

@@ -3,9 +3,9 @@
     <string name="loginName">云南省地质灾害</string>
     <string name="inputUser">请输入手机号</string>
     <string name="login">登录</string>
-    <string name="local_base_url">"http://183.230.252.112:12020/yncmd/</string>
-    <!--<string name="local_base_url">"http://183.224.17.33:8085/yncmd/</string>-->
-    <!--<string name="local_base_url">"http://192.168.10.164:8080/yncmd/</string>-->
+    <!--<string name="local_base_url">"http://183.230.252.112:12020/yncmd/</string>-->
+    <string name="local_base_url">"http://183.224.17.135:8085/yncmd/</string>
+    <!--<string name="local_base_url">"http://192.168.1.108:8080/yncmd/</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

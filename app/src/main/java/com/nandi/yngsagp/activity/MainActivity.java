@@ -3,6 +3,7 @@ package com.nandi.yngsagp.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -13,6 +14,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -79,7 +81,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String type;
     private String name;
     private String areaId;
-    private DisasterReportFragment disasterReportFragment;
+    private Fragment disasterReportFragment;
     private DangerReportFragment dangerReportFragment;
     private DisasterListFragment disasterListFragment;
     private DangerListFragment dangerListFragment;
@@ -90,6 +92,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String sessionId;
     private MyReceiver receiver;
     private TextView msg;
+    private String[] tag = new String[]{"fragment1", "fragment2", "fragment3", "fragment4", "fragment5", "fragment6"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +125,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             boolean isSuccess = jsonMeta.optBoolean("success");
                             if (isSuccess) {
                                 int data = jsonObject.optInt("data");
-                                if (data>0){
-                                    msg.setText(data+"");
+                                if (data > 0) {
+                                    msg.setText(data + "");
                                     msg.setVisibility(View.VISIBLE);
                                 }
                             } else {
@@ -284,17 +287,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(1).setVisible(false);
             navView.getMenu().getItem(4).setVisible(false);
             navView.getMenu().getItem(5).setVisible(false);
-            addFragment(disasterReportFragment);
-            addFragment(dangerReportFragment);
+            addFragment(disasterReportFragment, tag[0]);
+            addFragment(dangerReportFragment, tag[1]);
         } else if ("2".equals(type)) {
             tvTitle.setText("灾情处置");
             navView.getMenu().getItem(0).setChecked(true);
             navView.getMenu().getItem(4).setVisible(false);
             navView.getMenu().getItem(5).setVisible(false);
-            addFragment(disasterListFragment);
-            addFragment(dangerListFragment);
-            addFragment(disasterReportFragment);
-            addFragment(dangerReportFragment);
+            addFragment(disasterListFragment, tag[2]);
+            addFragment(dangerListFragment, tag[3]);
+            addFragment(disasterReportFragment, tag[0]);
+            addFragment(dangerReportFragment, tag[1]);
         } else {
             tvTitle.setText("灾情数据");
             navView.getMenu().getItem(4).setChecked(true);
@@ -302,8 +305,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navView.getMenu().getItem(1).setVisible(false);
             navView.getMenu().getItem(2).setVisible(false);
             navView.getMenu().getItem(3).setVisible(false);
-            addFragment(superDisasterFragment);
-            addFragment(superDangerFragment);
+            addFragment(superDisasterFragment, tag[4]);
+            addFragment(superDangerFragment, tag[5]);
         }
 
     }
@@ -316,51 +319,51 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_disaster_edit:
                 if (!navView.getMenu().getItem(2).isChecked()) {
                     tvTitle.setText("灾情直报");
-                    showFragment(disasterReportFragment);
-                    hideFragment(dangerReportFragment);
-                    hideFragment(disasterListFragment);
-                    hideFragment(dangerListFragment);
+                    showFragment(disasterReportFragment, tag[0]);
+                    hideFragment(dangerReportFragment,tag[1]);
+                    hideFragment(disasterListFragment,tag[2]);
+                    hideFragment(dangerListFragment,tag[3]);
                 }
                 break;
             case R.id.nav_danger_edit:
                 if (!navView.getMenu().getItem(3).isChecked()) {
                     tvTitle.setText("险情速报");
-                    hideFragment(disasterReportFragment);
-                    showFragment(dangerReportFragment);
-                    hideFragment(disasterListFragment);
-                    hideFragment(dangerListFragment);
+                    hideFragment(disasterReportFragment,tag[0]);
+                    showFragment(dangerReportFragment,tag[1]);
+                    hideFragment(disasterListFragment,tag[2]);
+                    hideFragment(dangerListFragment,tag[3]);
                 }
                 break;
             case R.id.nav_disaster_handle:
                 if (!navView.getMenu().getItem(0).isChecked()) {
                     tvTitle.setText("灾情处置");
-                    hideFragment(disasterReportFragment);
-                    hideFragment(dangerReportFragment);
-                    showFragment(disasterListFragment);
-                    hideFragment(dangerListFragment);
+                    hideFragment(disasterReportFragment,tag[0]);
+                    hideFragment(dangerReportFragment,tag[1]);
+                    showFragment(disasterListFragment,tag[2]);
+                    hideFragment(dangerListFragment,tag[3]);
                 }
                 break;
             case R.id.nav_danger_handle:
                 if (!navView.getMenu().getItem(1).isChecked()) {
                     tvTitle.setText("险情处置");
-                    hideFragment(disasterReportFragment);
-                    hideFragment(dangerReportFragment);
-                    hideFragment(disasterListFragment);
-                    showFragment(dangerListFragment);
+                    hideFragment(disasterReportFragment,tag[0]);
+                    hideFragment(dangerReportFragment,tag[1]);
+                    hideFragment(disasterListFragment,tag[2]);
+                    showFragment(dangerListFragment,tag[3]);
                 }
                 break;
             case R.id.nav_disaster_data:
                 if (!navView.getMenu().getItem(4).isChecked()) {
                     tvTitle.setText("灾情数据");
-                    hideFragment(superDangerFragment);
-                    showFragment(superDisasterFragment);
+                    hideFragment(superDangerFragment,tag[4]);
+                    showFragment(superDisasterFragment,tag[5]);
                 }
                 break;
             case R.id.nav_danger_data:
                 if (!navView.getMenu().getItem(5).isChecked()) {
                     tvTitle.setText("险情数据");
-                    showFragment(superDangerFragment);
-                    hideFragment(superDisasterFragment);
+                    showFragment(superDangerFragment,tag[4]);
+                    hideFragment(superDisasterFragment,tag[5]);
                 }
                 break;
             case R.id.nav_modify_password:
@@ -376,8 +379,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(context, VideoConfig.class));
                 break;
             case R.id.nav_science_promotion:
-                startActivity(new Intent(context,ScienceActivity.class));
+                startActivity(new Intent(context, ScienceActivity.class));
                 msg.setVisibility(View.GONE);
+            default:
+                break;
         }
         return true;
     }
@@ -403,13 +408,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }).show();
     }
 
-    private void addFragment(Fragment fragment) {
+    private void addFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.main_container, fragment);
+        transaction.add(R.id.main_container, fragment, tag);
         transaction.commit();
     }
 
-    private void showFragment(Fragment fragment) {
+    private void showFragment(Fragment fragment, String tag) {
+        fragment = getFragmentManager().findFragmentByTag(tag);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (fragment.isHidden()) {
             transaction.show(fragment);
@@ -417,7 +423,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void hideFragment(Fragment fragment) {
+    private void hideFragment(Fragment fragment, String tag) {
+        fragment = getFragmentManager().findFragmentByTag(tag);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.hide(fragment);
         transaction.commit();
@@ -525,17 +532,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (Constant.ACTION_DISASTER_UPLOADED.equals(action)) {
                 tvTitle.setText("灾情处置");
                 navView.getMenu().getItem(0).setChecked(true);
-                hideFragment(disasterReportFragment);
-                hideFragment(dangerReportFragment);
-                showFragment(disasterListFragment);
-                hideFragment(dangerListFragment);
+                hideFragment(disasterReportFragment,tag[0]);
+                hideFragment(dangerReportFragment,tag[1]);
+                showFragment(disasterListFragment,tag[2]);
+                hideFragment(dangerListFragment,tag[3]);
             } else if (Constant.ACTION_DANGER_UPLOADED.equals(action)) {
                 tvTitle.setText("险情处置");
                 navView.getMenu().getItem(1).setChecked(true);
-                hideFragment(disasterReportFragment);
-                hideFragment(dangerReportFragment);
-                hideFragment(disasterListFragment);
-                showFragment(dangerListFragment);
+                hideFragment(disasterReportFragment,tag[0]);
+                hideFragment(dangerReportFragment,tag[1]);
+                hideFragment(disasterListFragment,tag[2]);
+                showFragment(dangerListFragment,tag[3]);
             }
         }
     }

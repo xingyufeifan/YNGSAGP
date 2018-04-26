@@ -68,6 +68,7 @@ import com.nandi.yngsagp.bean.PhotoPath;
 import com.nandi.yngsagp.bean.VideoPath;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
+import com.nandi.yngsagp.utils.GPSUtils;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -186,6 +187,8 @@ public class DangerReportFragment extends Fragment {
     private String type;
     private List<DisasterPoint> disasterPoints;
     private List<String> disasterName = new ArrayList<>();
+    private double lon;
+    private double lat;
 
     @Nullable
     @Override
@@ -217,8 +220,10 @@ public class DangerReportFragment extends Fragment {
             timeDanger.setText(queryDanger.getTime());
             addressDanger.setText(queryDanger.getAddress());
             locationDanger.setText(queryDanger.getLocation());
-            lonDanger.setText(queryDanger.getLon());
-            latDanger.setText(queryDanger.getLat());
+            lon = Double.parseDouble(queryDanger.getLon());
+            lat = Double.parseDouble(queryDanger.getLat());
+            lonDanger.setText(GPSUtils.gpsInfoConvert(lon));
+            latDanger.setText(GPSUtils.gpsInfoConvert(lat));
             typePos = Integer.parseInt(queryDanger.getType());
             typeDanger.setSelection(Integer.parseInt(queryDanger.getType()));
             spFactorType.setSelection(Integer.parseInt(queryDanger.getFactor()));
@@ -267,10 +272,10 @@ public class DangerReportFragment extends Fragment {
         public void onReceiveLocation(BDLocation bdLocation) {
             int locType = bdLocation.getLocType();
             if (locType == BDLocation.TypeOffLineLocation || locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation) {
-                double lon = bdLocation.getLongitude();
-                double lat = bdLocation.getLatitude();
-                lonDanger.setText(lon + "");
-                latDanger.setText(lat + "");
+                lon = bdLocation.getLongitude();
+                lat = bdLocation.getLatitude();
+                lonDanger.setText(GPSUtils.gpsInfoConvert(lon));
+                latDanger.setText(GPSUtils.gpsInfoConvert(lat));
                 locationClient.unRegisterLocationListener(this);
                 locationClient.stop();
             }
@@ -531,8 +536,6 @@ public class DangerReportFragment extends Fragment {
         String time = timeDanger.getText().toString().trim();
         String address = addressDanger.getText().toString().trim();
         String location = locationDanger.getText().toString().trim();
-        String lon = lonDanger.getText().toString().trim();
-        String lat = latDanger.getText().toString().trim();
         String type = typePos - 1 + "";
         String factor = spFactorType.getSelectedItemPosition() + "";
         String person = personDanger.getText().toString().trim();
@@ -566,8 +569,8 @@ public class DangerReportFragment extends Fragment {
         map.put("personNum", person);
         map.put("houseNum", house);
         map.put("area", farm);
-        map.put("longitude", lon);
-        map.put("latitude", lat);
+        map.put("longitude", lon+"");
+        map.put("latitude", lat+"");
         map.put("otherThing", other);
         map.put("happenTime", time);
         map.put("potentialLoss", money);
@@ -578,7 +581,6 @@ public class DangerReportFragment extends Fragment {
         map.put("disastersId", disasterId);
         setRequest(map);
     }
-
     private void setRequest(Map<String, String> map) {
         progressDialog.show();
         PostFormBuilder formBuilder = OkHttpUtils.post().url(getString(R.string.local_base_url) + "appDangerous/add").addHeader("sessionID", sessionId);
@@ -697,8 +699,6 @@ public class DangerReportFragment extends Fragment {
         String time = timeDanger.getText().toString().trim();
         String address = addressDanger.getText().toString().trim();
         String location = locationDanger.getText().toString().trim();
-        String lon = lonDanger.getText().toString().trim();
-        String lat = latDanger.getText().toString().trim();
         String type = typePos + "";
         String factor = spFactorType.getSelectedItemPosition() + "";
         String person = personDanger.getText().toString().trim();
@@ -713,8 +713,8 @@ public class DangerReportFragment extends Fragment {
         dangerUBean.setTime(time);
         dangerUBean.setAddress(address);
         dangerUBean.setLocation(location);
-        dangerUBean.setLon(lon);
-        dangerUBean.setLat(lat);
+        dangerUBean.setLon(lon+"");
+        dangerUBean.setLat(lat+"");
         dangerUBean.setType(type);
         dangerUBean.setFactor(factor);
         dangerUBean.setPerson(person);
@@ -769,14 +769,13 @@ public class DangerReportFragment extends Fragment {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(audioPath)) {
-                    return;
+                if (!TextUtils.isEmpty(audioPath)) {
+                    File file2 = new File(audioPath);
+                    if (file2.isFile() && file2.exists()) {
+                        file2.delete();
+                    }
                 }
                 chronometer.stop();// 停止计时
-                File file2 = new File(audioPath);
-                if (file2.isFile() && file2.exists()) {
-                    file2.delete();
-                }
                 if (recorder != null) {
                     recorder.stop();
                     recorder.release();
@@ -831,9 +830,9 @@ public class DangerReportFragment extends Fragment {
             public void onClick(View view) {
                 if (type == 1) {
                     Uri uri;
-                    File videoFile=new File(tvVideo.getText().toString());
+                    File videoFile = new File(tvVideo.getText().toString());
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-                        uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+                        uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
                     } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
                         uri = Uri.fromFile(videoFile);
                     }
@@ -966,7 +965,7 @@ public class DangerReportFragment extends Fragment {
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(videoFile);
         }
@@ -1017,7 +1016,7 @@ public class DangerReportFragment extends Fragment {
         pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
         Uri imageUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             imageUri = Uri.fromFile(pictureFile);
         }

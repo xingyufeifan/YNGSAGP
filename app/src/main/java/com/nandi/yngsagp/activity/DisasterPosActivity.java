@@ -65,6 +65,7 @@ import com.nandi.yngsagp.bean.SuperBean;
 import com.nandi.yngsagp.fragment.DisasterListFragment;
 import com.nandi.yngsagp.greendao.GreedDaoHelper;
 import com.nandi.yngsagp.utils.AppUtils;
+import com.nandi.yngsagp.utils.GPSUtils;
 import com.nandi.yngsagp.utils.InputUtil;
 import com.nandi.yngsagp.utils.PictureUtils;
 import com.nandi.yngsagp.utils.SharedUtils;
@@ -280,6 +281,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         locationShow.setText(listBean.getCurrentLocation());
         addressShow.setText(listBean.getAddress());
         typeShow.setSelection(Integer.parseInt(listBean.getDisasterType()) + 1);
+
         spFactorType.setSelection(Integer.parseInt((String) listBean.getFactor()));
         injurdShow.setText((CharSequence) listBean.getInjurdNum());
         deathShow.setText((CharSequence) listBean.getDeathNum());
@@ -287,8 +289,8 @@ public class DisasterPosActivity extends AppCompatActivity {
         farmShow.setText((CharSequence) listBean.getFarmland());
         houseShow.setText((CharSequence) listBean.getHouseNum());
         moneyShow.setText(listBean.getLossProperty());
-        lonShow.setText(listBean.getLongitude());
-        latShow.setText(listBean.getLatitude());
+        lonShow.setText(GPSUtils.gpsInfoConvert(Double.parseDouble(listBean.getLongitude())));
+        latShow.setText(GPSUtils.gpsInfoConvert(Double.parseDouble(listBean.getLatitude())));
         otherShow.setText((CharSequence) listBean.getOtherThing());
         mobileShow.setText((CharSequence) listBean.getMonitorPhone());
         nameShow.setText((CharSequence) listBean.getMonitorName());
@@ -656,8 +658,8 @@ public class DisasterPosActivity extends AppCompatActivity {
         if (money.isEmpty() || money.equals(".")) {
             money = "0";
         }
-        String lon = lonShow.getText().toString().trim();
-        String lat = latShow.getText().toString().trim();
+        String lon = listBean.getLongitude();
+        String lat = listBean.getLatitude();
         String other = otherShow.getText().toString().trim();
         String reportName = nameShow.getText().toString().trim();
         String reportMobile = mobileShow.getText().toString().trim();
@@ -878,14 +880,14 @@ public class DisasterPosActivity extends AppCompatActivity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(audioPath)) {
-                    return;
+                if (!TextUtils.isEmpty(audioPath)) {
+                    File file2 = new File(audioPath);
+                    if (file2.isFile() && file2.exists()) {
+                        file2.delete();
+                    }
                 }
                 chronometer.stop();// 停止计时
                 File file2 = new File(audioPath);
-                if (file2.isFile() && file2.exists()) {
-                    file2.delete();
-                }
                 if (recorder != null) {
                     recorder.stop();
                     recorder.release();
@@ -936,7 +938,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         videoFile = new File(createFileDir("Video"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".mp4");
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", videoFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(videoFile);
         }
@@ -987,7 +989,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         pictureFile = new File(createFileDir("Photo"), new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".jpg");
         Uri imageUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
+            imageUri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", pictureFile);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             imageUri = Uri.fromFile(pictureFile);
         }
@@ -1136,7 +1138,7 @@ public class DisasterPosActivity extends AppCompatActivity {
         Intent it = new Intent(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", response);//通过FileProvider创建一个content类型的Uri，进行封装
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(response);
         }

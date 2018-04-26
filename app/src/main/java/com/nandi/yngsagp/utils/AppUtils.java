@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -71,15 +72,14 @@ public class AppUtils {
         context.finish();
     }
     public static String getPath(Context context, Uri uri) {
-
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
+            String[] projection = { MediaStore.Files.FileColumns.DATA };
             Cursor cursor = null;
-
             try {
                 cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+
+                if (cursor != null &&cursor.moveToFirst()) {
                     return cursor.getString(column_index);
                 }
             } catch (Exception e) {
@@ -93,8 +93,9 @@ public class AppUtils {
     public static Intent openFile(String filePath,Context context) {
 
         File file = new File(filePath);
-        if (!file.exists())
+        if (!file.exists()) {
             return null;
+        }
         /* 取得扩展名 */
         String end = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length()).toLowerCase(Locale.getDefault());
         Log.d("qs", "openFile: "+end);
@@ -131,7 +132,7 @@ public class AppUtils {
         intent.setAction(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -148,7 +149,7 @@ public class AppUtils {
         intent.setAction(Intent.ACTION_VIEW);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -166,7 +167,7 @@ public class AppUtils {
         intent.putExtra("configchange", 0);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -184,7 +185,7 @@ public class AppUtils {
         intent.putExtra("configchange", 0);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -210,7 +211,7 @@ public class AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -227,7 +228,7 @@ public class AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -244,7 +245,7 @@ public class AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -262,7 +263,7 @@ public class AppUtils {
 
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -279,7 +280,7 @@ public class AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri = Uri.fromFile(new File(param));
@@ -300,7 +301,7 @@ public class AppUtils {
         } else {
             Uri uri2;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-                uri2 = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+                uri2 = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
                 uri2 = Uri.fromFile(new File(param));
@@ -318,7 +319,7 @@ public class AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri2;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            uri2 = FileProvider.getUriForFile(context, "com.nandi.yngsagp.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
+            uri2 = FileProvider.getUriForFile(context, "com.nandi.yngsagps.fileprovider", new File(param));//通过FileProvider创建一个content类型的Uri，进行封装
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
             uri2 = Uri.fromFile(new File(param));

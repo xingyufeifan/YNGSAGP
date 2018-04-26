@@ -32,7 +32,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.nandi.yngsagp.fileprovider"
+            android:authorities="com.nandi.yngsagps.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
 
@@ -47,10 +47,10 @@
             android:value="gaqFUji6IN1I7Urix3uRf9dvfPDL9fv6" />
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24754821" />
+            android:value="24783283" />
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="141f0e3cc43fb61b4576f3cd381b2520" />
+            android:value="1a72f63bbd4da5f8326b84672d91291a" />
 
         <activity
             android:name=".activity.WelcomeActivity"

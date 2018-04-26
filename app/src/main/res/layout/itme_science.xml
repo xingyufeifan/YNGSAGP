@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/all-ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="12dp"
-    android:paddingRight="12dp"
-    android:id="@+id/all-ll"
-    android:orientation="vertical">
+    android:paddingRight="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,22 +19,21 @@
             android:layout_weight="4"
             android:maxLines="2"
             android:text="科普宣传科普宣传科普宣传科普宣传"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/science_background"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:background="@drawable/science_background"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"
-             />
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -47,24 +46,24 @@
             android:id="@+id/tv_nickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="云南"
             android:textColor="@color/media_title_bg"
-            android:textSize="16sp"
-            android:text="云南" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
+            android:text="2018-3-21"
             android:textColor="@color/media_title_bg"
-            android:textSize="16sp"
-            android:text="2018-3-21"/>
+            android:textSize="16sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/holo_light_primary"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:background="@color/holo_light_primary" />
 
 </LinearLayout>
